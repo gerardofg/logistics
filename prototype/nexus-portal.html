@@ -887,6 +887,8 @@
     from { opacity: 1; transform: translateY(0); }
     to   { opacity: 0; transform: translateY(-14px); }
   }
+  /* Hard guarantee: the sign-in screen can never render while a session is active */
+  body.signed-in #screen-signin { display: none !important; }
 
   /* ===== Sign-out chip + menu ===== */
   .user-menu-wrap { position: relative; flex: 0 0 auto; }
@@ -1845,13 +1847,15 @@ function showScreen(screenId) {
   $("#appHeader").classList.toggle("hidden", noChrome);
   $("#bottomNav").classList.toggle("hidden", noChrome);
 
-  // per-screen render hooks
-  if (screenId === "screen-dashboard") renderDashboard();
-  if (screenId === "screen-mgr-dash") renderManagerDash();
-  if (screenId === "screen-tasks") { isManager() || isExec() ? renderTasksScreen() : renderOperatorTasks(); }
-  if (screenId === "screen-manager") renderManager();
-  if (screenId === "screen-audit") renderAudit();
-  if (screenId === "screen-chats") renderChannelList();
+  // per-screen render hooks (a hook failure must never strand the outgoing screen)
+  try {
+    if (screenId === "screen-dashboard") renderDashboard();
+    if (screenId === "screen-mgr-dash") renderManagerDash();
+    if (screenId === "screen-tasks") { isManager() || isExec() ? renderTasksScreen() : renderOperatorTasks(); }
+    if (screenId === "screen-manager") renderManager();
+    if (screenId === "screen-audit") renderAudit();
+    if (screenId === "screen-chats") renderChannelList();
+  } catch (e) { console.error("render hook failed for " + screenId, e); }
 
   highlightNav();
 }
@@ -1924,6 +1928,7 @@ function setIdentity(accountId) {
 function activateSession(accountId) {
   setIdentity(accountId);
   State.session = accountId;
+  document.body.classList.add("signed-in");
   save();
   renderHeader();
   renderNav();
@@ -1937,6 +1942,7 @@ function enterHome(role) {
 /* Restore an existing session on load without re-showing sign-in */
 function restoreSession(accountId) {
   setIdentity(accountId);
+  document.body.classList.add("signed-in");
   renderHeader();
   renderNav();
   showScreen(ROLES[State.role].home);
@@ -1948,6 +1954,7 @@ function doSignOut() {
   if (a) logAudit(a.id, `${a.name} signed out.`);
   setIdentity(null);
   State.session = null;
+  document.body.classList.remove("signed-in");
   save();
   closeUserMenu();
   // reset transient view flags & sign-in form
