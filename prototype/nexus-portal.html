@@ -116,19 +116,6 @@
     font-size: 12px; color: var(--text-2);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .switch-role {
-    flex: 0 0 auto;
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--white);
-    display: grid; place-items: center;
-    cursor: pointer;
-    color: var(--text-2);
-    transition: var(--ease);
-  }
-  .switch-role:hover { background: var(--navy-tint); color: var(--navy); border-color: #D3DBEA; }
-  .switch-role:active { transform: scale(.94); }
 
   /* ===== Scroll area ===== */
   .screen-wrap {
@@ -150,13 +137,7 @@
   }
   .section-sub { font-size: 13px; color: var(--text-2); margin-bottom: 16px; }
 
-  /* ===== Screen 1: Role selector ===== */
-  #screen-landing { padding: 0; height: 100%; display: flex; flex-direction: column; }
-  #screen-landing .landing-inner {
-    flex: 1; display: flex; flex-direction: column; justify-content: center;
-    padding: 30px 26px 34px;
-  }
-  .wordmark-row { display: flex; align-items: center; gap: 9px; margin-bottom: 6px; }
+  /* ===== Brand wordmark (sign-in) ===== */
   .wordmark {
     font-size: 25px; font-weight: 700; letter-spacing: -.6px; color: var(--navy);
     display: inline-flex; align-items: center; gap: 8px;
@@ -172,38 +153,6 @@
     padding: 3px 7px; border-radius: 6px; border: 1px solid #DCE3F1;
   }
   .landing-sub { font-size: 13.5px; color: var(--text-2); margin-bottom: 26px; }
-
-  .role-cards { display: flex; flex-direction: column; gap: 12px; }
-  .role-card {
-    display: flex; align-items: center; gap: 14px;
-    padding: 16px; border: 1.5px solid var(--border);
-    border-radius: var(--radius); background: var(--white);
-    cursor: pointer; transition: var(--ease); position: relative;
-    text-align: left;
-  }
-  .role-card:hover { border-color: #C9D3E6; box-shadow: var(--shadow-sm); }
-  .role-card.selected {
-    border-color: var(--navy); background: var(--navy-tint);
-    box-shadow: 0 0 0 3px rgba(15,43,91,.08);
-  }
-  .role-icon {
-    width: 42px; height: 42px; border-radius: 10px; flex: 0 0 auto;
-    display: grid; place-items: center; color: var(--navy);
-    background: #F2F5FB; border: 1px solid #E6ECF7;
-    transition: var(--ease);
-  }
-  .role-card.selected .role-icon { background: #fff; border-color: #D6E0F2; }
-  .role-text { flex: 1; min-width: 0; }
-  .role-title { font-size: 15px; font-weight: 650; letter-spacing: -.2px; }
-  .role-desc { font-size: 12.5px; color: var(--text-2); margin-top: 2px; line-height: 1.35; }
-  .role-check {
-    width: 22px; height: 22px; border-radius: 50%; flex: 0 0 auto;
-    border: 1.5px solid var(--border); display: grid; place-items: center;
-    color: #fff; transition: var(--ease);
-  }
-  .role-card.selected .role-check { background: var(--navy); border-color: var(--navy); }
-  .role-check svg { opacity: 0; transition: var(--ease); }
-  .role-card.selected .role-check svg { opacity: 1; }
 
   /* ===== Buttons ===== */
   .btn {
@@ -222,7 +171,6 @@
   .btn-teal:hover { background: var(--teal-dark); }
   .btn-red { background: var(--red-tint); color: var(--red); border: 1px solid #FCCCC6; }
   .btn-red:hover { background: #FCE7E5; }
-  .enter-btn-wrap { margin-top: 26px; }
 
   /* ===== Metric cards ===== */
   .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
@@ -591,12 +539,215 @@
     opacity: 0; pointer-events: none; transition: var(--ease); z-index: 45; white-space: nowrap;
   }
   .no-access-tip.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ===== Sign-in screen ===== */
+  #screen-signin { padding: 0; height: 100%; display: flex; flex-direction: column; }
+  #screen-signin .signin-inner {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 30px 26px 30px;
+  }
+  .signin-brand { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 24px; }
+  .signin-brand .wordmark { font-size: 24px; margin-bottom: 8px; }
+  .signin-brand .landing-sub { margin-bottom: 0; }
+  .signin-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--white); box-shadow: var(--shadow-sm); padding: 20px 18px;
+  }
+  .signin-card.shake { animation: shake .4s cubic-bezier(.36,.07,.19,.97) both; }
+  .field { margin-bottom: 14px; }
+  .field-input-wrap { position: relative; }
+  .text-input {
+    width: 100%; border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 14px; font-size: 14.5px; font-family: var(--font); color: var(--text);
+    outline: none; transition: var(--ease); background: var(--white);
+  }
+  .text-input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(15,43,91,.08); }
+  .pw-toggle {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    width: 34px; height: 34px; border: none; background: none; cursor: pointer;
+    color: var(--text-3); display: grid; place-items: center; border-radius: 8px; transition: var(--ease);
+  }
+  .pw-toggle:hover { color: var(--text-2); background: var(--bg); }
+  .signin-error {
+    display: none; align-items: center; gap: 7px;
+    font-size: 12.5px; font-weight: 500; color: var(--red);
+    background: var(--red-tint); border: 1px solid #FCCCC6; border-radius: 9px;
+    padding: 9px 12px; margin-bottom: 14px;
+  }
+  .signin-error.show { display: flex; }
+  .signin-error svg { flex: 0 0 auto; }
+
+  /* Demo credentials hint (collapsible) */
+  .demo-hint { margin-top: 16px; border: 1px solid var(--border); border-radius: var(--radius); background: #FAFBFC; overflow: hidden; }
+  .demo-hint-head {
+    display: flex; align-items: center; gap: 8px; width: 100%;
+    padding: 12px 14px; background: none; border: none; cursor: pointer;
+    font-family: var(--font); font-size: 12.5px; font-weight: 600; color: var(--text-2);
+    transition: var(--ease); text-align: left;
+  }
+  .demo-hint-head:hover { color: var(--text); }
+  .demo-hint-head .dh-chevron { margin-left: auto; transition: transform var(--ease); color: var(--text-3); }
+  .demo-hint.open .dh-chevron { transform: rotate(90deg); }
+  .demo-hint-body { display: none; padding: 2px 10px 10px; }
+  .demo-hint.open .demo-hint-body { display: block; }
+  .cred-row {
+    display: flex; align-items: center; gap: 11px; width: 100%;
+    padding: 9px 8px; border: none; background: none; cursor: pointer;
+    border-radius: 9px; transition: var(--ease); text-align: left; font-family: var(--font);
+  }
+  .cred-row:hover { background: var(--navy-tint); }
+  .cred-avatar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 600; font-size: 11px; flex: 0 0 auto; }
+  .cred-meta { flex: 1; min-width: 0; }
+  .cred-email { font-size: 12.5px; font-weight: 600; color: var(--text); }
+  .cred-detail { font-size: 11px; color: var(--text-2); margin-top: 1px; }
+  .cred-pw { font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--text-3); flex: 0 0 auto; }
+
+  .signin-foot { text-align: center; margin-top: 20px; }
+  .reset-link {
+    font-size: 12px; font-weight: 500; color: var(--text-3); background: none; border: none;
+    cursor: pointer; font-family: var(--font); transition: var(--ease); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .reset-link:hover { color: var(--red); }
+
+  /* ===== Role reveal interstitial ===== */
+  #screen-reveal { padding: 0; height: 100%; display: flex; flex-direction: column; }
+  .reveal-inner {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 30px 30px; text-align: center;
+  }
+  .reveal-avatar {
+    width: 80px; height: 80px; border-radius: 50%; display: grid; place-items: center;
+    color: #fff; font-weight: 700; font-size: 28px; letter-spacing: .5px; margin-bottom: 20px;
+    animation: revealPop .5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes revealPop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
+  .reveal-welcome { font-size: 14px; color: var(--text-2); }
+  .reveal-name { font-size: 22px; font-weight: 700; letter-spacing: -.5px; margin: 2px 0 16px; }
+  .reveal-badge {
+    font-size: 13px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 9px 18px; border-radius: 999px; margin-bottom: 28px;
+    animation: fadeUp .5s .15s ease both;
+  }
+  .reveal-badge.executive { color: var(--navy); background: var(--navy-tint); border: 1px solid #DCE3F1; }
+  .reveal-badge.manager { color: var(--teal-dark); background: var(--teal-tint); border: 1px solid #C3EDE6; }
+  .reveal-badge.operator { color: #3C577F; background: #EEF2F8; border: 1px solid #DCE4EF; }
+  .reveal-inner .btn { min-width: 180px; animation: fadeUp .5s .25s ease both; }
+
+  /* ===== Sign-out chip + menu ===== */
+  .user-menu-wrap { position: relative; flex: 0 0 auto; }
+  .user-chip {
+    display: flex; align-items: center; gap: 6px; padding: 4px 4px 4px 4px;
+    border: 1px solid var(--border); border-radius: 999px; background: var(--white);
+    cursor: pointer; transition: var(--ease);
+  }
+  .user-chip:hover { background: var(--navy-tint); border-color: #D3DBEA; }
+  .user-chip:active { transform: scale(.96); }
+  .user-chip .avatar { width: 30px; height: 30px; font-size: 12px; }
+  .user-chip .uc-caret { color: var(--text-3); margin-right: 4px; }
+  .user-popover {
+    position: absolute; right: 0; top: 46px; z-index: 70;
+    min-width: 190px; background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; box-shadow: var(--shadow-lg); padding: 6px;
+    opacity: 0; transform: translateY(-6px) scale(.98); pointer-events: none; transition: var(--ease);
+  }
+  .user-popover.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+  .up-head { padding: 8px 10px 10px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
+  .up-name { font-size: 13.5px; font-weight: 600; }
+  .up-role { font-size: 11.5px; color: var(--text-2); margin-top: 1px; }
+  .up-item {
+    display: flex; align-items: center; gap: 9px; width: 100%;
+    padding: 9px 10px; border: none; background: none; cursor: pointer;
+    font-family: var(--font); font-size: 13.5px; font-weight: 500; color: var(--text);
+    border-radius: 8px; transition: var(--ease); text-align: left;
+  }
+  .up-item:hover { background: var(--bg); }
+  .up-item.danger { color: var(--red); }
+  .up-item.danger:hover { background: var(--red-tint); }
+
+  /* Header icon button (audit shortcut) */
+  .hdr-icon-btn {
+    flex: 0 0 auto; width: 36px; height: 36px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--white);
+    display: grid; place-items: center; cursor: pointer; color: var(--text-2); transition: var(--ease);
+  }
+  .hdr-icon-btn:hover { background: var(--navy-tint); color: var(--navy); border-color: #D3DBEA; }
+  .hdr-icon-btn:active { transform: scale(.94); }
+  .hdr-actions { display: flex; align-items: center; gap: 8px; }
+
+  /* ===== Chat: channel list ===== */
+  .channel-list { display: flex; flex-direction: column; gap: 11px; }
+  .channel-card {
+    display: flex; align-items: center; gap: 13px;
+    padding: 14px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--white);
+    box-shadow: var(--shadow-sm); cursor: pointer; transition: var(--ease); position: relative;
+  }
+  .channel-card.unlocked:hover { border-color: #C9D3E6; box-shadow: var(--shadow-md); }
+  .channel-card.locked { cursor: not-allowed; background: #FAFBFC; }
+  .channel-ic {
+    width: 42px; height: 42px; border-radius: 10px; flex: 0 0 auto;
+    display: grid; place-items: center; font-size: 18px; font-weight: 700;
+    background: var(--navy-tint); color: var(--navy); border: 1px solid #E6ECF7;
+  }
+  .channel-card.locked .channel-ic { background: #F0F1F3; color: #98A2B3; filter: grayscale(1); }
+  .channel-body { flex: 1; min-width: 0; }
+  .channel-name { font-size: 14.5px; font-weight: 650; letter-spacing: -.2px; display: flex; align-items: center; gap: 6px; }
+  .channel-card.locked .channel-name { color: #667085; }
+  .channel-preview { font-size: 12px; color: var(--text-2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .channel-card.locked .channel-preview { color: var(--text-3); }
+  .channel-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: 0 0 auto; }
+  .channel-time { font-size: 10.5px; color: var(--text-3); }
+  .unread-badge {
+    min-width: 19px; height: 19px; padding: 0 6px; border-radius: 999px;
+    background: var(--navy); color: #fff; font-size: 10.5px; font-weight: 700;
+    display: grid; place-items: center;
+  }
+  .channel-locknote {
+    display: none; align-items: center; gap: 7px; margin-top: 10px;
+    font-size: 12px; font-weight: 500; color: var(--amber);
+    background: var(--amber-tint); border: 1px solid #F7DDC0; border-radius: 9px; padding: 8px 12px;
+  }
+  .channel-locknote.show { display: flex; }
+  @keyframes wiggle {
+    0%,100% { transform: rotate(0); }
+    25% { transform: rotate(-1.4deg); }
+    75% { transform: rotate(1.4deg); }
+  }
+  .wiggle { animation: wiggle .3s ease; }
+
+  /* ===== Chat: channel view ===== */
+  .chan-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .chan-back {
+    width: 36px; height: 36px; border-radius: 10px; flex: 0 0 auto;
+    border: 1px solid var(--border); background: var(--white);
+    display: grid; place-items: center; cursor: pointer; color: var(--text-2); transition: var(--ease);
+  }
+  .chan-back:hover { background: var(--navy-tint); color: var(--navy); border-color: #D3DBEA; }
+  .chan-back:active { transform: scale(.94); }
+  .chan-title-block { min-width: 0; }
+  .chan-title { font-size: 17px; font-weight: 700; letter-spacing: -.3px; }
+  .chan-members { font-size: 11.5px; color: var(--text-2); margin-top: 1px; }
+  .chat-row { display: flex; gap: 8px; margin-bottom: 12px; align-items: flex-end; }
+  .chat-row.out { flex-direction: row-reverse; }
+  .chat-avatar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 600; font-size: 11px; flex: 0 0 auto; }
+  .chat-col { max-width: 76%; display: flex; flex-direction: column; }
+  .chat-row.out .chat-col { align-items: flex-end; }
+  .chat-senderline { font-size: 10.5px; color: var(--text-2); margin-bottom: 3px; display: flex; align-items: center; gap: 6px; padding: 0 4px; }
+  .chat-row.out .chat-senderline { display: none; }
+  .chat-bubble {
+    padding: 9px 13px; border-radius: 14px; font-size: 13.5px; line-height: 1.4;
+    box-shadow: var(--shadow-sm); word-break: break-word;
+  }
+  .chat-row.in .chat-bubble { background: var(--white); border: 1px solid var(--border); border-bottom-left-radius: 4px; color: var(--text); }
+  .chat-row.out .chat-bubble { background: var(--navy); color: #fff; border-bottom-right-radius: 4px; }
+  .chat-time { font-size: 9.5px; color: var(--text-3); margin-top: 3px; padding: 0 4px; }
+  .chat-thread { display: flex; flex-direction: column; padding-bottom: 6px; }
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- Slim header (hidden on landing) -->
+  <!-- Slim header (hidden on sign-in) -->
   <header class="app-header hidden" id="appHeader">
     <div class="persona">
       <div class="avatar" id="hdrAvatar">EV</div>
@@ -605,20 +756,38 @@
         <div class="persona-role" id="hdrRole">Chief Operations Officer</div>
       </div>
     </div>
-    <button class="switch-role" id="switchRoleBtn" title="Switch Role" aria-label="Switch Role">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M7 4 3 8l4 4"/><path d="M3 8h13a4 4 0 0 1 4 4"/>
-        <path d="m17 20 4-4-4-4"/><path d="M21 16H8a4 4 0 0 1-4-4"/>
-      </svg>
-    </button>
+    <div class="hdr-actions">
+      <!-- Audit shortcut icon (shown for roles that fold Audit out of the nav) -->
+      <button class="hdr-icon-btn" id="hdrAuditBtn" title="Audit Log" aria-label="Audit Log" style="display:none">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+      </button>
+      <div class="user-menu-wrap">
+        <button class="user-chip" id="userChipBtn" aria-label="Account menu">
+          <div class="avatar" id="chipAvatar">EV</div>
+          <span class="uc-caret">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </span>
+        </button>
+        <div class="user-popover" id="userPopover">
+          <div class="up-head">
+            <div class="up-name" id="popName">Eleanor Vance</div>
+            <div class="up-role" id="popRole">Executive</div>
+          </div>
+          <button class="up-item danger" id="signOutBtn">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+            Sign out
+          </button>
+        </div>
+      </div>
+    </div>
   </header>
 
   <div class="screen-wrap" id="screenWrap">
 
-    <!-- ============ SCREEN 1: LANDING ============ -->
-    <section class="screen active" id="screen-landing">
-      <div class="landing-inner">
-        <div class="wordmark-row">
+    <!-- ============ SCREEN 1: SIGN IN ============ -->
+    <section class="screen active" id="screen-signin">
+      <div class="signin-inner">
+        <div class="signin-brand">
           <span class="wordmark">
             <span class="brand-glyph">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -626,64 +795,54 @@
               </svg>
             </span>
             Nexus Portal
+            <span class="chip-demo">DEMO</span>
           </span>
-          <span class="chip-demo">DEMO</span>
-        </div>
-        <p class="landing-sub">Select a role to explore access-controlled logistics operations.</p>
-
-        <div class="role-cards" id="roleCards">
-          <button class="role-card" data-role="executive">
-            <span class="role-icon">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
-              </svg>
-            </span>
-            <span class="role-text">
-              <span class="role-title">Executive</span>
-              <span class="role-desc">Read-only analytics &amp; compliance</span>
-            </span>
-            <span class="role-check">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            </span>
-          </button>
-
-          <button class="role-card" data-role="manager">
-            <span class="role-icon">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
-            </span>
-            <span class="role-text">
-              <span class="role-title">Manager</span>
-              <span class="role-desc">Oversight, approvals &amp; role assignment</span>
-            </span>
-            <span class="role-check">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            </span>
-          </button>
-
-          <button class="role-card" data-role="operator">
-            <span class="role-icon">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.9 18.55A2 2 0 0 1 19 20H5a2 2 0 0 1-1.9-1.45"/><path d="M3 11h18v4H3z"/>
-                <path d="M5 11V7a2 2 0 0 1 2-2h3l2 2h5a2 2 0 0 1 2 2v2"/><circle cx="12" cy="17" r="1"/>
-              </svg>
-            </span>
-            <span class="role-text">
-              <span class="role-title">Operator</span>
-              <span class="role-desc">Field tasks &amp; verifications</span>
-            </span>
-            <span class="role-check">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            </span>
-          </button>
+          <p class="landing-sub">Sign in to access role-controlled logistics operations.</p>
         </div>
 
-        <div class="enter-btn-wrap">
-          <button class="btn btn-primary btn-block" id="enterDemoBtn" disabled>Enter Demo</button>
+        <form class="signin-card" id="signinCard" autocomplete="off">
+          <div class="signin-error" id="signinError">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+            <span>Incorrect email or password</span>
+          </div>
+          <div class="field">
+            <label class="field-label" for="emailInput">Email</label>
+            <div class="field-input-wrap">
+              <input type="email" class="text-input" id="emailInput" placeholder="you@nexus.io" autocomplete="off" spellcheck="false" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="passwordInput">Password</label>
+            <div class="field-input-wrap">
+              <input type="password" class="text-input" id="passwordInput" placeholder="••••••••" autocomplete="off" style="padding-right:44px" />
+              <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">
+                <svg id="pwEye" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="signInBtn">Sign In</button>
+        </form>
+
+        <div class="demo-hint" id="demoHint">
+          <button type="button" class="demo-hint-head" id="demoHintHead">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            Demo credentials
+            <span class="dh-chevron">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </span>
+          </button>
+          <div class="demo-hint-body" id="demoHintBody"><!-- rendered --></div>
+        </div>
+
+        <div class="signin-foot">
+          <button type="button" class="reset-link" id="resetDemoLink">Reset demo data</button>
         </div>
       </div>
+    </section>
+
+    <!-- ============ SCREEN: ROLE REVEAL ============ -->
+    <section class="screen" id="screen-reveal">
+      <div class="reveal-inner" id="revealInner"><!-- rendered --></div>
     </section>
 
     <!-- ============ SCREEN 2: EXECUTIVE DASHBOARD ============ -->
@@ -803,6 +962,33 @@
       <div class="timeline" id="auditTimeline"><!-- rendered --></div>
     </section>
 
+    <!-- ============ SCREEN: CHAT CHANNEL LIST ============ -->
+    <section class="screen" id="screen-chats">
+      <h1 class="section-title">Chats</h1>
+      <p class="section-sub">Team channels &amp; announcements</p>
+      <div class="channel-list" id="channelList"><!-- rendered --></div>
+    </section>
+
+    <!-- ============ SCREEN: CHAT CHANNEL VIEW ============ -->
+    <section class="screen" id="screen-channel">
+      <div class="chan-header">
+        <button class="chan-back" id="chanBack" aria-label="Back to channels">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="chan-title-block">
+          <div class="chan-title" id="chanTitle">#general</div>
+          <div class="chan-members" id="chanMembers">All roles</div>
+        </div>
+      </div>
+      <div class="chat-thread" id="chatThread"><!-- rendered --></div>
+      <div class="msg-input-row">
+        <input type="text" class="msg-input" id="chanInput" placeholder="Message channel…" />
+        <button class="msg-send" id="chanSend" aria-label="Send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        </button>
+      </div>
+    </section>
+
   </div>
 
   <!-- Bottom nav (hidden on landing) -->
@@ -842,6 +1028,20 @@ const PERSONAS = {
   operator:  { name: "Dana Cole",     title: "Field Operator",           initials: "DC" }
 };
 
+/* Seeded accounts (email + password → role). Demo only. */
+const ACCOUNTS = [
+  { email: "eleanor@nexus.io", password: "exec2026",   role: "executive" },
+  { email: "marcus@nexus.io",  password: "manage2026", role: "manager"   },
+  { email: "dana@nexus.io",    password: "field2026",  role: "operator"  }
+];
+
+/* Prominent role badge label shown on the reveal interstitial */
+const ROLE_BADGE = {
+  executive: "Executive",
+  manager:   "Regional Manager",
+  operator:  "Field Operator"
+};
+
 /* ============================================================
    ROLES PERMISSION MATRIX
    Every screen derives visibility/access from here.
@@ -852,7 +1052,8 @@ const NAV_META = {
   dashboard: { label: "Dashboard", screen: "screen-dashboard", icon: iconChart },
   tasks:     { label: "Tasks",     screen: "screen-tasks",     icon: iconTasks },
   approvals: { label: "Approvals", screen: "screen-manager",   icon: iconApprovals, sub: "approvals" },
-  messages:  { label: "Messages",  screen: "screen-messages",  icon: iconMessages },
+  messages:  { label: "Dispatch",  screen: "screen-messages",  icon: iconMessages },
+  chats:     { label: "Chats",     screen: "screen-chats",     icon: iconChats },
   audit:     { label: "Audit Log", screen: "screen-audit",     icon: iconAudit }
 };
 
@@ -860,78 +1061,204 @@ const ROLES = {
   executive: {
     home: "screen-dashboard",
     analytics: "unlocked",              // executive dashboard is their unlocked view
+    auditInHeader: true,                // Audit folded into header icon to keep nav ≤ 4 items
     nav: [
       { key: "dashboard", access: true },
       { key: "tasks",     access: false },
       { key: "approvals", access: false },
-      { key: "audit",     access: true }
+      { key: "chats",     access: true }
     ],
     actions: { viewDashboard: true, submitTask: false, approve: false, assignRole: false, message: false }
   },
   manager: {
     home: "screen-manager",
     analytics: "unlocked",
+    auditInHeader: true,
     nav: [
       { key: "dashboard", access: true },
       { key: "tasks",     access: true },   // routes to manager team-tasks view
       { key: "approvals", access: true },
-      { key: "audit",     access: true }
+      { key: "chats",     access: true }
     ],
     actions: { viewDashboard: true, submitTask: false, approve: true, assignRole: true, message: false }
   },
   operator: {
     home: "screen-tasks",
     analytics: "locked",
+    auditInHeader: true,                // Audit folded into header icon; nav holds Tasks/Messages/Chats + locked Approvals
     nav: [
       { key: "tasks",     access: true },
       { key: "messages",  access: true },
-      { key: "approvals", access: false },
-      { key: "audit",     access: true }
+      { key: "chats",     access: true },
+      { key: "approvals", access: false }
     ],
     actions: { viewDashboard: false, submitTask: true, approve: false, assignRole: false, message: true }
   }
 };
 
-/* For manager, the "dashboard" and "tasks" nav map to specific screens/behaviors */
-const MANAGER_NAV_TARGET = {
-  dashboard: "analytics-modal",   // opens analytics
-  tasks:     "screen-manager",    // team tasks tab
-  approvals: "screen-manager"     // approvals tab
+/* ============================================================
+   CHANNELS — access matrix (drives Chat hub, mirrors ROLES pattern)
+   access[role]: 'rw' (read/write) | 'locked'
+   ============================================================ */
+const CHANNELS = {
+  general: {
+    name: "#general",
+    desc: "Company-wide announcements & chatter",
+    access: { executive: "rw", manager: "rw", operator: "rw" }
+  },
+  "field-ops": {
+    name: "#field-ops",
+    desc: "Route updates, loading bays, field coordination",
+    access: { executive: "locked", manager: "rw", operator: "rw" }
+  },
+  approvals: {
+    name: "#approvals",
+    desc: "Verification reviews & sign-offs",
+    access: { executive: "locked", manager: "rw", operator: "locked" }
+  },
+  "executive-briefing": {
+    name: "#executive-briefing",
+    desc: "KPIs, compliance & strategy",
+    access: { executive: "rw", manager: "rw", operator: "locked" }
+  }
 };
+const CHANNEL_ORDER = ["general", "field-ops", "approvals", "executive-briefing"];
+
+/* Human-readable member line + the role required to unlock a locked channel */
+function channelMemberLine(chanId) {
+  const acc = CHANNELS[chanId].access;
+  const roles = Object.keys(acc).filter(r => acc[r] === "rw").map(r => capitalize(r));
+  return roles.join(" · ");
+}
+function requiredRoleFor(chanId) {
+  const acc = CHANNELS[chanId].access;
+  const rw = Object.keys(acc).filter(r => acc[r] === "rw");
+  // The "gatekeeper" role to name in the notice: prefer Manager if it's the only rw, else first rw role
+  if (rw.length === 1) return capitalize(rw[0]);
+  if (rw.includes("manager")) return "Manager";
+  return capitalize(rw[0]);
+}
 
 /* ============================================================
-   GLOBAL STATE (single source of truth)
+   PERSISTENCE — single versioned localStorage key
+   Shape (nexus.v2):
+   {
+     session: role|null,
+     tasks: [...], messages: [...], auditLog: [...],
+     channels: { chanId: [ {id, role, text, time, ts} ] },
+     lastRead: { accountEmail: { chanId: count } }
+   }
+   ============================================================ */
+const STORAGE_KEY = "nexus.v2";
+
+/* ============================================================
+   GLOBAL STATE (single source of truth, hydrated from storage)
    ============================================================ */
 const State = {
-  role: null,
-  activeScreen: "screen-landing",
+  role: null,                 // active role once signed in
+  session: null,              // persisted signed-in role (survives reload)
+  activeScreen: "screen-signin",
   analyticsViewed: false,
   dashboardViewLogged: false,
-  tasks: [
-    { id: "t1", type: "weight", title: "Verify Cargo Weight",       subtitle: "Container #C-4817", status: "assigned", value: null, valueLabel: "Recorded Weight", unit: "kg", submittedAt: null },
-    { id: "t2", type: "scan",   title: "Scan Container ID",         subtitle: "Bay 7",            status: "assigned", value: null, valueLabel: "Scanned ID",      unit: "",   submittedAt: null },
-    { id: "t3", type: "confirm",title: "Confirm Delivery Manifest", subtitle: "Route A-12",       status: "assigned", value: null, valueLabel: "Confirmation",    unit: "",   submittedAt: null }
-  ],
-  messages: [
-    { from: "in",  who: "Dispatch",   text: "Container C-4817 arrived at Bay 7. Please verify weight.", time: "8:42 AM" },
-    { from: "in",  who: "Dispatch",   text: "Manifest for Route A-12 uploaded to your queue.",          time: "8:58 AM" },
-    { from: "out", who: "You",        text: "Copy. Heading to Bay 7 now.",                              time: "9:03 AM" }
-  ],
-  auditLog: [] // newest first
+  tasks: [],
+  messages: [],
+  auditLog: [],               // newest first
+  channels: {},               // chanId -> array of messages (oldest first)
+  lastRead: {}                // accountEmail -> { chanId: seenCount }
 };
 
-/* Seed audit log with plausible pre-session entries (earlier timestamps) */
-function seedAudit() {
-  const seed = [
-    { time: "7:45 AM", role: "system",   actor: "System",       desc: "System initialized demo environment." },
-    { time: "8:10 AM", role: "operator", actor: "Dana Cole",    desc: "Received 3 field task assignments." },
-    { time: "8:32 AM", role: "manager",  actor: "Marcus Reid",  desc: "Reviewed Northeast regional shipment report." },
-    { time: "8:55 AM", role: "executive",actor: "Eleanor Vance",desc: "Compliance rate cleared quarterly threshold (98.2%)." }
-  ];
-  // stored oldest-first in seed; auditLog keeps newest first, so push in order then they sit below live entries
-  State.auditLog = seed.slice().reverse();
+/* Build a fresh default dataset (used on first run + reset) */
+function seedDefaults() {
+  return {
+    session: null,
+    tasks: [
+      { id: "t1", type: "weight", title: "Verify Cargo Weight",       subtitle: "Container #C-4817", status: "assigned", value: null, valueLabel: "Recorded Weight", unit: "kg", submittedAt: null },
+      { id: "t2", type: "scan",   title: "Scan Container ID",         subtitle: "Bay 7",            status: "assigned", value: null, valueLabel: "Scanned ID",      unit: "",   submittedAt: null },
+      { id: "t3", type: "confirm",title: "Confirm Delivery Manifest", subtitle: "Route A-12",       status: "assigned", value: null, valueLabel: "Confirmation",    unit: "",   submittedAt: null }
+    ],
+    messages: [
+      { from: "in",  who: "Dispatch",   text: "Container C-4817 arrived at Bay 7. Please verify weight.", time: "8:42 AM" },
+      { from: "in",  who: "Dispatch",   text: "Manifest for Route A-12 uploaded to your queue.",          time: "8:58 AM" },
+      { from: "out", who: "You",        text: "Copy. Heading to Bay 7 now.",                              time: "9:03 AM" }
+    ],
+    auditLog: [
+      { time: "8:55 AM", role: "executive",actor: "Eleanor Vance",desc: "Compliance rate cleared quarterly threshold (98.2%)." },
+      { time: "8:32 AM", role: "manager",  actor: "Marcus Reid",  desc: "Reviewed Northeast regional shipment report." },
+      { time: "8:10 AM", role: "operator", actor: "Dana Cole",    desc: "Received 3 field task assignments." },
+      { time: "7:45 AM", role: "system",   actor: "System",       desc: "System initialized demo environment." }
+    ],
+    channels: seedChannels(),
+    lastRead: {}
+  };
 }
-seedAudit();
+
+/* Seed each channel with a few believable messages (earlier today) */
+function seedChannels() {
+  return {
+    "general": [
+      { id: "g1", role: "executive", text: "Morning all — quarterly compliance cleared 98%. Great work.", time: "7:52 AM", ts: 1 },
+      { id: "g2", role: "manager",   text: "Thanks Eleanor. Northeast team is running clean this week.",   time: "8:05 AM", ts: 2 },
+      { id: "g3", role: "operator",  text: "On site at Bay 7, starting inbound verifications now.",         time: "8:20 AM", ts: 3 },
+      { id: "g4", role: "manager",   text: "Appreciate it Dana. Ping the channel if anything's off.",       time: "8:22 AM", ts: 4 }
+    ],
+    "field-ops": [
+      { id: "f1", role: "manager",   text: "Route A-12 manifest is live in your queue Dana.",              time: "8:40 AM", ts: 1 },
+      { id: "f2", role: "operator",  text: "Copy. Container C-4817 is at Bay 7, weighing it now.",          time: "8:44 AM", ts: 2 },
+      { id: "f3", role: "operator",  text: "Loading dock 3 is clear if we need to reroute.",                time: "8:51 AM", ts: 3 },
+      { id: "f4", role: "manager",   text: "Good. Hold C-4817 for my sign-off once you submit the weight.", time: "8:53 AM", ts: 4 }
+    ],
+    "approvals": [
+      { id: "a1", role: "manager",   text: "Keeping all verification sign-offs threaded here for the audit trail.", time: "8:15 AM", ts: 1 },
+      { id: "a2", role: "manager",   text: "Weight submissions get a second look before I approve.",              time: "8:16 AM", ts: 2 },
+      { id: "a3", role: "manager",   text: "Nothing pending yet this shift.",                                     time: "8:30 AM", ts: 3 }
+    ],
+    "executive-briefing": [
+      { id: "e1", role: "executive", text: "Board wants the 30-day volume trend for Thursday.",              time: "7:58 AM", ts: 1 },
+      { id: "e2", role: "manager",   text: "I'll have the Northeast numbers packaged by EOD.",               time: "8:12 AM", ts: 2 },
+      { id: "e3", role: "executive", text: "Perfect. Flag any compliance dips above the 2% threshold.",      time: "8:14 AM", ts: 3 }
+    ]
+  };
+}
+
+function hydrateInto(data) {
+  State.session   = data.session || null;
+  State.tasks     = data.tasks;
+  State.messages  = data.messages;
+  State.auditLog  = data.auditLog;
+  State.channels  = data.channels;
+  State.lastRead  = data.lastRead || {};
+}
+
+/* Load from storage or seed. Returns true if a session should be restored. */
+function loadState() {
+  let data = null;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) data = JSON.parse(raw);
+  } catch (e) { data = null; }
+  if (!data) { data = seedDefaults(); }
+  hydrateInto(data);
+  return !!State.session;
+}
+
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      session:  State.session,
+      tasks:    State.tasks,
+      messages: State.messages,
+      auditLog: State.auditLog,
+      channels: State.channels,
+      lastRead: State.lastRead
+    }));
+  } catch (e) { /* storage unavailable (e.g. private mode) — app still works in-memory */ }
+}
+
+function resetDemo() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  hydrateInto(seedDefaults());
+  save();
+}
 
 /* ============================================================
    UTILITIES
@@ -951,6 +1278,7 @@ function nowTime() {
 function logAudit(role, desc) {
   const actor = role === "system" ? "System" : (PERSONAS[role] ? PERSONAS[role].name : "System");
   State.auditLog.unshift({ time: nowTime(), role: role, actor: actor, desc: desc, live: true });
+  save();
   // keep audit view fresh if visible
   if (State.activeScreen === "screen-audit") renderAudit();
 }
@@ -973,6 +1301,9 @@ function iconApprovals() {
 }
 function iconMessages() {
   return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+}
+function iconChats() {
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/><path d="M21 12c0 4.42-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.3-3.9A7.7 7.7 0 0 1 3 12c0-4.42 4.03-8 9-8s9 3.58 9 8Z"/></svg>`;
 }
 function iconAudit() {
   return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>`;
@@ -1036,6 +1367,16 @@ function renderHeader() {
   $("#hdrAvatar").textContent = p.initials;
   $("#hdrName").textContent = p.name;
   $("#hdrRole").textContent = p.title;
+
+  // account chip + popover
+  $("#chipAvatar").className = "avatar " + State.role;
+  $("#chipAvatar").textContent = p.initials;
+  $("#popName").textContent = p.name;
+  $("#popRole").textContent = capitalize(State.role);
+
+  // Audit folded into header icon for roles whose nav is full
+  const inHeader = !!(ROLES[State.role] && ROLES[State.role].auditInHeader);
+  $("#hdrAuditBtn").style.display = inHeader ? "" : "none";
 }
 
 function renderNav() {
@@ -1058,11 +1399,15 @@ function renderNav() {
 }
 
 function highlightNav() {
+  // channel view counts as being in the Chats section
+  const chatActive = State.activeScreen === "screen-chats" || State.activeScreen === "screen-channel";
   $all(".nav-item").forEach(btn => {
     const key = btn.dataset.navkey;
     const meta = NAV_META[key];
     let match = false;
-    if (State.role === "manager") {
+    if (key === "chats") {
+      match = chatActive;
+    } else if (State.role === "manager") {
       if (key === "tasks" && State.activeScreen === "screen-manager" && currentManagerTab === "team") match = true;
       else if (key === "approvals" && State.activeScreen === "screen-manager" && currentManagerTab === "approvals") match = true;
       else if (key === "audit" && State.activeScreen === "screen-audit") match = true;
@@ -1082,9 +1427,10 @@ function showScreen(screenId) {
   $all(".screen").forEach(s => s.classList.toggle("active", s.id === screenId));
   $("#screenWrap").scrollTop = 0;
 
-  const isLanding = screenId === "screen-landing";
-  $("#appHeader").classList.toggle("hidden", isLanding);
-  $("#bottomNav").classList.toggle("hidden", isLanding);
+  // chrome (header + nav) hidden on auth screens
+  const noChrome = screenId === "screen-signin" || screenId === "screen-reveal";
+  $("#appHeader").classList.toggle("hidden", noChrome);
+  $("#bottomNav").classList.toggle("hidden", noChrome);
 
   // per-screen render hooks
   if (screenId === "screen-dashboard") renderDashboard();
@@ -1092,30 +1438,100 @@ function showScreen(screenId) {
   if (screenId === "screen-messages") renderMessages();
   if (screenId === "screen-manager") renderManager();
   if (screenId === "screen-audit") renderAudit();
+  if (screenId === "screen-chats") renderChannelList();
 
   highlightNav();
 }
 
 /* ============================================================
-   ROLE ENTRY / SWITCH
+   SIGN IN / SESSION / SIGN OUT
    ============================================================ */
-function enterRole(role) {
+/* Validate credentials; returns matched account or null (no role leaked on failure) */
+function matchAccount(email, password) {
+  const e = (email || "").trim().toLowerCase();
+  return ACCOUNTS.find(a => a.email === e && a.password === password) || null;
+}
+
+function attemptSignIn() {
+  const email = $("#emailInput").value;
+  const password = $("#passwordInput").value;
+  const acct = matchAccount(email, password);
+  if (!acct) {
+    showSigninError();
+    return;
+  }
+  hideSigninError();
+  const p = PERSONAS[acct.role];
+  logAudit(acct.role, `${p.name} signed in (${capitalize(acct.role)}).`);
+  activateSession(acct.role);
+  showRoleReveal(acct.role);
+}
+
+function showSigninError() {
+  $("#signinError").classList.add("show");
+  const card = $("#signinCard");
+  card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
+  $("#passwordInput").value = "";
+  $("#passwordInput").focus();
+}
+function hideSigninError() { $("#signinError").classList.remove("show"); }
+
+/* Persist who's signed in + wire up chrome (does not route) */
+function activateSession(role) {
+  State.role = role;
+  State.session = role;
+  save();
+  renderHeader();
+  renderNav();
+}
+
+/* Role reveal interstitial → Continue routes to the role home */
+function showRoleReveal(role) {
+  const p = PERSONAS[role];
+  $("#revealInner").innerHTML = `
+    <div class="reveal-avatar ${role}">${p.initials}</div>
+    <div class="reveal-welcome">Welcome,</div>
+    <div class="reveal-name">${p.name}</div>
+    <div class="reveal-badge ${role}">${ROLE_BADGE[role]}</div>
+    <button class="btn btn-primary" id="revealContinue">Continue</button>`;
+  showScreen("screen-reveal");
+  $("#revealContinue").onclick = () => enterHome(role);
+  // auto-advance after ~1s if the user doesn't tap
+  clearTimeout(showRoleReveal._t);
+  showRoleReveal._t = setTimeout(() => {
+    if (State.activeScreen === "screen-reveal") enterHome(role);
+  }, 1400);
+}
+
+function enterHome(role) {
+  clearTimeout(showRoleReveal._t);
+  showScreen(ROLES[role].home);
+  if (role === "manager") setManagerTab("team");
+}
+
+/* Restore an existing session on load without re-showing sign-in */
+function restoreSession(role) {
   State.role = role;
   renderHeader();
   renderNav();
-  const p = PERSONAS[role];
-  logAudit(role, `${p.name} entered demo as ${capitalize(role)}.`);
   showScreen(ROLES[role].home);
+  if (role === "manager") setManagerTab("team");
 }
 
-function switchRole() {
-  // preserve all state, return to landing
+function doSignOut() {
+  const role = State.role;
+  const p = PERSONAS[role];
+  if (p) logAudit(role, `${p.name} signed out.`);
   State.role = null;
-  State.activeScreen = "screen-landing";
-  selectedRole = null;
-  $all(".role-card").forEach(c => c.classList.remove("selected"));
-  $("#enterDemoBtn").disabled = true;
-  showScreen("screen-landing");
+  State.session = null;
+  save();
+  closeUserMenu();
+  // reset transient view flags & sign-in form
+  State.dashboardViewLogged = false;
+  $("#emailInput").value = "";
+  $("#passwordInput").value = "";
+  hideSigninError();
+  showScreen("screen-signin");
 }
 
 function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
@@ -1269,6 +1685,7 @@ function submitTask(taskId, value, displayVal, auditLabel) {
   t.value = value;
   t.status = "submitted";
   t.submittedAt = nowTime();
+  save();
   logAudit("operator", `Dana Cole submitted verification for ${friendlyTaskName(t)} (${displayVal}).`);
   closeSheet();
   renderOperatorTasks();
@@ -1307,6 +1724,7 @@ function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
   State.messages.push({ from: "out", who: "You", text: text, time: nowTime() });
+  save();
   input.value = "";
   renderMessages();
   logAudit("operator", `Dana Cole sent a message to Dispatch.`);
@@ -1428,6 +1846,7 @@ function resolveApproval(taskId, decision) {
   const card = $(`.approval-card[data-taskid="${taskId}"]`);
 
   t.status = decision === "approve" ? "verified" : "rejected";
+  save();
   const verb = decision === "approve" ? "approved" : "rejected";
   logAudit("manager", `Marcus Reid ${verb} ${friendlyTaskName(t)} verification.`);
 
@@ -1472,6 +1891,139 @@ function renderAudit() {
       <div class="tl-desc">${e.desc}</div>`;
     timeline.appendChild(item);
   });
+}
+
+/* ============================================================
+   CHAT HUB — channel list + channel view
+   ============================================================ */
+let currentChannelId = null;
+
+/* The signed-in account's email keys last-read tracking */
+function currentAccountEmail() {
+  const acct = ACCOUNTS.find(a => a.role === State.role);
+  return acct ? acct.email : "unknown";
+}
+
+function channelAccess(chanId) {
+  return CHANNELS[chanId].access[State.role] || "locked";
+}
+
+/* messages arrived since this account last opened the channel */
+function unreadCount(chanId) {
+  const total = (State.channels[chanId] || []).length;
+  const email = currentAccountEmail();
+  const seen = (State.lastRead[email] && State.lastRead[email][chanId]) || 0;
+  return Math.max(0, total - seen);
+}
+
+function markChannelRead(chanId) {
+  const email = currentAccountEmail();
+  if (!State.lastRead[email]) State.lastRead[email] = {};
+  State.lastRead[email][chanId] = (State.channels[chanId] || []).length;
+  save();
+}
+
+function channelPreview(chanId) {
+  const msgs = State.channels[chanId] || [];
+  if (msgs.length === 0) return CHANNELS[chanId].desc;
+  const last = msgs[msgs.length - 1];
+  const who = PERSONAS[last.role] ? PERSONAS[last.role].name.split(" ")[0] : "";
+  return who + ": " + last.text;
+}
+function channelLastTime(chanId) {
+  const msgs = State.channels[chanId] || [];
+  return msgs.length ? msgs[msgs.length - 1].time : "";
+}
+
+function renderChannelList() {
+  const list = $("#channelList");
+  list.innerHTML = "";
+  CHANNEL_ORDER.forEach(chanId => {
+    const ch = CHANNELS[chanId];
+    const locked = channelAccess(chanId) !== "rw";
+    const card = document.createElement("div");
+    card.className = "channel-card " + (locked ? "locked" : "unlocked");
+    card.dataset.chanid = chanId;
+    const unread = locked ? 0 : unreadCount(chanId);
+    card.innerHTML = `
+      <div class="channel-ic">#</div>
+      <div class="channel-body">
+        <div class="channel-name">${ch.name}${locked ? ' <span class="lock-badge">🔒</span>' : ""}</div>
+        <div class="channel-preview">${escapeHtml(locked ? ch.desc : channelPreview(chanId))}</div>
+      </div>
+      <div class="channel-right">
+        <div class="channel-time">${locked ? "" : channelLastTime(chanId)}</div>
+        ${unread > 0 ? `<span class="unread-badge">${unread}</span>` : ""}
+      </div>`;
+    list.appendChild(card);
+    // inline lock notice slot
+    const note = document.createElement("div");
+    note.className = "channel-locknote";
+    note.dataset.notefor = chanId;
+    note.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Requires ${requiredRoleFor(chanId)} access</span>`;
+    list.appendChild(note);
+  });
+}
+
+function denyChannel(chanId, cardEl) {
+  cardEl.classList.remove("wiggle"); void cardEl.offsetWidth; cardEl.classList.add("wiggle");
+  const note = $(`.channel-locknote[data-notefor="${chanId}"]`);
+  if (note) note.classList.add("show");
+  logAudit(State.role, `${PERSONAS[State.role].name} attempted to open ${CHANNELS[chanId].name} (denied — requires ${requiredRoleFor(chanId)} access).`);
+}
+
+function openChannel(chanId) {
+  if (channelAccess(chanId) !== "rw") return;
+  currentChannelId = chanId;
+  renderChannelView();
+  markChannelRead(chanId);
+  showScreen("screen-channel");
+}
+
+function renderChannelView() {
+  const chanId = currentChannelId;
+  const ch = CHANNELS[chanId];
+  $("#chanTitle").textContent = ch.name;
+  $("#chanMembers").textContent = channelMemberLine(chanId);
+  const thread = $("#chatThread");
+  thread.innerHTML = "";
+  (State.channels[chanId] || []).forEach(m => {
+    const mine = m.role === State.role;
+    const p = PERSONAS[m.role];
+    const row = document.createElement("div");
+    row.className = "chat-row " + (mine ? "out" : "in");
+    row.innerHTML = `
+      <div class="chat-avatar ${m.role}">${p.initials}</div>
+      <div class="chat-col">
+        <div class="chat-senderline">${p.name} <span class="role-chip ${m.role}">${capitalize(m.role)}</span></div>
+        <div class="chat-bubble">${escapeHtml(m.text)}</div>
+        <div class="chat-time">${m.time}</div>
+      </div>`;
+    thread.appendChild(row);
+  });
+  const wrap = $("#screenWrap");
+  requestAnimationFrame(() => { wrap.scrollTop = wrap.scrollHeight; });
+}
+
+function sendChannelMessage() {
+  const input = $("#chanInput");
+  const text = input.value.trim();
+  if (!text || !currentChannelId) return;
+  if (channelAccess(currentChannelId) !== "rw") return;
+  const chanId = currentChannelId;
+  const msg = {
+    id: "m" + Date.now() + Math.floor(Math.random() * 1000),
+    role: State.role,
+    text: text,
+    time: nowTime(),
+    ts: Date.now()
+  };
+  if (!State.channels[chanId]) State.channels[chanId] = [];
+  State.channels[chanId].push(msg);
+  input.value = "";
+  markChannelRead(chanId);   // author has read their own message (also saves)
+  renderChannelView();
+  logAudit(State.role, `${PERSONAS[State.role].name} posted in ${CHANNELS[chanId].name}.`);
 }
 
 /* ============================================================
@@ -1560,24 +2112,85 @@ function denyAnalytics(el) {
 /* ============================================================
    EVENT WIRING (delegation where sensible)
    ============================================================ */
-let selectedRole = null;
 
-// Role card selection
-$("#roleCards").addEventListener("click", e => {
-  const card = e.target.closest(".role-card");
-  if (!card) return;
-  selectedRole = card.dataset.role;
-  $all(".role-card").forEach(c => c.classList.toggle("selected", c === card));
-  $("#enterDemoBtn").disabled = false;
+// --- Sign-in form ---
+$("#signinCard").addEventListener("submit", e => { e.preventDefault(); attemptSignIn(); });
+$("#emailInput").addEventListener("input", hideSigninError);
+$("#passwordInput").addEventListener("input", hideSigninError);
+
+// Password show/hide
+$("#pwToggle").addEventListener("click", () => {
+  const input = $("#passwordInput");
+  const showing = input.type === "text";
+  input.type = showing ? "password" : "text";
+  $("#pwToggle").setAttribute("aria-label", showing ? "Show password" : "Hide password");
+  $("#pwEye").innerHTML = showing
+    ? `<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>`
+    : `<path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c6.5 0 10 8 10 8a13.2 13.2 0 0 1-1.67 2.68"/><path d="M6.6 6.6A13.5 13.5 0 0 0 2 12s3.5 7 10 7a9.1 9.1 0 0 0 5.4-1.6"/><path d="m2 2 20 20"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>`;
 });
 
-$("#enterDemoBtn").addEventListener("click", () => {
-  if (!selectedRole) return;
-  enterRole(selectedRole);
+// Demo credentials hint (collapsible + prefill)
+function renderDemoHint() {
+  const body = $("#demoHintBody");
+  body.innerHTML = "";
+  ACCOUNTS.forEach(a => {
+    const p = PERSONAS[a.role];
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = "cred-row";
+    row.dataset.email = a.email;
+    row.dataset.password = a.password;
+    row.innerHTML = `
+      <span class="cred-avatar ${a.role}">${p.initials}</span>
+      <span class="cred-meta">
+        <span class="cred-email">${a.email}</span>
+        <span class="cred-detail">${p.name} · ${capitalize(a.role)}</span>
+      </span>
+      <span class="cred-pw">${a.password}</span>`;
+    body.appendChild(row);
+  });
+}
+renderDemoHint();
+
+$("#demoHintHead").addEventListener("click", () => {
+  $("#demoHint").classList.toggle("open");
+});
+$("#demoHintBody").addEventListener("click", e => {
+  const row = e.target.closest(".cred-row");
+  if (!row) return;
+  $("#emailInput").value = row.dataset.email;
+  $("#passwordInput").value = row.dataset.password;
+  hideSigninError();
+  $("#signInBtn").focus();
 });
 
-// Switch role
-$("#switchRoleBtn").addEventListener("click", switchRole);
+// Reset demo data (with confirm)
+$("#resetDemoLink").addEventListener("click", () => {
+  if (!confirm("Reset all demo data? This clears tasks, chats, audit log and sign-in state.")) return;
+  resetDemo();
+  $("#emailInput").value = "";
+  $("#passwordInput").value = "";
+  hideSigninError();
+  $("#demoHint").classList.remove("open");
+});
+
+// --- Account menu (sign out) ---
+function openUserMenu() { $("#userPopover").classList.add("show"); }
+function closeUserMenu() { $("#userPopover").classList.remove("show"); }
+$("#userChipBtn").addEventListener("click", e => {
+  e.stopPropagation();
+  $("#userPopover").classList.toggle("show");
+});
+$("#signOutBtn").addEventListener("click", () => {
+  if (!confirm("Sign out of Nexus Portal?")) return;
+  doSignOut();
+});
+document.addEventListener("click", e => {
+  if (!e.target.closest(".user-menu-wrap")) closeUserMenu();
+});
+
+// --- Header audit shortcut (folded-out Audit) ---
+$("#hdrAuditBtn").addEventListener("click", () => { closeUserMenu(); showScreen("screen-audit"); });
 
 // Bottom nav (delegated)
 $("#bottomNav").addEventListener("click", e => {
@@ -1595,6 +2208,8 @@ $("#bottomNav").addEventListener("click", e => {
 
   const meta = NAV_META[key];
 
+  if (key === "chats") { showScreen("screen-chats"); return; }
+
   if (State.role === "manager") {
     if (key === "dashboard") {
       logAudit("manager", "Marcus Reid opened Company Analytics.");
@@ -1609,6 +2224,20 @@ $("#bottomNav").addEventListener("click", e => {
 
   showScreen(meta.screen);
 });
+
+// --- Chat channel list (delegated) ---
+$("#channelList").addEventListener("click", e => {
+  const card = e.target.closest(".channel-card");
+  if (!card) return;
+  const chanId = card.dataset.chanid;
+  if (card.classList.contains("locked")) { denyChannel(chanId, card); return; }
+  openChannel(chanId);
+});
+
+// --- Chat channel view ---
+$("#chanBack").addEventListener("click", () => showScreen("screen-chats"));
+$("#chanSend").addEventListener("click", sendChannelMessage);
+$("#chanInput").addEventListener("keydown", e => { if (e.key === "Enter") sendChannelMessage(); });
 
 // Operator task card → sheet (delegated)
 $("#operatorTaskList").addEventListener("click", e => {
@@ -1676,9 +2305,16 @@ document.addEventListener("keydown", e => {
 });
 
 /* ============================================================
-   INIT
+   INIT — hydrate from storage, restore session or show sign-in
    ============================================================ */
-showScreen("screen-landing");
+(function init() {
+  const hasSession = loadState();
+  if (hasSession && ROLES[State.session]) {
+    restoreSession(State.session);   // a real app remembers you
+  } else {
+    showScreen("screen-signin");
+  }
+})();
 </script>
 </body>
 </html>
