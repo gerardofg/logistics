@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Nexus Portal (Demo)</title>
+<style>
+  :root {
+    /* Palette */
+    --white: #FFFFFF;
+    --bg: #F5F6F8;
+    --border: #E5E8EE;
+    --shadow-sm: 0 1px 3px rgba(16,24,40,.06);
+    --shadow-md: 0 4px 16px rgba(16,24,40,.10);
+    --shadow-lg: 0 12px 40px rgba(16,24,40,.18);
+
+    --navy: #0F2B5B;
+    --navy-hover: #0A1F42;
+    --navy-tint: #EEF2FA;
+
+    --teal: #12A594;
+    --teal-tint: #E6F7F4;
+    --teal-dark: #0E7C70;
+
+    --amber: #B54708;
+    --amber-tint: #FEF6EE;
+    --blue: #175CD3;
+    --blue-tint: #EFF4FF;
+
+    --red: #B42318;
+    --red-tint: #FEF3F2;
+
+    --text: #101828;
+    --text-2: #667085;
+    --text-3: #98A2B3;
+
+    --radius: 12px;
+    --radius-sm: 10px;
+    --ease: 180ms cubic-bezier(.4,0,.2,1);
+
+    --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    font-family: var(--font);
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background:
+      radial-gradient(1200px 600px at 50% -200px, #EAEEF6 0%, var(--bg) 60%);
+  }
+
+  /* ===== App frame (mobile feel) ===== */
+  #app {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    height: min(880px, calc(100vh - 48px));
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== Slim header ===== */
+  .app-header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    z-index: 5;
+  }
+  .app-header.hidden { display: none; }
+  .persona {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+  }
+  .avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: .3px;
+    flex: 0 0 auto;
+  }
+  .avatar.executive { background: linear-gradient(135deg,#12336E,#0F2B5B); }
+  .avatar.manager   { background: linear-gradient(135deg,#16BBA8,#0E7C70); }
+  .avatar.operator  { background: linear-gradient(135deg,#5E7CB0,#3C577F); }
+  .persona-meta { min-width: 0; }
+  .persona-name {
+    font-size: 14px; font-weight: 600; letter-spacing: -.2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .persona-role {
+    font-size: 12px; color: var(--text-2);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .switch-role {
+    flex: 0 0 auto;
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    display: grid; place-items: center;
+    cursor: pointer;
+    color: var(--text-2);
+    transition: var(--ease);
+  }
+  .switch-role:hover { background: var(--navy-tint); color: var(--navy); border-color: #D3DBEA; }
+  .switch-role:active { transform: scale(.94); }
+
+  /* ===== Scroll area ===== */
+  .screen-wrap {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .screen { display: none; padding: 18px 18px 26px; animation: fadeUp .28s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-size: 19px; font-weight: 700; letter-spacing: -.4px;
+    margin-bottom: 3px;
+  }
+  .section-sub { font-size: 13px; color: var(--text-2); margin-bottom: 16px; }
+
+  /* ===== Screen 1: Role selector ===== */
+  #screen-landing { padding: 0; height: 100%; display: flex; flex-direction: column; }
+  #screen-landing .landing-inner {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 30px 26px 34px;
+  }
+  .wordmark-row { display: flex; align-items: center; gap: 9px; margin-bottom: 6px; }
+  .wordmark {
+    font-size: 25px; font-weight: 700; letter-spacing: -.6px; color: var(--navy);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .brand-glyph {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: linear-gradient(135deg,#12336E,#0F2B5B);
+    display: grid; place-items: center;
+  }
+  .chip-demo {
+    font-size: 10px; font-weight: 700; letter-spacing: .8px;
+    color: var(--navy); background: var(--navy-tint);
+    padding: 3px 7px; border-radius: 6px; border: 1px solid #DCE3F1;
+  }
+  .landing-sub { font-size: 13.5px; color: var(--text-2); margin-bottom: 26px; }
+
+  .role-cards { display: flex; flex-direction: column; gap: 12px; }
+  .role-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px; border: 1.5px solid var(--border);
+    border-radius: var(--radius); background: var(--white);
+    cursor: pointer; transition: var(--ease); position: relative;
+    text-align: left;
+  }
+  .role-card:hover { border-color: #C9D3E6; box-shadow: var(--shadow-sm); }
+  .role-card.selected {
+    border-color: var(--navy); background: var(--navy-tint);
+    box-shadow: 0 0 0 3px rgba(15,43,91,.08);
+  }
+  .role-icon {
+    width: 42px; height: 42px; border-radius: 10px; flex: 0 0 auto;
+    display: grid; place-items: center; color: var(--navy);
+    background: #F2F5FB; border: 1px solid #E6ECF7;
+    transition: var(--ease);
+  }
+  .role-card.selected .role-icon { background: #fff; border-color: #D6E0F2; }
+  .role-text { flex: 1; min-width: 0; }
+  .role-title { font-size: 15px; font-weight: 650; letter-spacing: -.2px; }
+  .role-desc { font-size: 12.5px; color: var(--text-2); margin-top: 2px; line-height: 1.35; }
+  .role-check {
+    width: 22px; height: 22px; border-radius: 50%; flex: 0 0 auto;
+    border: 1.5px solid var(--border); display: grid; place-items: center;
+    color: #fff; transition: var(--ease);
+  }
+  .role-card.selected .role-check { background: var(--navy); border-color: var(--navy); }
+  .role-check svg { opacity: 0; transition: var(--ease); }
+  .role-card.selected .role-check svg { opacity: 1; }
+
+  /* ===== Buttons ===== */
+  .btn {
+    font-family: var(--font);
+    font-size: 15px; font-weight: 600; letter-spacing: -.1px;
+    border: none; border-radius: var(--radius-sm); cursor: pointer;
+    padding: 14px 18px; transition: var(--ease);
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-primary { background: var(--navy); color: #fff; }
+  .btn-primary:hover { background: var(--navy-hover); }
+  .btn-primary:active { transform: scale(.985); }
+  .btn-primary:disabled { background: #C7D0DE; cursor: not-allowed; color: #EEF1F6; }
+  .btn-block { width: 100%; }
+  .btn-teal { background: var(--teal); color: #fff; }
+  .btn-teal:hover { background: var(--teal-dark); }
+  .btn-red { background: var(--red-tint); color: var(--red); border: 1px solid #FCCCC6; }
+  .btn-red:hover { background: #FCE7E5; }
+  .enter-btn-wrap { margin-top: 26px; }
+
+  /* ===== Metric cards ===== */
+  .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .metric-card {
+    grid-column: span 1;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px; background: var(--white); box-shadow: var(--shadow-sm);
+    cursor: pointer; transition: var(--ease);
+  }
+  .metric-card:first-child { grid-column: span 2; }
+  .metric-card:hover { border-color: #D3DBEA; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .metric-card:active { transform: translateY(0); }
+  .metric-label { font-size: 12px; color: var(--text-2); font-weight: 500; }
+  .metric-value { font-size: 27px; font-weight: 700; letter-spacing: -1px; margin-top: 3px; }
+  .metric-card:first-child .metric-value { font-size: 32px; }
+  .metric-delta { font-size: 11.5px; margin-top: 3px; display: inline-flex; align-items: center; gap: 3px; }
+  .delta-up { color: var(--teal-dark); }
+  .delta-flat { color: var(--text-2); }
+
+  /* ===== Chart card ===== */
+  .chart-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 15px 15px 10px; background: var(--white); box-shadow: var(--shadow-sm);
+    cursor: pointer; transition: var(--ease);
+  }
+  .chart-card:hover { border-color: #D3DBEA; box-shadow: var(--shadow-md); }
+  .chart-caption { font-size: 13px; font-weight: 600; letter-spacing: -.2px; }
+  .chart-sub { font-size: 11.5px; color: var(--text-2); margin-bottom: 8px; }
+  .chart-svg { width: 100%; height: auto; display: block; }
+
+  /* ===== Locked folder / analytics row ===== */
+  .folder-row {
+    display: flex; align-items: center; gap: 13px;
+    padding: 14px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--white);
+    margin-bottom: 16px; transition: var(--ease); box-shadow: var(--shadow-sm);
+  }
+  .folder-row.locked { cursor: not-allowed; background: #FAFBFC; }
+  .folder-row.unlocked { cursor: pointer; }
+  .folder-row.unlocked:hover { border-color: #C9D3E6; box-shadow: var(--shadow-md); }
+  .folder-ic {
+    width: 40px; height: 40px; border-radius: 10px; flex: 0 0 auto;
+    display: grid; place-items: center;
+  }
+  .folder-row.locked .folder-ic { background: #F0F1F3; color: #98A2B3; }
+  .folder-row.unlocked .folder-ic { background: var(--navy-tint); color: var(--navy); }
+  .folder-row.locked .folder-ic svg { filter: grayscale(1); }
+  .folder-text { flex: 1; min-width: 0; }
+  .folder-title { font-size: 14px; font-weight: 600; letter-spacing: -.2px; display: flex; align-items: center; gap: 6px; }
+  .folder-row.locked .folder-title { color: #667085; }
+  .folder-sub { font-size: 12px; color: var(--text-3); margin-top: 1px; }
+  .lock-badge { font-size: 12px; }
+  .folder-chevron { color: var(--text-3); flex: 0 0 auto; }
+  .shake { animation: shake .4s cubic-bezier(.36,.07,.19,.97) both; }
+  @keyframes shake {
+    10%,90% { transform: translateX(-1px); }
+    20%,80% { transform: translateX(2px); }
+    30%,50%,70% { transform: translateX(-4px); }
+    40%,60% { transform: translateX(4px); }
+  }
+  .pulse-dim { animation: pulseDim .5s ease; }
+  @keyframes pulseDim { 0%,100%{opacity:1;} 50%{opacity:.5;} }
+
+  /* ===== Task cards ===== */
+  .task-list { display: flex; flex-direction: column; gap: 11px; }
+  .task-card {
+    display: flex; align-items: center; gap: 13px;
+    padding: 14px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--white);
+    box-shadow: var(--shadow-sm); cursor: pointer; transition: var(--ease);
+  }
+  .task-card:hover { border-color: #D3DBEA; box-shadow: var(--shadow-md); }
+  .task-card:active { transform: scale(.995); }
+  .task-card.no-action { cursor: default; }
+  .task-card.no-action:hover { border-color: var(--border); box-shadow: var(--shadow-sm); }
+  .task-ic {
+    width: 40px; height: 40px; border-radius: 10px; flex: 0 0 auto;
+    display: grid; place-items: center; background: #F2F5FB; color: var(--navy);
+    border: 1px solid #E6ECF7;
+  }
+  .task-body { flex: 1; min-width: 0; }
+  .task-title { font-size: 14.5px; font-weight: 600; letter-spacing: -.2px; }
+  .task-sub { font-size: 12px; color: var(--text-2); margin-top: 1px; }
+
+  /* ===== Status chips ===== */
+  .chip {
+    font-size: 11px; font-weight: 600; letter-spacing: .1px;
+    padding: 4px 9px; border-radius: 999px; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .chip-assigned  { color: var(--amber); background: var(--amber-tint); }
+  .chip-submitted { color: var(--blue);  background: var(--blue-tint); }
+  .chip-verified  { color: var(--teal-dark); background: var(--teal-tint); }
+  .chip-rejected  { color: var(--red);   background: var(--red-tint); }
+
+  /* ===== Segmented tabs ===== */
+  .seg-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .seg-tab {
+    flex: 1; padding: 10px 4px 12px; font-size: 13.5px; font-weight: 600;
+    color: var(--text-2); background: none; border: none; cursor: pointer;
+    position: relative; transition: var(--ease); letter-spacing: -.1px;
+  }
+  .seg-tab .badge {
+    display: inline-block; min-width: 18px; padding: 1px 5px;
+    font-size: 10.5px; border-radius: 999px; margin-left: 5px;
+    background: var(--navy); color: #fff; font-weight: 700; vertical-align: 1px;
+  }
+  .seg-tab.active { color: var(--navy); }
+  .seg-tab.active::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2.5px;
+    background: var(--navy); border-radius: 3px 3px 0 0;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeUp .22s ease; }
+
+  /* ===== Approval cards ===== */
+  .approval-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 15px; background: var(--white); box-shadow: var(--shadow-sm);
+    margin-bottom: 12px; transition: var(--ease);
+  }
+  .approval-card.resolving { opacity: 0; transform: translateX(30px); }
+  .ap-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .ap-operator { font-size: 12px; color: var(--text-2); }
+  .ap-task { font-size: 15px; font-weight: 650; letter-spacing: -.2px; margin-top: 2px; }
+  .ap-value {
+    margin: 12px 0; padding: 11px 13px; border-radius: 10px;
+    background: var(--bg); border: 1px solid var(--border);
+    display: flex; align-items: baseline; justify-content: space-between;
+  }
+  .ap-value-label { font-size: 11.5px; color: var(--text-2); }
+  .ap-value-num { font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
+  .ap-time { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+  .ap-actions { display: flex; gap: 10px; }
+  .ap-actions .btn { flex: 1; padding: 11px; font-size: 14px; }
+
+  .empty-state {
+    text-align: center; padding: 42px 20px; color: var(--text-2);
+  }
+  .empty-ic {
+    width: 54px; height: 54px; border-radius: 14px; margin: 0 auto 14px;
+    display: grid; place-items: center; background: var(--bg); color: var(--text-3);
+    border: 1px solid var(--border);
+  }
+  .empty-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .empty-sub { font-size: 13px; line-height: 1.4; max-width: 240px; margin: 0 auto; }
+
+  .resolved-head {
+    font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
+    color: var(--text-3); margin: 20px 0 10px;
+  }
+  .resolved-card {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    padding: 13px 14px; border: 1px solid var(--border); border-radius: 10px;
+    background: #FAFBFC; margin-bottom: 9px;
+  }
+  .resolved-card .rc-title { font-size: 13.5px; font-weight: 600; }
+  .resolved-card .rc-sub { font-size: 11.5px; color: var(--text-2); }
+
+  /* ===== Messages ===== */
+  .msg-thread { display: flex; flex-direction: column; gap: 10px; padding-bottom: 6px; }
+  .msg {
+    max-width: 82%; padding: 10px 13px; border-radius: 14px;
+    font-size: 13.5px; line-height: 1.4; box-shadow: var(--shadow-sm);
+  }
+  .msg .msg-meta { font-size: 10.5px; margin-top: 4px; opacity: .7; }
+  .msg.in  { align-self: flex-start; background: var(--white); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+  .msg.out { align-self: flex-end; background: var(--navy); color: #fff; border-bottom-right-radius: 4px; }
+  .msg-input-row {
+    display: flex; gap: 8px; margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .msg-input {
+    flex: 1; border: 1px solid var(--border); border-radius: 999px;
+    padding: 11px 15px; font-size: 14px; font-family: var(--font); outline: none;
+    transition: var(--ease);
+  }
+  .msg-input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(15,43,91,.08); }
+  .msg-send {
+    width: 42px; height: 42px; border-radius: 50%; flex: 0 0 auto; border: none;
+    background: var(--navy); color: #fff; cursor: pointer; display: grid; place-items: center;
+    transition: var(--ease);
+  }
+  .msg-send:hover { background: var(--navy-hover); }
+  .msg-send:active { transform: scale(.92); }
+
+  /* ===== Audit timeline ===== */
+  .audit-filter-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .audit-filter-row label { font-size: 12.5px; color: var(--text-2); font-weight: 500; }
+  .select-wrap { position: relative; flex: 1; }
+  .select-wrap select {
+    width: 100%; appearance: none; -webkit-appearance: none;
+    font-family: var(--font); font-size: 13.5px; font-weight: 500; color: var(--text);
+    padding: 10px 34px 10px 13px; border: 1px solid var(--border); border-radius: 10px;
+    background: var(--white); cursor: pointer; outline: none; transition: var(--ease);
+  }
+  .select-wrap select:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(15,43,91,.08); }
+  .select-wrap::after {
+    content: ''; position: absolute; right: 14px; top: 50%; width: 8px; height: 8px;
+    border-right: 1.5px solid var(--text-2); border-bottom: 1.5px solid var(--text-2);
+    transform: translateY(-70%) rotate(45deg); pointer-events: none;
+  }
+
+  .timeline { position: relative; padding-left: 26px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px;
+    background: var(--border); border-radius: 2px;
+  }
+  .tl-item { position: relative; padding-bottom: 20px; }
+  .tl-item:last-child { padding-bottom: 4px; }
+  .tl-dot {
+    position: absolute; left: -26px; top: 3px; width: 14px; height: 14px;
+    border-radius: 50%; border: 3px solid var(--white);
+    box-shadow: 0 0 0 1.5px var(--border);
+  }
+  .tl-dot.executive { background: var(--navy); box-shadow: 0 0 0 1.5px var(--navy); }
+  .tl-dot.manager   { background: var(--teal); box-shadow: 0 0 0 1.5px var(--teal); }
+  .tl-dot.operator  { background: #5E7CB0; box-shadow: 0 0 0 1.5px #5E7CB0; }
+  .tl-dot.system    { background: #98A2B3; box-shadow: 0 0 0 1.5px #98A2B3; }
+  .tl-time { font-size: 11px; color: var(--text-3); font-weight: 500; }
+  .tl-actor { font-size: 13.5px; font-weight: 600; letter-spacing: -.2px; margin-top: 1px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .role-chip {
+    font-size: 10px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 5px;
+  }
+  .role-chip.executive { color: var(--navy); background: var(--navy-tint); }
+  .role-chip.manager   { color: var(--teal-dark); background: var(--teal-tint); }
+  .role-chip.operator  { color: #3C577F; background: #EEF2F8; }
+  .role-chip.system    { color: #667085; background: #F0F1F3; }
+  .tl-desc { font-size: 13px; color: var(--text-2); margin-top: 3px; line-height: 1.4; }
+
+  /* ===== Bottom nav ===== */
+  .bottom-nav {
+    flex: 0 0 auto;
+    display: flex; align-items: stretch;
+    border-top: 1px solid var(--border);
+    background: rgba(255,255,255,.92);
+    backdrop-filter: saturate(180%) blur(10px);
+    -webkit-backdrop-filter: saturate(180%) blur(10px);
+    padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+  }
+  .bottom-nav.hidden { display: none; }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 6px 2px; background: none; border: none; cursor: pointer;
+    color: var(--text-2); transition: var(--ease); border-radius: 10px;
+    position: relative;
+  }
+  .nav-item .nav-label { font-size: 10.5px; font-weight: 600; letter-spacing: -.1px; }
+  .nav-item:hover:not(.locked):not(.active) { color: var(--text); }
+  .nav-item.active { color: var(--navy); }
+  .nav-item.locked { color: var(--text-3); cursor: not-allowed; opacity: .8; }
+  .nav-item.locked svg { filter: grayscale(1); }
+  .nav-lock {
+    position: absolute; top: 2px; right: 50%; transform: translateX(15px);
+    font-size: 9px;
+  }
+
+  /* ===== Bottom sheet ===== */
+  .backdrop {
+    position: absolute; inset: 0; background: rgba(16,24,40,.45);
+    opacity: 0; pointer-events: none; transition: opacity var(--ease); z-index: 40;
+  }
+  .backdrop.show { opacity: 1; pointer-events: auto; }
+
+  .sheet {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 50;
+    background: var(--white); border-radius: 22px 22px 0 0;
+    box-shadow: 0 -8px 30px rgba(16,24,40,.18);
+    transform: translateY(102%); transition: transform 260ms cubic-bezier(.32,.72,0,1);
+    padding: 8px 20px calc(24px + env(safe-area-inset-bottom));
+    max-height: 88%; overflow-y: auto;
+  }
+  .sheet.show { transform: translateY(0); }
+  .sheet-handle { width: 40px; height: 4px; border-radius: 3px; background: #D6DAE2; margin: 6px auto 14px; }
+  .sheet-title { font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
+  .sheet-sub { font-size: 13px; color: var(--text-2); margin-top: 3px; margin-bottom: 18px; }
+
+  .field-label { font-size: 12.5px; font-weight: 600; color: var(--text-2); margin-bottom: 8px; display: block; }
+  .stepper {
+    display: flex; align-items: stretch; border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; margin-bottom: 14px;
+  }
+  .stepper button {
+    width: 52px; border: none; background: var(--bg); font-size: 22px; font-weight: 500;
+    color: var(--navy); cursor: pointer; transition: var(--ease);
+  }
+  .stepper button:hover { background: var(--navy-tint); }
+  .stepper button:active { background: #E1E8F5; }
+  .stepper input {
+    flex: 1; border: none; text-align: center; font-family: var(--font);
+    font-size: 24px; font-weight: 700; letter-spacing: -.5px; color: var(--text);
+    outline: none; width: 100%; -moz-appearance: textfield;
+  }
+  .stepper input::-webkit-outer-spin-button,
+  .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .unit-hint { font-size: 12px; color: var(--text-3); text-align: center; margin-top: -6px; margin-bottom: 18px; }
+
+  .quick-vals { display: flex; gap: 8px; margin-bottom: 20px; }
+  .quick-val {
+    flex: 1; padding: 9px; border: 1px solid var(--border); border-radius: 9px;
+    background: var(--white); font-family: var(--font); font-size: 13px; font-weight: 600;
+    color: var(--text-2); cursor: pointer; transition: var(--ease);
+  }
+  .quick-val:hover { border-color: var(--navy); color: var(--navy); background: var(--navy-tint); }
+
+  .sheet-sim {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    padding: 8px 0 22px;
+  }
+  .sim-visual {
+    width: 120px; height: 120px; border-radius: 20px; background: var(--bg);
+    border: 1px solid var(--border); display: grid; place-items: center; color: var(--navy);
+  }
+  .sim-status { font-size: 13px; color: var(--text-2); text-align: center; min-height: 18px; }
+
+  /* ===== Read-only / access modal ===== */
+  .modal {
+    position: absolute; left: 50%; top: 50%; z-index: 55;
+    transform: translate(-50%, -46%) scale(.96);
+    width: min(340px, calc(100% - 48px));
+    background: var(--white); border-radius: 18px; box-shadow: var(--shadow-lg);
+    padding: 24px 22px 20px; text-align: center;
+    opacity: 0; pointer-events: none; transition: var(--ease);
+  }
+  .modal.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+  .modal-ic {
+    width: 52px; height: 52px; border-radius: 14px; margin: 0 auto 14px;
+    display: grid; place-items: center;
+  }
+  .modal-ic.lock { background: var(--amber-tint); color: var(--amber); }
+  .modal-ic.info { background: var(--navy-tint); color: var(--navy); }
+  .modal-ic.unlock { background: var(--teal-tint); color: var(--teal-dark); }
+  .modal-title { font-size: 17px; font-weight: 700; letter-spacing: -.3px; }
+  .modal-body { font-size: 13.5px; color: var(--text-2); line-height: 1.5; margin: 8px 0 20px; }
+  .modal .btn { width: 100%; }
+  .modal-analytics-metrics { display: flex; gap: 10px; margin: 4px 0 18px; }
+  .modal-analytics-metrics .mm {
+    flex: 1; padding: 11px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg);
+  }
+  .mm-val { font-size: 19px; font-weight: 700; letter-spacing: -.4px; }
+  .mm-lbl { font-size: 10.5px; color: var(--text-2); margin-top: 2px; }
+
+  /* ===== Toast ===== */
+  .toast-wrap {
+    position: absolute; left: 0; right: 0; bottom: 86px; z-index: 60;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    pointer-events: none; padding: 0 18px;
+  }
+  .toast {
+    background: var(--text); color: #fff; font-size: 13.5px; font-weight: 500;
+    padding: 12px 16px; border-radius: 12px; box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: 9px; max-width: 100%;
+    transform: translateY(20px); opacity: 0; transition: all 260ms cubic-bezier(.32,.72,0,1);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast .toast-ic { flex: 0 0 auto; display: grid; place-items: center; }
+  .toast.success .toast-ic { color: #5BE3D0; }
+  .toast.danger .toast-ic { color: #FF9B90; }
+
+  .no-access-tip {
+    position: absolute; bottom: 92px; left: 50%; transform: translateX(-50%) translateY(8px);
+    background: var(--text); color: #fff; font-size: 12.5px; font-weight: 500;
+    padding: 9px 14px; border-radius: 10px; box-shadow: var(--shadow-md);
+    opacity: 0; pointer-events: none; transition: var(--ease); z-index: 45; white-space: nowrap;
+  }
+  .no-access-tip.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Slim header (hidden on landing) -->
+  <header class="app-header hidden" id="appHeader">
+    <div class="persona">
+      <div class="avatar" id="hdrAvatar">EV</div>
+      <div class="persona-meta">
+        <div class="persona-name" id="hdrName">Eleanor Vance</div>
+        <div class="persona-role" id="hdrRole">Chief Operations Officer</div>
+      </div>
+    </div>
+    <button class="switch-role" id="switchRoleBtn" title="Switch Role" aria-label="Switch Role">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 4 3 8l4 4"/><path d="M3 8h13a4 4 0 0 1 4 4"/>
+        <path d="m17 20 4-4-4-4"/><path d="M21 16H8a4 4 0 0 1-4-4"/>
+      </svg>
+    </button>
+  </header>
+
+  <div class="screen-wrap" id="screenWrap">
+
+    <!-- ============ SCREEN 1: LANDING ============ -->
+    <section class="screen active" id="screen-landing">
+      <div class="landing-inner">
+        <div class="wordmark-row">
+          <span class="wordmark">
+            <span class="brand-glyph">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5"/><path d="M12 22V12"/>
+              </svg>
+            </span>
+            Nexus Portal
+          </span>
+          <span class="chip-demo">DEMO</span>
+        </div>
+        <p class="landing-sub">Select a role to explore access-controlled logistics operations.</p>
+
+        <div class="role-cards" id="roleCards">
+          <button class="role-card" data-role="executive">
+            <span class="role-icon">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+              </svg>
+            </span>
+            <span class="role-text">
+              <span class="role-title">Executive</span>
+              <span class="role-desc">Read-only analytics &amp; compliance</span>
+            </span>
+            <span class="role-check">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+          </button>
+
+          <button class="role-card" data-role="manager">
+            <span class="role-icon">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </span>
+            <span class="role-text">
+              <span class="role-title">Manager</span>
+              <span class="role-desc">Oversight, approvals &amp; role assignment</span>
+            </span>
+            <span class="role-check">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+          </button>
+
+          <button class="role-card" data-role="operator">
+            <span class="role-icon">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.9 18.55A2 2 0 0 1 19 20H5a2 2 0 0 1-1.9-1.45"/><path d="M3 11h18v4H3z"/>
+                <path d="M5 11V7a2 2 0 0 1 2-2h3l2 2h5a2 2 0 0 1 2 2v2"/><circle cx="12" cy="17" r="1"/>
+              </svg>
+            </span>
+            <span class="role-text">
+              <span class="role-title">Operator</span>
+              <span class="role-desc">Field tasks &amp; verifications</span>
+            </span>
+            <span class="role-check">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+          </button>
+        </div>
+
+        <div class="enter-btn-wrap">
+          <button class="btn btn-primary btn-block" id="enterDemoBtn" disabled>Enter Demo</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN 2: EXECUTIVE DASHBOARD ============ -->
+    <section class="screen" id="screen-dashboard">
+      <h1 class="section-title">Operations Overview</h1>
+      <p class="section-sub" id="dashSub">Executive summary — read-only</p>
+
+      <div class="metrics" id="dashMetrics">
+        <div class="metric-card" data-metric="shipments">
+          <div class="metric-label">Total Shipments</div>
+          <div class="metric-value">1,284</div>
+          <div class="metric-delta delta-up">▲ +4.1% this week</div>
+        </div>
+        <div class="metric-card" data-metric="compliance">
+          <div class="metric-label">Compliance Rate</div>
+          <div class="metric-value">98.2%</div>
+          <div class="metric-delta delta-up">▲ +0.6%</div>
+        </div>
+        <div class="metric-card" data-metric="partners">
+          <div class="metric-label">Active Partners</div>
+          <div class="metric-value">47</div>
+          <div class="metric-delta delta-flat">— stable</div>
+        </div>
+      </div>
+
+      <div class="chart-card" id="dashChart">
+        <div class="chart-caption">Shipment Volume</div>
+        <div class="chart-sub">Last 30 Days</div>
+        <!-- inline SVG chart injected by renderChart() -->
+      </div>
+    </section>
+
+    <!-- ============ SCREEN 3: OPERATOR WORKSPACE ============ -->
+    <section class="screen" id="screen-tasks">
+      <h1 class="section-title">My Tasks</h1>
+      <p class="section-sub">Field verifications assigned to you</p>
+
+      <div class="folder-row locked" id="operatorAnalyticsFolder">
+        <div class="folder-ic">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>
+          </svg>
+        </div>
+        <div class="folder-text">
+          <div class="folder-title">Company Analytics <span class="lock-badge">🔒</span></div>
+          <div class="folder-sub">Manager Access Required</div>
+        </div>
+      </div>
+
+      <div class="task-list" id="operatorTaskList"><!-- rendered --></div>
+    </section>
+
+    <!-- ============ SCREEN: MESSAGES (Operator) ============ -->
+    <section class="screen" id="screen-messages">
+      <h1 class="section-title">Messages</h1>
+      <p class="section-sub">Dispatch &amp; status updates</p>
+      <div class="msg-thread" id="msgThread"><!-- rendered --></div>
+      <div class="msg-input-row">
+        <input type="text" class="msg-input" id="msgInput" placeholder="Message dispatch…" />
+        <button class="msg-send" id="msgSend" aria-label="Send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN 4: MANAGER HUB ============ -->
+    <section class="screen" id="screen-manager">
+      <h1 class="section-title">Team Hub</h1>
+      <p class="section-sub">Oversight &amp; approvals — Northeast Region</p>
+
+      <div class="folder-row unlocked" id="managerAnalyticsFolder">
+        <div class="folder-ic">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>
+          </svg>
+        </div>
+        <div class="folder-text">
+          <div class="folder-title">Company Analytics</div>
+          <div class="folder-sub">Regional performance &amp; volume</div>
+        </div>
+        <span class="folder-chevron">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </span>
+      </div>
+
+      <div class="seg-tabs">
+        <button class="seg-tab active" data-mtab="team">Team Tasks</button>
+        <button class="seg-tab" data-mtab="approvals">Approvals Queue<span class="badge" id="approvalBadge" style="display:none">0</span></button>
+      </div>
+
+      <div class="tab-panel active" id="mtab-team">
+        <div class="task-list" id="managerTeamList"><!-- rendered --></div>
+      </div>
+
+      <div class="tab-panel" id="mtab-approvals">
+        <div id="approvalsQueue"><!-- rendered --></div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN 5: AUDIT TRAIL ============ -->
+    <section class="screen" id="screen-audit">
+      <h1 class="section-title">Audit Trail</h1>
+      <p class="section-sub">Chronological record of session activity</p>
+
+      <div class="audit-filter-row">
+        <label for="auditFilter">Filter by Role</label>
+        <div class="select-wrap">
+          <select id="auditFilter">
+            <option value="all">All Roles</option>
+            <option value="executive">Executive</option>
+            <option value="manager">Manager</option>
+            <option value="operator">Operator</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="timeline" id="auditTimeline"><!-- rendered --></div>
+    </section>
+
+  </div>
+
+  <!-- Bottom nav (hidden on landing) -->
+  <nav class="bottom-nav hidden" id="bottomNav"><!-- rendered per role --></nav>
+
+  <!-- Overlays -->
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- Bottom sheet -->
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+    <div id="sheetContent"><!-- rendered --></div>
+  </div>
+
+  <!-- Modal (read-only / access / analytics) -->
+  <div class="modal" id="modal">
+    <div id="modalContent"><!-- rendered --></div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <!-- No-access tooltip -->
+  <div class="no-access-tip" id="noAccessTip">No access for this role</div>
+
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   PERSONAS
+   ============================================================ */
+const PERSONAS = {
+  executive: { name: "Eleanor Vance", title: "Chief Operations Officer", initials: "EV" },
+  manager:   { name: "Marcus Reid",   title: "Regional Manager",         initials: "MR" },
+  operator:  { name: "Dana Cole",     title: "Field Operator",           initials: "DC" }
+};
+
+/* ============================================================
+   ROLES PERMISSION MATRIX
+   Every screen derives visibility/access from here.
+   analytics: 'unlocked' | 'locked' | 'none'
+   nav: array of nav item keys in order (each flagged access true/false)
+   ============================================================ */
+const NAV_META = {
+  dashboard: { label: "Dashboard", screen: "screen-dashboard", icon: iconChart },
+  tasks:     { label: "Tasks",     screen: "screen-tasks",     icon: iconTasks },
+  approvals: { label: "Approvals", screen: "screen-manager",   icon: iconApprovals, sub: "approvals" },
+  messages:  { label: "Messages",  screen: "screen-messages",  icon: iconMessages },
+  audit:     { label: "Audit Log", screen: "screen-audit",     icon: iconAudit }
+};
+
+const ROLES = {
+  executive: {
+    home: "screen-dashboard",
+    analytics: "unlocked",              // executive dashboard is their unlocked view
+    nav: [
+      { key: "dashboard", access: true },
+      { key: "tasks",     access: false },
+      { key: "approvals", access: false },
+      { key: "audit",     access: true }
+    ],
+    actions: { viewDashboard: true, submitTask: false, approve: false, assignRole: false, message: false }
+  },
+  manager: {
+    home: "screen-manager",
+    analytics: "unlocked",
+    nav: [
+      { key: "dashboard", access: true },
+      { key: "tasks",     access: true },   // routes to manager team-tasks view
+      { key: "approvals", access: true },
+      { key: "audit",     access: true }
+    ],
+    actions: { viewDashboard: true, submitTask: false, approve: true, assignRole: true, message: false }
+  },
+  operator: {
+    home: "screen-tasks",
+    analytics: "locked",
+    nav: [
+      { key: "tasks",     access: true },
+      { key: "messages",  access: true },
+      { key: "approvals", access: false },
+      { key: "audit",     access: true }
+    ],
+    actions: { viewDashboard: false, submitTask: true, approve: false, assignRole: false, message: true }
+  }
+};
+
+/* For manager, the "dashboard" and "tasks" nav map to specific screens/behaviors */
+const MANAGER_NAV_TARGET = {
+  dashboard: "analytics-modal",   // opens analytics
+  tasks:     "screen-manager",    // team tasks tab
+  approvals: "screen-manager"     // approvals tab
+};
+
+/* ============================================================
+   GLOBAL STATE (single source of truth)
+   ============================================================ */
+const State = {
+  role: null,
+  activeScreen: "screen-landing",
+  analyticsViewed: false,
+  dashboardViewLogged: false,
+  tasks: [
+    { id: "t1", type: "weight", title: "Verify Cargo Weight",       subtitle: "Container #C-4817", status: "assigned", value: null, valueLabel: "Recorded Weight", unit: "kg", submittedAt: null },
+    { id: "t2", type: "scan",   title: "Scan Container ID",         subtitle: "Bay 7",            status: "assigned", value: null, valueLabel: "Scanned ID",      unit: "",   submittedAt: null },
+    { id: "t3", type: "confirm",title: "Confirm Delivery Manifest", subtitle: "Route A-12",       status: "assigned", value: null, valueLabel: "Confirmation",    unit: "",   submittedAt: null }
+  ],
+  messages: [
+    { from: "in",  who: "Dispatch",   text: "Container C-4817 arrived at Bay 7. Please verify weight.", time: "8:42 AM" },
+    { from: "in",  who: "Dispatch",   text: "Manifest for Route A-12 uploaded to your queue.",          time: "8:58 AM" },
+    { from: "out", who: "You",        text: "Copy. Heading to Bay 7 now.",                              time: "9:03 AM" }
+  ],
+  auditLog: [] // newest first
+};
+
+/* Seed audit log with plausible pre-session entries (earlier timestamps) */
+function seedAudit() {
+  const seed = [
+    { time: "7:45 AM", role: "system",   actor: "System",       desc: "System initialized demo environment." },
+    { time: "8:10 AM", role: "operator", actor: "Dana Cole",    desc: "Received 3 field task assignments." },
+    { time: "8:32 AM", role: "manager",  actor: "Marcus Reid",  desc: "Reviewed Northeast regional shipment report." },
+    { time: "8:55 AM", role: "executive",actor: "Eleanor Vance",desc: "Compliance rate cleared quarterly threshold (98.2%)." }
+  ];
+  // stored oldest-first in seed; auditLog keeps newest first, so push in order then they sit below live entries
+  State.auditLog = seed.slice().reverse();
+}
+seedAudit();
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+function $(sel, root) { return (root || document).querySelector(sel); }
+function $all(sel, root) { return Array.from((root || document).querySelectorAll(sel)); }
+
+function nowTime() {
+  const d = new Date();
+  let h = d.getHours();
+  const m = d.getMinutes();
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12; if (h === 0) h = 12;
+  return h + ":" + (m < 10 ? "0" + m : m) + " " + ampm;
+}
+
+function logAudit(role, desc) {
+  const actor = role === "system" ? "System" : (PERSONAS[role] ? PERSONAS[role].name : "System");
+  State.auditLog.unshift({ time: nowTime(), role: role, actor: actor, desc: desc, live: true });
+  // keep audit view fresh if visible
+  if (State.activeScreen === "screen-audit") renderAudit();
+}
+
+function fmtNumber(n) {
+  return Number(n).toLocaleString("en-US");
+}
+
+/* ============================================================
+   ICONS (SVG factory functions)
+   ============================================================ */
+function iconChart() {
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>`;
+}
+function iconTasks() {
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`;
+}
+function iconApprovals() {
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>`;
+}
+function iconMessages() {
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+}
+function iconAudit() {
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>`;
+}
+function taskTypeIcon(type) {
+  if (type === "weight") return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="M6.5 6h11l3 11a5 5 0 0 1-10 0"/><path d="M6.5 6l-3 11a5 5 0 0 0 10 0"/><circle cx="12" cy="4" r="1"/></svg>`;
+  if (type === "scan")   return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>`;
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg>`;
+}
+
+/* ============================================================
+   CHART (inline SVG polyline + gradient fill)
+   ============================================================ */
+function renderChart(container) {
+  const data = [42,45,41,48,52,49,55,58,54,61,59,66,63,70,68,72,69,75,73,80,78,84,81,88,86,92,89,95,93,99];
+  const W = 360, H = 130, pad = 8;
+  const max = Math.max(...data), min = Math.min(...data);
+  const stepX = (W - pad * 2) / (data.length - 1);
+  const scaleY = v => H - pad - ((v - min) / (max - min)) * (H - pad * 2 - 6);
+
+  const pts = data.map((v, i) => [pad + i * stepX, scaleY(v)]);
+  const line = pts.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+  const area = "M" + pad + "," + (H - pad) + " L" + pts.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" L") + " L" + (W - pad) + "," + (H - pad) + " Z";
+
+  // axis ticks (4 gridlines)
+  let grid = "";
+  for (let g = 0; g < 4; g++) {
+    const gy = pad + g * ((H - pad * 2) / 3);
+    grid += `<line x1="${pad}" y1="${gy.toFixed(1)}" x2="${W - pad}" y2="${gy.toFixed(1)}" stroke="#EEF0F4" stroke-width="1"/>`;
+  }
+  // x ticks label
+  const xticks = `
+    <text x="${pad}" y="${H + 4}" font-size="8.5" fill="#98A2B3" font-family="var(--font)">Day 1</text>
+    <text x="${W/2}" y="${H + 4}" font-size="8.5" fill="#98A2B3" text-anchor="middle" font-family="var(--font)">Day 15</text>
+    <text x="${W - pad}" y="${H + 4}" font-size="8.5" fill="#98A2B3" text-anchor="end" font-family="var(--font)">Day 30</text>`;
+
+  const svg = `
+  <svg class="chart-svg" viewBox="0 0 ${W} ${H + 8}" preserveAspectRatio="none" role="img" aria-label="Shipment volume chart">
+    <defs>
+      <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#12A594" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="#12A594" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${grid}
+    <path d="${area}" fill="url(#chartFill)"/>
+    <polyline points="${line}" fill="none" stroke="#0F2B5B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${pts[pts.length-1][0].toFixed(1)}" cy="${pts[pts.length-1][1].toFixed(1)}" r="3.5" fill="#0F2B5B" stroke="#fff" stroke-width="1.5"/>
+    ${xticks}
+  </svg>`;
+  container.insertAdjacentHTML("beforeend", svg);
+}
+
+/* ============================================================
+   HEADER + NAV RENDER
+   ============================================================ */
+function renderHeader() {
+  const p = PERSONAS[State.role];
+  if (!p) return;
+  $("#hdrAvatar").className = "avatar " + State.role;
+  $("#hdrAvatar").textContent = p.initials;
+  $("#hdrName").textContent = p.name;
+  $("#hdrRole").textContent = p.title;
+}
+
+function renderNav() {
+  const nav = $("#bottomNav");
+  const roleDef = ROLES[State.role];
+  if (!roleDef) return;
+  nav.innerHTML = "";
+
+  roleDef.nav.forEach(item => {
+    const meta = NAV_META[item.key];
+    const btn = document.createElement("button");
+    btn.className = "nav-item" + (item.access ? "" : " locked");
+    btn.dataset.navkey = item.key;
+    btn.dataset.access = item.access ? "1" : "0";
+    btn.innerHTML = `${meta.icon()}<span class="nav-label">${meta.label}</span>` +
+      (item.access ? "" : `<span class="nav-lock">🔒</span>`);
+    nav.appendChild(btn);
+  });
+  highlightNav();
+}
+
+function highlightNav() {
+  $all(".nav-item").forEach(btn => {
+    const key = btn.dataset.navkey;
+    const meta = NAV_META[key];
+    let match = false;
+    if (State.role === "manager") {
+      if (key === "tasks" && State.activeScreen === "screen-manager" && currentManagerTab === "team") match = true;
+      else if (key === "approvals" && State.activeScreen === "screen-manager" && currentManagerTab === "approvals") match = true;
+      else if (key === "audit" && State.activeScreen === "screen-audit") match = true;
+      // dashboard opens modal, never "active"
+    } else {
+      match = meta.screen === State.activeScreen;
+    }
+    btn.classList.toggle("active", match && btn.dataset.access === "1");
+  });
+}
+
+/* ============================================================
+   SCREEN ROUTER
+   ============================================================ */
+function showScreen(screenId) {
+  State.activeScreen = screenId;
+  $all(".screen").forEach(s => s.classList.toggle("active", s.id === screenId));
+  $("#screenWrap").scrollTop = 0;
+
+  const isLanding = screenId === "screen-landing";
+  $("#appHeader").classList.toggle("hidden", isLanding);
+  $("#bottomNav").classList.toggle("hidden", isLanding);
+
+  // per-screen render hooks
+  if (screenId === "screen-dashboard") renderDashboard();
+  if (screenId === "screen-tasks") renderOperatorTasks();
+  if (screenId === "screen-messages") renderMessages();
+  if (screenId === "screen-manager") renderManager();
+  if (screenId === "screen-audit") renderAudit();
+
+  highlightNav();
+}
+
+/* ============================================================
+   ROLE ENTRY / SWITCH
+   ============================================================ */
+function enterRole(role) {
+  State.role = role;
+  renderHeader();
+  renderNav();
+  const p = PERSONAS[role];
+  logAudit(role, `${p.name} entered demo as ${capitalize(role)}.`);
+  showScreen(ROLES[role].home);
+}
+
+function switchRole() {
+  // preserve all state, return to landing
+  State.role = null;
+  State.activeScreen = "screen-landing";
+  selectedRole = null;
+  $all(".role-card").forEach(c => c.classList.remove("selected"));
+  $("#enterDemoBtn").disabled = true;
+  showScreen("screen-landing");
+}
+
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+/* ============================================================
+   SCREEN 2 — EXECUTIVE DASHBOARD
+   ============================================================ */
+function renderDashboard() {
+  const chart = $("#dashChart");
+  if (!chart.querySelector("svg")) renderChart(chart);
+  $("#dashSub").textContent = State.role === "manager"
+    ? "Regional analytics — Marcus Reid" : "Executive summary — read-only";
+
+  if (State.role === "executive" && !State.dashboardViewLogged) {
+    State.dashboardViewLogged = true;
+    logAudit("executive", "Eleanor Vance viewed Dashboard.");
+  }
+}
+
+/* ============================================================
+   SCREEN 3 — OPERATOR TASKS
+   ============================================================ */
+function chipHtml(status) {
+  const map = {
+    assigned:  { cls: "chip-assigned",  label: "Assigned" },
+    submitted: { cls: "chip-submitted", label: "Submitted — Pending" },
+    verified:  { cls: "chip-verified",  label: "Verified" },
+    rejected:  { cls: "chip-rejected",  label: "Rejected" }
+  };
+  const c = map[status];
+  return `<span class="chip ${c.cls}">${c.label}</span>`;
+}
+
+function renderOperatorTasks() {
+  const list = $("#operatorTaskList");
+  list.innerHTML = "";
+  State.tasks.forEach(t => {
+    const actionable = t.status === "assigned";
+    const card = document.createElement("div");
+    card.className = "task-card" + (actionable ? "" : " no-action");
+    if (actionable) card.dataset.taskid = t.id;
+    card.innerHTML = `
+      <div class="task-ic">${taskTypeIcon(t.type)}</div>
+      <div class="task-body">
+        <div class="task-title">${t.title}</div>
+        <div class="task-sub">${t.subtitle}${t.value != null ? " · " + formatTaskValue(t) : ""}</div>
+      </div>
+      ${chipHtml(t.status)}`;
+    list.appendChild(card);
+  });
+}
+
+function formatTaskValue(t) {
+  if (t.type === "weight") return fmtNumber(t.value) + " " + t.unit;
+  return t.value;
+}
+
+/* ============================================================
+   BOTTOM SHEET (task verification)
+   ============================================================ */
+let sheetTaskId = null;
+
+function openSheet(taskId) {
+  const t = State.tasks.find(x => x.id === taskId);
+  if (!t || t.status !== "assigned") return;
+  sheetTaskId = taskId;
+  const content = $("#sheetContent");
+
+  if (t.type === "weight") {
+    content.innerHTML = `
+      <div class="sheet-title">${t.title}</div>
+      <div class="sheet-sub">${t.subtitle} · record the measured value</div>
+      <label class="field-label">Recorded Weight (kg)</label>
+      <div class="stepper">
+        <button type="button" id="stepDown">−</button>
+        <input type="number" id="weightInput" value="12480" inputmode="numeric" />
+        <button type="button" id="stepUp">+</button>
+      </div>
+      <div class="unit-hint">kilograms · use steppers or presets</div>
+      <div class="quick-vals">
+        <button class="quick-val" data-qv="11500">11,500</button>
+        <button class="quick-val" data-qv="12480">12,480</button>
+        <button class="quick-val" data-qv="13250">13,250</button>
+      </div>
+      <button class="btn btn-primary btn-block" id="sheetSubmit">Submit Verification</button>`;
+  } else if (t.type === "scan") {
+    content.innerHTML = `
+      <div class="sheet-title">${t.title}</div>
+      <div class="sheet-sub">${t.subtitle} · scan container barcode</div>
+      <div class="sheet-sim">
+        <div class="sim-visual" id="scanVisual">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
+        </div>
+        <div class="sim-status" id="scanStatus">Ready to scan</div>
+      </div>
+      <button class="btn btn-primary btn-block" id="sheetSubmit">Simulate Scan</button>`;
+  } else {
+    content.innerHTML = `
+      <div class="sheet-title">${t.title}</div>
+      <div class="sheet-sub">${t.subtitle} · confirm all items received</div>
+      <div class="sheet-sim">
+        <div class="sim-visual">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg>
+        </div>
+        <div class="sim-status">18 line items · Route A-12</div>
+      </div>
+      <button class="btn btn-primary btn-block" id="sheetSubmit">Confirm Manifest</button>`;
+  }
+
+  wireSheet(t);
+  $("#backdrop").classList.add("show");
+  $("#sheet").classList.add("show");
+}
+
+function wireSheet(t) {
+  const submit = $("#sheetSubmit");
+  if (t.type === "weight") {
+    const input = $("#weightInput");
+    $("#stepDown").onclick = () => { input.value = Math.max(0, (parseInt(input.value || "0", 10) - 10)); };
+    $("#stepUp").onclick   = () => { input.value = (parseInt(input.value || "0", 10) + 10); };
+    $all(".quick-val", $("#sheetContent")).forEach(b => {
+      b.onclick = () => { input.value = b.dataset.qv; };
+    });
+    submit.onclick = () => {
+      const val = parseInt(input.value || "0", 10);
+      if (!val || val <= 0) { input.focus(); return; }
+      submitTask(t.id, val, fmtNumber(val) + " kg", "Cargo Weight verification");
+    };
+  } else if (t.type === "scan") {
+    submit.onclick = () => {
+      const status = $("#scanStatus");
+      const visual = $("#scanVisual");
+      status.textContent = "Scanning…";
+      visual.style.color = "#12A594";
+      submit.disabled = true;
+      setTimeout(() => {
+        const code = "CID-" + (Math.floor(Math.random() * 9000) + 1000);
+        submitTask(t.id, code, code, "Scan Container ID");
+      }, 650);
+    };
+  } else {
+    submit.onclick = () => {
+      submitTask(t.id, "Confirmed (18 items)", "Confirmed", "Delivery Manifest");
+    };
+  }
+}
+
+function submitTask(taskId, value, displayVal, auditLabel) {
+  const t = State.tasks.find(x => x.id === taskId);
+  if (!t) return;
+  t.value = value;
+  t.status = "submitted";
+  t.submittedAt = nowTime();
+  logAudit("operator", `Dana Cole submitted verification for ${friendlyTaskName(t)} (${displayVal}).`);
+  closeSheet();
+  renderOperatorTasks();
+  showToast("Verification submitted for review.", "success");
+}
+
+function friendlyTaskName(t) {
+  if (t.type === "weight") return "Cargo Weight";
+  if (t.type === "scan") return "Container ID Scan";
+  return "Delivery Manifest";
+}
+
+function closeSheet() {
+  $("#sheet").classList.remove("show");
+  $("#backdrop").classList.remove("show");
+  sheetTaskId = null;
+}
+
+/* ============================================================
+   MESSAGES
+   ============================================================ */
+function renderMessages() {
+  const thread = $("#msgThread");
+  thread.innerHTML = "";
+  State.messages.forEach(m => {
+    const el = document.createElement("div");
+    el.className = "msg " + m.from;
+    el.innerHTML = `${escapeHtml(m.text)}<div class="msg-meta">${m.who} · ${m.time}</div>`;
+    thread.appendChild(el);
+  });
+  thread.scrollTop = thread.scrollHeight;
+}
+
+function sendMessage() {
+  const input = $("#msgInput");
+  const text = input.value.trim();
+  if (!text) return;
+  State.messages.push({ from: "out", who: "You", text: text, time: nowTime() });
+  input.value = "";
+  renderMessages();
+  logAudit("operator", `Dana Cole sent a message to Dispatch.`);
+  // simple scroll to bottom
+  const wrap = $("#screenWrap");
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+/* ============================================================
+   SCREEN 4 — MANAGER HUB
+   ============================================================ */
+let currentManagerTab = "team";
+
+function renderManager() {
+  renderManagerTeam();
+  renderApprovals();
+  setManagerTab(currentManagerTab);
+}
+
+function setManagerTab(tab) {
+  currentManagerTab = tab;
+  $all(".seg-tab").forEach(t => t.classList.toggle("active", t.dataset.mtab === tab));
+  $("#mtab-team").classList.toggle("active", tab === "team");
+  $("#mtab-approvals").classList.toggle("active", tab === "approvals");
+  highlightNav();
+}
+
+function renderManagerTeam() {
+  const list = $("#managerTeamList");
+  list.innerHTML = "";
+  State.tasks.forEach(t => {
+    const card = document.createElement("div");
+    card.className = "task-card no-action";
+    card.innerHTML = `
+      <div class="task-ic">${taskTypeIcon(t.type)}</div>
+      <div class="task-body">
+        <div class="task-title">${t.title}</div>
+        <div class="task-sub">Dana Cole · ${t.subtitle}</div>
+      </div>
+      ${chipHtml(t.status)}`;
+    list.appendChild(card);
+  });
+}
+
+function renderApprovals() {
+  const queue = $("#approvalsQueue");
+  const pending = State.tasks.filter(t => t.status === "submitted");
+  const resolved = State.tasks.filter(t => t.status === "verified" || t.status === "rejected");
+
+  // badge
+  const badge = $("#approvalBadge");
+  if (pending.length > 0) { badge.style.display = ""; badge.textContent = pending.length; }
+  else { badge.style.display = "none"; }
+
+  queue.innerHTML = "";
+
+  if (pending.length === 0) {
+    queue.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-ic">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+        </div>
+        <div class="empty-title">No pending approvals</div>
+        <div class="empty-sub">Operator submissions will appear here for review.</div>
+      </div>`;
+  } else {
+    pending.forEach(t => {
+      const card = document.createElement("div");
+      card.className = "approval-card";
+      card.dataset.taskid = t.id;
+      card.innerHTML = `
+        <div class="ap-head">
+          <div>
+            <div class="ap-operator">Dana Cole · Field Operator</div>
+            <div class="ap-task">${t.title}</div>
+            <div class="ap-time">Submitted ${t.submittedAt || ""} · ${t.subtitle}</div>
+          </div>
+          ${chipHtml("submitted")}
+        </div>
+        <div class="ap-value">
+          <span class="ap-value-label">${t.valueLabel}</span>
+          <span class="ap-value-num">${formatTaskValue(t)}</span>
+        </div>
+        <div class="ap-actions">
+          <button class="btn btn-red" data-approve="reject" data-taskid="${t.id}">Reject</button>
+          <button class="btn btn-teal" data-approve="approve" data-taskid="${t.id}">Approve</button>
+        </div>`;
+      queue.appendChild(card);
+    });
+  }
+
+  // resolved subsection
+  if (resolved.length > 0) {
+    const head = document.createElement("div");
+    head.className = "resolved-head";
+    head.textContent = "Resolved";
+    queue.appendChild(head);
+    resolved.forEach(t => {
+      const rc = document.createElement("div");
+      rc.className = "resolved-card";
+      rc.innerHTML = `
+        <div>
+          <div class="rc-title">${t.title}</div>
+          <div class="rc-sub">Dana Cole · ${formatTaskValue(t)}</div>
+        </div>
+        ${chipHtml(t.status)}`;
+      queue.appendChild(rc);
+    });
+  }
+}
+
+function resolveApproval(taskId, decision) {
+  const t = State.tasks.find(x => x.id === taskId);
+  if (!t || t.status !== "submitted") return;
+  const card = $(`.approval-card[data-taskid="${taskId}"]`);
+
+  t.status = decision === "approve" ? "verified" : "rejected";
+  const verb = decision === "approve" ? "approved" : "rejected";
+  logAudit("manager", `Marcus Reid ${verb} ${friendlyTaskName(t)} verification.`);
+
+  if (card) {
+    card.classList.add("resolving");
+    setTimeout(() => { renderApprovals(); renderManagerTeam(); }, 260);
+  } else {
+    renderApprovals(); renderManagerTeam();
+  }
+
+  showToast(
+    decision === "approve" ? "Process verified by Manager." : "Verification rejected — returned to operator.",
+    decision === "approve" ? "success" : "danger"
+  );
+}
+
+/* ============================================================
+   SCREEN 5 — AUDIT TRAIL
+   ============================================================ */
+function renderAudit() {
+  const filter = $("#auditFilter").value;
+  const timeline = $("#auditTimeline");
+  timeline.innerHTML = "";
+
+  const entries = State.auditLog.filter(e => filter === "all" ? true : e.role === filter);
+
+  if (entries.length === 0) {
+    timeline.innerHTML = `<div class="empty-state"><div class="empty-title">No activity for this role</div><div class="empty-sub">Try a different filter.</div></div>`;
+    return;
+  }
+
+  entries.forEach(e => {
+    const item = document.createElement("div");
+    item.className = "tl-item";
+    const roleChip = e.role === "system"
+      ? `<span class="role-chip system">System</span>`
+      : `<span class="role-chip ${e.role}">${capitalize(e.role)}</span>`;
+    item.innerHTML = `
+      <span class="tl-dot ${e.role}"></span>
+      <div class="tl-time">${e.time}</div>
+      <div class="tl-actor">${e.actor} ${roleChip}</div>
+      <div class="tl-desc">${e.desc}</div>`;
+    timeline.appendChild(item);
+  });
+}
+
+/* ============================================================
+   MODAL (read-only / access / analytics)
+   ============================================================ */
+function showModal(kind) {
+  const c = $("#modalContent");
+  if (kind === "readonly") {
+    c.innerHTML = `
+      <div class="modal-ic lock">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <div class="modal-title">Read-Only View</div>
+      <div class="modal-body">Executive access is read-only. Contact a Manager for operational changes.</div>
+      <button class="btn btn-primary" data-modal-close>OK</button>`;
+  } else if (kind === "analytics") {
+    // reuse chart + a couple of metrics
+    c.innerHTML = `
+      <div class="modal-ic unlock">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+      </div>
+      <div class="modal-title">Company Analytics</div>
+      <div class="modal-body" style="margin-bottom:12px">Northeast region — last 30 days.</div>
+      <div class="chart-card" id="modalChart" style="cursor:default;box-shadow:none;margin-bottom:14px">
+        <div class="chart-caption">Shipment Volume</div>
+        <div class="chart-sub">Last 30 Days</div>
+      </div>
+      <div class="modal-analytics-metrics">
+        <div class="mm"><div class="mm-val">1,284</div><div class="mm-lbl">Total Shipments</div></div>
+        <div class="mm"><div class="mm-val">98.2%</div><div class="mm-lbl">Compliance</div></div>
+      </div>
+      <button class="btn btn-primary" data-modal-close>Close</button>`;
+    renderChart($("#modalChart", c));
+  }
+  $("#backdrop").classList.add("show");
+  $("#modal").classList.add("show");
+}
+
+function closeModal() {
+  $("#modal").classList.remove("show");
+  if (!$("#sheet").classList.contains("show")) $("#backdrop").classList.remove("show");
+}
+
+/* ============================================================
+   TOASTS
+   ============================================================ */
+function showToast(text, kind) {
+  const wrap = $("#toastWrap");
+  const toast = document.createElement("div");
+  toast.className = "toast " + (kind || "");
+  const ic = kind === "danger"
+    ? `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`
+    : `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+  toast.innerHTML = `<span class="toast-ic">${ic}</span><span>${text}</span>`;
+  wrap.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add("show"));
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 2600);
+}
+
+function showNoAccessTip() {
+  const tip = $("#noAccessTip");
+  tip.classList.add("show");
+  clearTimeout(tip._t);
+  tip._t = setTimeout(() => tip.classList.remove("show"), 1600);
+}
+
+/* ============================================================
+   DENIED ANALYTICS (operator folder)
+   ============================================================ */
+let deniedLogged = false;
+function denyAnalytics(el) {
+  el.classList.remove("shake");
+  void el.offsetWidth; // reflow to restart animation
+  el.classList.add("shake");
+  el.classList.add("pulse-dim");
+  setTimeout(() => el.classList.remove("pulse-dim"), 500);
+  if (!deniedLogged) {
+    deniedLogged = true;
+    logAudit("operator", "Dana Cole attempted to open Company Analytics (denied).");
+  }
+}
+
+/* ============================================================
+   EVENT WIRING (delegation where sensible)
+   ============================================================ */
+let selectedRole = null;
+
+// Role card selection
+$("#roleCards").addEventListener("click", e => {
+  const card = e.target.closest(".role-card");
+  if (!card) return;
+  selectedRole = card.dataset.role;
+  $all(".role-card").forEach(c => c.classList.toggle("selected", c === card));
+  $("#enterDemoBtn").disabled = false;
+});
+
+$("#enterDemoBtn").addEventListener("click", () => {
+  if (!selectedRole) return;
+  enterRole(selectedRole);
+});
+
+// Switch role
+$("#switchRoleBtn").addEventListener("click", switchRole);
+
+// Bottom nav (delegated)
+$("#bottomNav").addEventListener("click", e => {
+  const btn = e.target.closest(".nav-item");
+  if (!btn) return;
+  const key = btn.dataset.navkey;
+  const access = btn.dataset.access === "1";
+
+  if (!access) {
+    // locked nav — wiggle + tooltip
+    btn.classList.remove("shake"); void btn.offsetWidth; btn.classList.add("shake");
+    showNoAccessTip();
+    return;
+  }
+
+  const meta = NAV_META[key];
+
+  if (State.role === "manager") {
+    if (key === "dashboard") {
+      logAudit("manager", "Marcus Reid opened Company Analytics.");
+      State.analyticsViewed = true;
+      showModal("analytics");
+      return;
+    }
+    if (key === "tasks") { showScreen("screen-manager"); setManagerTab("team"); return; }
+    if (key === "approvals") { showScreen("screen-manager"); setManagerTab("approvals"); return; }
+    if (key === "audit") { showScreen("screen-audit"); return; }
+  }
+
+  showScreen(meta.screen);
+});
+
+// Operator task card → sheet (delegated)
+$("#operatorTaskList").addEventListener("click", e => {
+  const card = e.target.closest(".task-card[data-taskid]");
+  if (!card) return;
+  openSheet(card.dataset.taskid);
+});
+
+// Operator locked analytics folder
+$("#operatorAnalyticsFolder").addEventListener("click", function () {
+  denyAnalytics(this);
+});
+
+// Manager unlocked analytics folder
+$("#managerAnalyticsFolder").addEventListener("click", () => {
+  logAudit("manager", "Marcus Reid opened Company Analytics.");
+  State.analyticsViewed = true;
+  showModal("analytics");
+});
+
+// Manager segmented tabs
+$all(".seg-tab").forEach(tab => {
+  tab.addEventListener("click", () => setManagerTab(tab.dataset.mtab));
+});
+
+// Approvals queue actions (delegated)
+$("#approvalsQueue").addEventListener("click", e => {
+  const btn = e.target.closest("[data-approve]");
+  if (!btn) return;
+  resolveApproval(btn.dataset.taskid, btn.dataset.approve);
+});
+
+// Dashboard read-only interactions (delegated)
+$("#dashMetrics").addEventListener("click", () => {
+  if (State.role === "executive") showModal("readonly");
+});
+$("#dashChart").addEventListener("click", () => {
+  if (State.role === "executive") showModal("readonly");
+});
+
+// Messages
+$("#msgSend").addEventListener("click", sendMessage);
+$("#msgInput").addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
+
+// Audit filter
+$("#auditFilter").addEventListener("change", renderAudit);
+
+// Backdrop dismiss
+$("#backdrop").addEventListener("click", () => {
+  if ($("#sheet").classList.contains("show")) closeSheet();
+  if ($("#modal").classList.contains("show")) closeModal();
+});
+
+// Modal close (delegated)
+$("#modal").addEventListener("click", e => {
+  if (e.target.closest("[data-modal-close]")) closeModal();
+});
+
+// Escape key closes overlays
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    if ($("#sheet").classList.contains("show")) closeSheet();
+    if ($("#modal").classList.contains("show")) closeModal();
+  }
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+showScreen("screen-landing");
+</script>
+</body>
+</html>
