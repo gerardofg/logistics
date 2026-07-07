@@ -1045,6 +1045,235 @@
   .chat-row.focused .chat-bubble { box-shadow: 0 0 0 3px rgba(201,154,46,.25), var(--shadow-sm); }
   .chat-system.focused .sys-bubble { box-shadow: 0 0 0 3px rgba(201,154,46,.25); }
   .chat-thread { display: flex; flex-direction: column; padding-bottom: 6px; }
+
+  /* ===== Equipment Map ===== */
+  #screen-map { padding: 14px 14px 20px; }
+  .map-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .map-head-titles { min-width: 0; }
+  .map-title { font-size: 19px; font-weight: 700; letter-spacing: -.4px; }
+  .map-sub { font-size: 12.5px; color: var(--text-2); margin-top: 1px; }
+  .map-view-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+    color: var(--teal-dark); background: var(--teal-tint); border: 1px solid #C3EDE6;
+    padding: 4px 9px; border-radius: 999px; white-space: nowrap; flex: 0 0 auto;
+  }
+  .map-view-badge.floor { color: var(--navy); background: var(--navy-tint); border-color: #DCE3F1; }
+
+  /* Filter bar */
+  .map-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-bottom: 10px; }
+  .filter-chip {
+    font-size: 12px; font-weight: 600; letter-spacing: -.1px;
+    padding: 6px 11px; border-radius: 999px; cursor: pointer; transition: var(--ease);
+    background: var(--white); color: var(--text-2); border: 1px solid var(--border);
+    font-family: var(--font); display: inline-flex; align-items: center; gap: 6px;
+  }
+  .filter-chip:hover { border-color: #C9D3E6; color: var(--text); }
+  .filter-chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .filter-chip .fc-count {
+    min-width: 17px; padding: 0 5px; height: 16px; border-radius: 999px;
+    display: inline-grid; place-items: center; font-size: 10px; font-weight: 700;
+    background: var(--bg); color: var(--text-2);
+  }
+  .filter-chip.active .fc-count { background: rgba(255,255,255,.22); color: #fff; }
+  .map-type-select { position: relative; flex: 0 0 auto; }
+  .map-type-select select {
+    appearance: none; -webkit-appearance: none; font-family: var(--font);
+    font-size: 12px; font-weight: 600; color: var(--text-2);
+    padding: 6px 26px 6px 11px; border: 1px solid var(--border); border-radius: 999px;
+    background: var(--white); cursor: pointer; outline: none; transition: var(--ease);
+  }
+  .map-type-select select:focus { border-color: var(--navy); }
+  .map-type-select::after {
+    content: ''; position: absolute; right: 11px; top: 50%; width: 6px; height: 6px;
+    border-right: 1.4px solid var(--text-2); border-bottom: 1.4px solid var(--text-2);
+    transform: translateY(-70%) rotate(45deg); pointer-events: none;
+  }
+  .map-list-btn {
+    margin-left: auto; width: 34px; height: 34px; border-radius: 999px; flex: 0 0 auto;
+    border: 1px solid var(--border); background: var(--white); color: var(--text-2);
+    display: grid; place-items: center; cursor: pointer; transition: var(--ease);
+  }
+  .map-list-btn:hover { background: var(--navy-tint); color: var(--navy); border-color: #D3DBEA; }
+
+  /* Map canvas */
+  .map-canvas-wrap {
+    position: relative; width: 100%; height: 340px; border-radius: var(--radius);
+    overflow: hidden; border: 1px solid var(--border); background: #EEF1F5;
+    box-shadow: var(--shadow-sm); touch-action: none;
+  }
+  .map-svg { display: block; width: 100%; height: 100%; cursor: grab; }
+  .map-svg.dragging { cursor: grabbing; }
+  .map-marker { cursor: pointer; }
+  .map-marker .mk-hit { fill: transparent; }
+  .marker-pulse { transform-box: fill-box; transform-origin: center; animation: mkPulse 1.8s ease-out infinite; }
+  @keyframes mkPulse {
+    0% { transform: scale(1); opacity: .55; }
+    70% { transform: scale(3.4); opacity: 0; }
+    100% { transform: scale(3.4); opacity: 0; }
+  }
+
+  /* Zoom + fit controls */
+  .map-controls {
+    position: absolute; right: 10px; bottom: 10px; z-index: 6;
+    display: flex; flex-direction: column; gap: 7px;
+  }
+  .map-ctrl-btn {
+    width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border);
+    background: rgba(255,255,255,.94); color: var(--text); cursor: pointer;
+    display: grid; place-items: center; font-size: 19px; font-weight: 500;
+    box-shadow: var(--shadow-sm); transition: var(--ease); backdrop-filter: blur(6px);
+  }
+  .map-ctrl-btn:hover { background: var(--navy-tint); color: var(--navy); border-color: #D3DBEA; }
+  .map-ctrl-btn:active { transform: scale(.93); }
+  .map-back-site {
+    position: absolute; left: 10px; top: 10px; z-index: 6;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px 7px 10px; border-radius: 999px; border: 1px solid var(--border);
+    background: rgba(255,255,255,.94); color: var(--navy); font-family: var(--font);
+    font-size: 12.5px; font-weight: 600; cursor: pointer; box-shadow: var(--shadow-sm);
+    transition: var(--ease); backdrop-filter: blur(6px);
+  }
+  .map-back-site:hover { background: var(--navy-tint); }
+  .map-legend {
+    position: absolute; left: 10px; bottom: 10px; z-index: 6;
+    display: flex; gap: 11px; padding: 7px 11px; border-radius: 10px;
+    background: rgba(255,255,255,.92); border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm); backdrop-filter: blur(6px);
+  }
+  .lg-item { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600; color: var(--text-2); }
+  .lg-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .lg-dot.active { background: var(--teal); }
+  .lg-dot.idle { background: var(--text-3); }
+  .lg-dot.maintenance { background: var(--amber); }
+
+  /* Building / floor-plan section under the map */
+  .map-plan-panel {
+    margin-top: 14px; border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--white); box-shadow: var(--shadow-sm); padding: 14px;
+  }
+  .mpp-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .mpp-title { font-size: 13.5px; font-weight: 700; letter-spacing: -.1px; display: flex; align-items: center; gap: 8px; }
+  .mpp-bldg-select { position: relative; flex: 0 0 auto; }
+  .mpp-bldg-select select {
+    appearance: none; -webkit-appearance: none; font-family: var(--font);
+    font-size: 12px; font-weight: 600; color: var(--navy);
+    padding: 6px 26px 6px 11px; border: 1px solid #DCE3F1; border-radius: 8px;
+    background: var(--navy-tint); cursor: pointer; outline: none;
+  }
+  .mpp-bldg-select::after {
+    content: ''; position: absolute; right: 10px; top: 50%; width: 6px; height: 6px;
+    border-right: 1.4px solid var(--navy); border-bottom: 1.4px solid var(--navy);
+    transform: translateY(-70%) rotate(45deg); pointer-events: none;
+  }
+  .plan-dropzone {
+    border: 1.5px dashed #B9C8E4; border-radius: 11px; background: var(--navy-tint);
+    padding: 20px 16px; text-align: center; cursor: pointer; transition: var(--ease);
+  }
+  .plan-dropzone:hover { background: #E3EAF8; border-color: var(--navy); }
+  .plan-dropzone .pd-ic { color: var(--navy); margin-bottom: 8px; }
+  .plan-dropzone .pd-title { font-size: 13px; font-weight: 650; color: var(--navy); }
+  .plan-dropzone .pd-sub { font-size: 11.5px; color: var(--text-2); margin-top: 4px; line-height: 1.4; }
+
+  .plan-applied { }
+  .plan-thumb-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .plan-thumb {
+    width: 62px; height: 46px; border-radius: 8px; flex: 0 0 auto; overflow: hidden;
+    border: 1px solid var(--border); background: var(--bg);
+  }
+  .plan-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .plan-thumb-meta { min-width: 0; flex: 1; }
+  .plan-thumb-name { font-size: 12.5px; font-weight: 650; letter-spacing: -.1px; }
+  .plan-thumb-sub { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+  .plan-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .plan-btn {
+    flex: 1; min-width: 92px; padding: 9px; border-radius: 9px; font-family: var(--font);
+    font-size: 12.5px; font-weight: 600; cursor: pointer; transition: var(--ease);
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    border: 1px solid var(--border); background: var(--white); color: var(--text);
+  }
+  .plan-btn:hover { border-color: #C9D3E6; background: var(--bg); }
+  .plan-btn.primary { background: var(--navy-tint); color: var(--navy); border-color: #DCE3F1; }
+  .plan-btn.primary:hover { background: #E3EAF8; border-color: var(--navy); }
+  .plan-btn.danger { color: var(--red); }
+  .plan-btn.danger:hover { background: var(--red-tint); border-color: #F4C7C7; }
+
+  /* Calibrate panel */
+  .calibrate-panel { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; display: none; }
+  .calibrate-panel.open { display: block; animation: fadeUp .2s ease; }
+  .cal-row { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
+  .cal-label { font-size: 11.5px; font-weight: 600; color: var(--text-2); width: 62px; flex: 0 0 auto; }
+  .cal-row input[type=range] {
+    flex: 1; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 3px;
+    background: var(--border); outline: none; cursor: pointer;
+  }
+  .cal-row input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--navy); cursor: pointer; border: 2px solid #fff; box-shadow: var(--shadow-sm);
+  }
+  .cal-row input[type=range]::-moz-range-thumb {
+    width: 16px; height: 16px; border-radius: 50%; background: var(--navy);
+    cursor: pointer; border: 2px solid #fff;
+  }
+  .cal-val { font-size: 11px; font-weight: 700; color: var(--text); width: 42px; text-align: right; flex: 0 0 auto; font-variant-numeric: tabular-nums; }
+  .cal-btns { display: flex; gap: 8px; margin-top: 4px; }
+
+  /* Machine list drawer (reuses sheet) */
+  .mach-list { display: flex; flex-direction: column; gap: 9px; margin: 6px 0 4px; }
+  .mach-row {
+    display: flex; align-items: center; gap: 12px; padding: 11px 12px;
+    border: 1px solid var(--border); border-radius: 11px; background: var(--white);
+    cursor: pointer; transition: var(--ease); text-align: left; font-family: var(--font); width: 100%;
+  }
+  .mach-row:hover { border-color: #C9D3E6; background: var(--bg); }
+  .mach-dot { width: 11px; height: 11px; border-radius: 50%; flex: 0 0 auto; }
+  .mach-dot.active { background: var(--teal); }
+  .mach-dot.idle { background: var(--text-3); }
+  .mach-dot.maintenance { background: var(--amber); }
+  .mach-row-meta { flex: 1; min-width: 0; }
+  .mach-row-name { font-size: 13.5px; font-weight: 650; letter-spacing: -.2px; }
+  .mach-row-sub { font-size: 11.5px; color: var(--text-2); margin-top: 1px; }
+  .mach-row-chev { color: var(--text-3); flex: 0 0 auto; }
+
+  /* Machine detail panel (reuses .modal.detail) */
+  .md-statusrow { display: flex; align-items: center; gap: 8px; margin: 2px 0 14px; flex-wrap: wrap; }
+  .md-batt-wrap { margin: 12px 0; }
+  .md-batt-label { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-2); margin-bottom: 5px; }
+  .md-batt-label .mb-pct { font-weight: 700; color: var(--text); }
+  .md-batt-track { height: 8px; border-radius: 999px; background: var(--bg); overflow: hidden; border: 1px solid var(--border); }
+  .md-batt-fill { height: 100%; border-radius: 999px; transition: width .4s ease; }
+  .md-batt-fill.hi { background: linear-gradient(90deg,#16BBA8,#0E7C70); }
+  .md-batt-fill.mid { background: linear-gradient(90deg,#E9A23B,#B54708); }
+  .md-batt-fill.lo { background: linear-gradient(90deg,#E86B5C,#B42318); }
+  .md-table { margin: 4px 0 14px; }
+  .md-tr { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+  .md-tr:last-child { border-bottom: none; }
+  .md-tr .mk { color: var(--text-2); }
+  .md-tr .mv { font-weight: 600; text-align: right; }
+  .md-tr .mv.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; }
+  .md-gpslink {
+    display: flex; align-items: center; gap: 9px; padding: 11px 12px; margin: 4px 0 14px;
+    border: 1px solid #C3EDE6; border-radius: 11px; background: var(--teal-tint);
+  }
+  .md-gps-ic { width: 30px; height: 30px; border-radius: 8px; background: var(--teal); color: #fff; display: grid; place-items: center; flex: 0 0 auto; }
+  .md-gps-meta { flex: 1; min-width: 0; }
+  .md-gps-id { font-size: 12.5px; font-weight: 700; color: var(--teal-dark); display: flex; align-items: center; gap: 6px; }
+  .md-gps-uri { font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--text-2); margin-top: 2px; word-break: break-all; }
+  .md-linked-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 3px rgba(18,165,148,.2); animation: pulseLive 1.6s ease-in-out infinite; }
+  @keyframes pulseLive { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+  .md-actions { display: flex; gap: 8px; margin-top: 4px; }
+  .md-copy-btn, .md-maps-btn {
+    flex: 1; padding: 11px; border-radius: 10px; font-family: var(--font); font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: var(--ease); display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    border: 1px solid var(--border); background: var(--white); color: var(--text); text-decoration: none;
+  }
+  .md-copy-btn:hover, .md-maps-btn:hover { background: var(--bg); border-color: #C9D3E6; }
+  .md-locate-btn { width: 100%; margin-top: 8px; }
+  .md-ping { color: var(--teal-dark); font-weight: 700; }
+
+  .map-empty-note {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    text-align: center; color: var(--text-2); font-size: 12.5px; pointer-events: none;
+  }
 </style>
 </head>
 <body>
@@ -1252,7 +1481,56 @@
       </div>
     </section>
 
+    <!-- ============ SCREEN: LIVE EQUIPMENT MAP ============ -->
+    <section class="screen" id="screen-map">
+      <div class="map-head">
+        <div class="map-head-titles">
+          <div class="map-title" id="mapTitle">Live Equipment Map</div>
+          <div class="map-sub" id="mapSub">GPS-linked machines · updating live</div>
+        </div>
+        <span class="map-view-badge" id="mapViewBadge">Site view</span>
+      </div>
+
+      <div class="map-filters" id="mapFilters">
+        <button type="button" class="filter-chip active" data-mapstatus="all">All <span class="fc-count" id="mfAll">0</span></button>
+        <button type="button" class="filter-chip" data-mapstatus="active">Active <span class="fc-count" id="mfActive">0</span></button>
+        <button type="button" class="filter-chip" data-mapstatus="idle">Idle <span class="fc-count" id="mfIdle">0</span></button>
+        <button type="button" class="filter-chip" data-mapstatus="maintenance">Maint. <span class="fc-count" id="mfMaint">0</span></button>
+        <div class="map-type-select">
+          <select id="mapTypeFilter"><option value="all">All types</option></select>
+        </div>
+        <button type="button" class="map-list-btn" id="mapListBtn" title="Machine list" aria-label="Machine list">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
+        </button>
+      </div>
+
+      <div class="map-canvas-wrap" id="mapCanvasWrap">
+        <button type="button" class="map-back-site" id="mapBackSite" style="display:none">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Back to site
+        </button>
+        <svg class="map-svg" id="mapSvg" viewBox="0 0 400 340" preserveAspectRatio="xMidYMid slice"><!-- rendered --></svg>
+        <div class="map-controls">
+          <button type="button" class="map-ctrl-btn" data-mapzoom="in" aria-label="Zoom in">+</button>
+          <button type="button" class="map-ctrl-btn" data-mapzoom="out" aria-label="Zoom out">−</button>
+          <button type="button" class="map-ctrl-btn" data-mapzoom="fit" aria-label="Fit all" title="Fit all">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+          </button>
+        </div>
+        <div class="map-legend">
+          <span class="lg-item"><span class="lg-dot active"></span>Active</span>
+          <span class="lg-item"><span class="lg-dot idle"></span>Idle</span>
+          <span class="lg-item"><span class="lg-dot maintenance"></span>Maint.</span>
+        </div>
+      </div>
+
+      <div class="map-plan-panel" id="mapPlanPanel"><!-- rendered by renderPlanPanel() --></div>
+    </section>
+
   </div>
+
+  <!-- Hidden file input for floor-plan upload -->
+  <input type="file" id="planFileInput" accept="image/*" style="display:none" />
 
   <!-- Bottom nav (hidden on landing) -->
   <nav class="bottom-nav hidden" id="bottomNav"><!-- rendered per role --></nav>
@@ -1342,6 +1620,7 @@ const NAV_META = {
   dashboard: { label: "Dashboard", screen: "screen-dashboard", icon: iconChart },
   tasks:     { label: "Tasks",     screen: "screen-tasks",     icon: iconTasks },
   approvals: { label: "Approvals", screen: "screen-manager",   icon: iconApprovals, sub: "approvals" },
+  map:       { label: "Map",       screen: "screen-map",       icon: iconMap },
   chats:     { label: "Chats",     screen: "screen-chats",     icon: iconChats },
   audit:     { label: "Audit Log", screen: "screen-audit",     icon: iconAudit }
 };
@@ -1355,6 +1634,7 @@ const ROLES = {
       { key: "dashboard", access: true },
       { key: "tasks",     access: true },   // executive: all sectors' assignments (read/grouped)
       { key: "approvals", access: true },   // executive override queue (all sectors)
+      { key: "map",       access: true },   // live equipment map — all sectors
       { key: "chats",     access: true }
     ],
     actions: { viewDashboard: true, submitTask: false, approve: true, assignRole: false, override: true }
@@ -1367,6 +1647,7 @@ const ROLES = {
       { key: "dashboard", access: true },   // personalized sector dashboard + roster
       { key: "tasks",     access: true },   // routes to manager team-tasks view
       { key: "approvals", access: true },
+      { key: "map",       access: true },   // live equipment map — own sector only
       { key: "chats",     access: true }
     ],
     actions: { viewDashboard: true, submitTask: false, approve: true, assignRole: true, override: false }
@@ -1461,8 +1742,37 @@ function sectorChannelId(sector) { return "sector-" + String(sector).toLowerCase
    decision: null | { action:'verified'|'rejected', byId, byName,
                       overriddenById, overriddenByName, originalAction }
    ============================================================ */
-const STORAGE_KEY   = "nexus.v4";
-const LEGACY_KEYS   = ["nexus.v3", "nexus.v2"];
+const STORAGE_KEY   = "nexus.v5";
+const LEGACY_KEYS   = ["nexus.v4", "nexus.v3", "nexus.v2"];
+
+/* ============================================================
+   EQUIPMENT / GPS TELEMETRY — geospatial model
+   Real-world anchor: an industrial estate south of Madrid (~40.33, -3.68).
+   Machines are spread over a few hundred meters. Indoor machines sit
+   inside a building footprint; outdoor machines random-walk within bounds.
+   ============================================================ */
+const MAP_ANCHOR = { lat: 40.3305, lng: -3.6795 };
+/* Half-extent of the visible site, in degrees, around the anchor.
+   ~0.0022° lat ≈ 245 m; lng scaled by cos(lat) so the site reads square. */
+const MAP_SPAN = { lat: 0.0022, lng: 0.0029 };
+/* SVG viewport the projection maps into (matches #mapSvg viewBox). */
+const MAP_VB = { w: 400, h: 340 };
+
+/* Building footprints in SVG-viewport coordinates (axis-aligned rects).
+   Used for drawing labels AND for georeferencing floor plans. */
+const BUILDINGS = {
+  A: { id: "A", name: "Warehouse A",     sector: "A", x: 42,  y: 60,  w: 150, h: 120 },
+  B: { id: "B", name: "Dock & Yard B",   sector: "B", x: 226, y: 150, w: 138, h: 130 }
+};
+
+/* Machine types → short label + marker glyph key */
+const EQUIP_TYPES = {
+  forklift:   { label: "Forklift" },
+  palletjack: { label: "Pallet Jack" },
+  yardtruck:  { label: "Yard Truck" },
+  gantry:     { label: "Gantry Crane" },
+  van:        { label: "Delivery Van" }
+};
 
 /* ============================================================
    GLOBAL STATE (single source of truth, hydrated from storage)
@@ -1479,7 +1789,9 @@ const State = {
   auditLog: [],               // newest first
   channels: {},               // chanId -> array of messages (oldest first)
   savedChats: [],             // account-scoped saved chat references
-  lastRead: {}                // accountId -> { chanId: seenCount }
+  lastRead: {},               // accountId -> { chanId: seenCount }
+  equipment: [],              // GPS-linked machines (live telemetry)
+  floorPlans: {}              // building id -> { building, dataUrl, scale, offsetX, offsetY, rotation, opacity }
 };
 
 /* Build a fresh default dataset (used on first run + reset).
@@ -1518,8 +1830,43 @@ function seedDefaults() {
     ],
     channels: seedChannels(),
     savedChats: [],
-    lastRead: {}
+    lastRead: {},
+    equipment: seedEquipment(),
+    floorPlans: {}
   };
+}
+
+/* Seed ~10 GPS-linked machines across both sectors.
+   Outdoor machines get a small waypoint they wander toward; indoor
+   machines sit inside their building footprint and drift only slightly.
+   lat/lng derived from the SVG footprint/anchor so seeds land plausibly. */
+function seedEquipment() {
+  // helper: SVG viewport point -> {lat,lng} using the same projection (inverse)
+  const P = (x, y) => svgToLatLng(x, y);
+  const bA = BUILDINGS.A, bB = BUILDINGS.B;
+  // a couple of points inside each building for indoor machines
+  const inA1 = P(bA.x + 40,  bA.y + 45);
+  const inA2 = P(bA.x + 105, bA.y + 80);
+  const inB1 = P(bB.x + 45,  bB.y + 50);
+  const list = [
+    // ---- Sector A — Warehouse ----
+    { id: "eq1", name: "Forklift FL-03",  type: "forklift",   sector: "A", gpsDevice: "GPS-TRK-001", status: "active",      battery: 82, speed: 6,  indoor: true,  pos: inA1,             lastPing: Date.now() },
+    { id: "eq2", name: "Forklift FL-07",  type: "forklift",   sector: "A", gpsDevice: "GPS-TRK-002", status: "idle",        battery: 64, speed: 0,  indoor: true,  pos: inA2,             lastPing: Date.now() },
+    { id: "eq3", name: "Pallet Jack PJ-12", type: "palletjack", sector: "A", gpsDevice: "GPS-TRK-003", status: "active",    battery: 91, speed: 3,  indoor: true,  pos: P(bA.x + 70, bA.y + 25), lastPing: Date.now() },
+    { id: "eq4", name: "Yard Truck YT-01", type: "yardtruck", sector: "A", gpsDevice: "GPS-TRK-004", status: "active",      battery: 73, speed: 14, indoor: false, pos: P(120, 220),      lastPing: Date.now() },
+    { id: "eq5", name: "Delivery Van VN-05", type: "van",     sector: "A", gpsDevice: "GPS-TRK-005", status: "maintenance", battery: 38, speed: 0,  indoor: false, pos: P(60, 250),       lastPing: Date.now() },
+    // ---- Sector B — Dock & Yard ----
+    { id: "eq6", name: "Gantry Crane GC-01", type: "gantry",  sector: "B", gpsDevice: "GPS-TRK-006", status: "active",      battery: 88, speed: 2,  indoor: false, pos: P(300, 130),      lastPing: Date.now() },
+    { id: "eq7", name: "Yard Truck YT-04", type: "yardtruck", sector: "B", gpsDevice: "GPS-TRK-007", status: "active",      battery: 69, speed: 17, indoor: false, pos: P(250, 100),      lastPing: Date.now() },
+    { id: "eq8", name: "Yard Truck YT-06", type: "yardtruck", sector: "B", gpsDevice: "GPS-TRK-008", status: "idle",        battery: 55, speed: 0,  indoor: false, pos: P(340, 90),       lastPing: Date.now() },
+    { id: "eq9", name: "Forklift FL-11",  type: "forklift",   sector: "B", gpsDevice: "GPS-TRK-009", status: "active",      battery: 77, speed: 5,  indoor: true,  pos: inB1,             lastPing: Date.now() },
+    { id: "eq10", name: "Delivery Van VN-09", type: "van",    sector: "B", gpsDevice: "GPS-TRK-010", status: "active",      battery: 60, speed: 22, indoor: false, pos: P(300, 300),      lastPing: Date.now() }
+  ];
+  // seed a wander waypoint for outdoor movers so the walk has direction
+  list.forEach(m => {
+    if (!m.indoor && m.status === "active") m.wp = randWaypoint(m.sector);
+  });
+  return list;
 }
 
 /* Seed each channel with believable messages (earlier today).
@@ -1558,6 +1905,9 @@ function hydrateInto(data) {
   State.channels    = data.channels || {};
   State.savedChats  = data.savedChats || [];
   State.lastRead    = data.lastRead || {};
+  // Equipment/plans are v5 additions; re-seed equipment if a payload predates them.
+  State.equipment   = (data.equipment && data.equipment.length) ? data.equipment : seedEquipment();
+  State.floorPlans  = data.floorPlans || {};
 }
 
 /* Load from storage or seed. Returns true if a session should be restored.
@@ -1584,9 +1934,11 @@ function save() {
       auditLog:    State.auditLog,
       channels:    State.channels,
       savedChats:  State.savedChats,
-      lastRead:    State.lastRead
+      lastRead:    State.lastRead,
+      equipment:   State.equipment.map(serializeMachine),
+      floorPlans:  State.floorPlans
     }));
-  } catch (e) { /* storage unavailable (e.g. private mode) — app still works in-memory */ }
+  } catch (e) { /* storage unavailable / quota (e.g. private mode, large plan) — app still works in-memory */ }
 }
 
 function resetDemo() {
@@ -1645,6 +1997,9 @@ function iconChats() {
 }
 function iconAudit() {
   return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>`;
+}
+function iconMap() {
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3Z"/><path d="M9 3v15"/><path d="M15 6v15"/></svg>`;
 }
 function iconBookmark(filled) {
   return `<svg width="15" height="15" viewBox="0 0 24 24" ${filled ? 'fill="currentColor"' : 'fill="none"'} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>`;
@@ -1822,6 +2177,8 @@ function highlightNav() {
     let match = false;
     if (key === "chats") {
       match = chatActive;
+    } else if (key === "map") {
+      match = State.activeScreen === "screen-map";
     } else if (State.role === "manager") {
       if (key === "dashboard" && State.activeScreen === "screen-mgr-dash") match = true;
       else if (key === "tasks" && State.activeScreen === "screen-manager" && currentManagerTab === "team") match = true;
@@ -1838,6 +2195,9 @@ function highlightNav() {
    SCREEN ROUTER
    ============================================================ */
 function showScreen(screenId) {
+  // leaving the map screen — pause telemetry so no timers leak
+  if (State.activeScreen === "screen-map" && screenId !== "screen-map") stopTelemetry();
+
   State.activeScreen = screenId;
   $all(".screen").forEach(s => s.classList.toggle("active", s.id === screenId));
   $("#screenWrap").scrollTop = 0;
@@ -1855,6 +2215,7 @@ function showScreen(screenId) {
     if (screenId === "screen-manager") renderManager();
     if (screenId === "screen-audit") renderAudit();
     if (screenId === "screen-chats") renderChannelList();
+    if (screenId === "screen-map") { renderMapScreen(); startTelemetry(); }
   } catch (e) { console.error("render hook failed for " + screenId, e); }
 
   highlightNav();
@@ -1952,6 +2313,13 @@ function restoreSession(accountId) {
 function doSignOut() {
   const a = currentAcct();
   if (a) logAudit(a.id, `${a.name} signed out.`);
+  stopTelemetry();                 // no background timers leaking past sign-out
+  MapView.floorBuilding = null;
+  MapView.status = "all";
+  MapView.type = "all";
+  MapView.openMachineId = null;
+  planPanelBuilding = null;
+  mapViewedLogged = false;
   setIdentity(null);
   State.session = null;
   document.body.classList.remove("signed-in");
@@ -3387,6 +3755,858 @@ function showProofModal(proof) {
   $("#modal").classList.add("show");
 }
 
+/* ============================================================
+   LIVE EQUIPMENT MAP — projection, telemetry, rendering, interaction
+   ============================================================ */
+
+/* --- Equirectangular lat/lng <-> SVG-viewport projection ---
+   Anchor sits at the viewport centre. Longitude is scaled by cos(lat)
+   so a square metre of ground reads square on screen. y is flipped
+   (north = up). Round-trips: latLngToSvg(svgToLatLng(x,y)) ≈ (x,y). */
+const MAP_COSLAT = Math.cos(MAP_ANCHOR.lat * Math.PI / 180);
+function latLngToSvg(pos) {
+  const nx = (pos.lng - MAP_ANCHOR.lng) / (MAP_SPAN.lng);   // -1..1 across span
+  const ny = (pos.lat - MAP_ANCHOR.lat) / (MAP_SPAN.lat);
+  return {
+    x: MAP_VB.w / 2 + nx * (MAP_VB.w / 2),
+    y: MAP_VB.h / 2 - ny * (MAP_VB.h / 2)
+  };
+}
+function svgToLatLng(x, y) {
+  const nx = (x - MAP_VB.w / 2) / (MAP_VB.w / 2);
+  const ny = (MAP_VB.h / 2 - y) / (MAP_VB.h / 2);
+  return {
+    lng: MAP_ANCHOR.lng + nx * MAP_SPAN.lng,
+    lat: MAP_ANCHOR.lat + ny * MAP_SPAN.lat
+  };
+}
+
+/* A random outdoor waypoint within the yard bounds for a sector. */
+function randWaypoint(sector) {
+  // keep vehicles in the lower / yard portion of the viewport, sector-biased
+  const xMin = sector === "A" ? 30 : 220, xMax = sector === "A" ? 200 : 375;
+  const yMin = sector === "A" ? 195 : 80, yMax = sector === "A" ? 305 : 315;
+  const x = xMin + Math.random() * (xMax - xMin);
+  const y = yMin + Math.random() * (yMax - yMin);
+  return svgToLatLng(x, y);
+}
+
+/* Serialize a machine for storage (drop transient wander waypoint). */
+function serializeMachine(m) {
+  const { wp, ...rest } = m;
+  return rest;
+}
+
+/* Machines visible to the current account (sector-scoped via RBAC). */
+function visibleMachines() {
+  return State.equipment.filter(m => canAccessSector(m.sector));
+}
+function machineById(id) { return State.equipment.find(m => m.id === id) || null; }
+
+/* ---- Map view state (transform + current filters + floor view) ---- */
+const MapView = {
+  zoom: 1, panX: 0, panY: 0,     // <g> transform
+  status: "all",                  // status filter
+  type: "all",                    // type filter
+  floorBuilding: null,            // building id when in floor view, else null
+  openMachineId: null,            // machine whose detail panel is open (for live ping)
+  telemetryTimer: null,
+  pingTimer: null,
+  tickCount: 0
+};
+
+let mapViewedLogged = false;
+
+/* Which building the map defaults to (manager = own sector's building). */
+function defaultBuildingForAccount() {
+  if (isExec()) return "A";
+  return State.sector === "B" ? "B" : "A";
+}
+
+/* ============================================================
+   TELEMETRY SIMULATOR — runs only while the map screen is open.
+   ============================================================ */
+function startTelemetry() {
+  stopTelemetry();
+  MapView.telemetryTimer = setInterval(telemetryTick, 1500);
+}
+function stopTelemetry() {
+  if (MapView.telemetryTimer) { clearInterval(MapView.telemetryTimer); MapView.telemetryTimer = null; }
+  if (MapView.pingTimer)      { clearInterval(MapView.pingTimer);      MapView.pingTimer = null; }
+}
+
+function telemetryTick() {
+  MapView.tickCount++;
+  const now = Date.now();
+  State.equipment.forEach(m => {
+    if (m.status === "maintenance") { m.speed = 0; return; }
+
+    // occasionally flip active <-> idle (never touches maintenance)
+    if (Math.random() < 0.04) {
+      m.status = m.status === "active" ? "idle" : "active";
+      if (m.status === "active" && !m.indoor) m.wp = randWaypoint(m.sector);
+    }
+
+    if (m.status !== "active") { m.speed = 0; m.lastPing = now; return; }
+
+    if (m.indoor) {
+      // indoor: tiny drift, kept inside the building footprint
+      const p = latLngToSvg(m.pos);
+      const nx = p.x + (Math.random() - 0.5) * 3;
+      const ny = p.y + (Math.random() - 0.5) * 3;
+      const b = BUILDINGS[m.sector];
+      const cx = Math.max(b.x + 8, Math.min(b.x + b.w - 8, nx));
+      const cy = Math.max(b.y + 8, Math.min(b.y + b.h - 8, ny));
+      m.pos = svgToLatLng(cx, cy);
+      m.speed = +(0.5 + Math.random() * 4).toFixed(1);
+    } else {
+      // outdoor: waypoint-seeking random walk within site bounds
+      if (!m.wp) m.wp = randWaypoint(m.sector);
+      const p = latLngToSvg(m.pos), t = latLngToSvg(m.wp);
+      let dx = t.x - p.x, dy = t.y - p.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 8) { m.wp = randWaypoint(m.sector); }
+      else {
+        const step = 4 + Math.random() * 3;             // px per tick
+        dx = dx / dist * step + (Math.random() - 0.5) * 2;
+        dy = dy / dist * step + (Math.random() - 0.5) * 2;
+        let nx = p.x + dx, ny = p.y + dy;
+        nx = Math.max(10, Math.min(MAP_VB.w - 10, nx));
+        ny = Math.max(10, Math.min(MAP_VB.h - 10, ny));
+        m.pos = svgToLatLng(nx, ny);
+      }
+      m.speed = +(8 + Math.random() * 16).toFixed(0);
+    }
+    m.lastPing = now;
+  });
+
+  // repaint markers (cheap) + refresh open detail panel's live fields
+  updateMarkerPositions();
+  updateOpenMachinePing();
+
+  // throttle persistence: every ~4 ticks (~6s)
+  if (MapView.tickCount % 4 === 0) save();
+}
+
+/* Relative "Ns ago" label from a lastPing timestamp. */
+function pingAgo(ts) {
+  const s = Math.max(0, Math.round((Date.now() - ts) / 1000));
+  if (s < 1) return "just now";
+  if (s < 60) return s + "s ago";
+  const m = Math.floor(s / 60);
+  return m + "m ago";
+}
+
+/* ============================================================
+   MAP SCREEN RENDER
+   ============================================================ */
+function renderMapScreen() {
+  const a = currentAcct();
+  if (!a || isOperator()) return;   // operators never reach here
+
+  // sector-scoped titles
+  if (isExec()) {
+    $("#mapTitle").textContent = "Live Equipment Map";
+    $("#mapSub").textContent = "GPS-linked machines · all sectors · live";
+  } else {
+    const sec = SECTORS[State.sector];
+    $("#mapTitle").textContent = "Equipment Map · " + sec.name;
+    $("#mapSub").textContent = "Sector " + State.sector + " machines · GPS-linked · live";
+  }
+
+  // populate type filter (only types present in visible fleet)
+  const sel = $("#mapTypeFilter");
+  const types = Array.from(new Set(visibleMachines().map(m => m.type)));
+  sel.innerHTML = `<option value="all">All types</option>` +
+    types.map(t => `<option value="${t}">${escapeHtml(EQUIP_TYPES[t] ? EQUIP_TYPES[t].label : t)}</option>`).join("");
+  sel.value = MapView.type;
+
+  // managers auto-centre on their sector building; exec starts fit-all site view
+  if (MapView.floorBuilding && !State.floorPlans[MapView.floorBuilding]) MapView.floorBuilding = null;
+  fitAllMachines(false);
+
+  drawMap();
+  renderMapFilters();
+  renderPlanPanel();
+  updateMapViewBadge();
+
+  if (!mapViewedLogged) {
+    mapViewedLogged = true;
+    logAudit(a.id, a.name + " opened the equipment map" + (isExec() ? "" : " (Sector " + State.sector + ")") + ".");
+  }
+}
+
+function updateMapViewBadge() {
+  const badge = $("#mapViewBadge");
+  const back = $("#mapBackSite");
+  if (MapView.floorBuilding) {
+    const b = BUILDINGS[MapView.floorBuilding];
+    badge.textContent = "Floor · " + b.name;
+    badge.classList.add("floor");
+    back.style.display = "";
+  } else {
+    badge.textContent = "Site view";
+    badge.classList.remove("floor");
+    back.style.display = "none";
+  }
+}
+
+/* Status filter chip counts + active state. */
+function renderMapFilters() {
+  const mine = visibleMachines();
+  const c = { all: mine.length, active: 0, idle: 0, maintenance: 0 };
+  mine.forEach(m => { c[m.status]++; });
+  $("#mfAll").textContent = c.all;
+  $("#mfActive").textContent = c.active;
+  $("#mfIdle").textContent = c.idle;
+  $("#mfMaint").textContent = c.maintenance;
+  $all(".filter-chip", $("#mapFilters")).forEach(chip => {
+    chip.classList.toggle("active", chip.dataset.mapstatus === MapView.status);
+  });
+}
+
+/* Machines passing the current status + type filters. */
+function filteredMachines() {
+  return visibleMachines().filter(m => {
+    if (MapView.status !== "all" && m.status !== MapView.status) return false;
+    if (MapView.type !== "all" && m.type !== MapView.type) return false;
+    if (MapView.floorBuilding) {
+      // floor view shows only that building's indoor machines
+      return m.indoor && m.sector === MapView.floorBuilding;
+    }
+    return true;
+  });
+}
+
+/* ---- Build the full SVG map (ground, roads, buildings, plan, markers). ---- */
+function drawMap() {
+  const svg = $("#mapSvg");
+  const floorId = MapView.floorBuilding;
+  const plan = floorId ? State.floorPlans[floorId] : null;
+
+  let bg = "";
+  if (floorId) {
+    // Floor view: neutral backdrop; the plan image (if any) is the ground
+    bg = `<rect x="0" y="0" width="${MAP_VB.w}" height="${MAP_VB.h}" fill="#F7F8FA"/>`;
+  } else {
+    bg = siteBackgroundSvg();
+  }
+
+  // floor-plan image layer (under markers). Rendered both in floor view and,
+  // when a plan exists, faintly on the site view over its building footprint.
+  let planLayer = "";
+  if (floorId && plan) {
+    planLayer = floorPlanImageSvg(floorId, plan, 1);   // full opacity control from plan
+  } else if (!floorId) {
+    SECTOR_ORDER.forEach(sid => {
+      if (State.floorPlans[sid] && canAccessSector(sid)) {
+        planLayer += floorPlanImageSvg(sid, State.floorPlans[sid], 0.5); // faint hint on site
+      }
+    });
+  }
+
+  const markers = filteredMachines().map(markerSvg).join("");
+
+  svg.innerHTML = `
+    <g id="mapWorld" transform="${worldTransform()}">
+      ${bg}
+      ${planLayer}
+      ${markers}
+    </g>`;
+
+  // empty-state note when nothing matches
+  const wrap = $("#mapCanvasWrap");
+  let note = $("#mapEmptyNote");
+  if (filteredMachines().length === 0) {
+    if (!note) {
+      note = document.createElement("div");
+      note.id = "mapEmptyNote"; note.className = "map-empty-note";
+      wrap.appendChild(note);
+    }
+    note.textContent = MapView.floorBuilding ? "No indoor machines match here." : "No machines match this filter.";
+    note.style.display = "";
+  } else if (note) {
+    note.style.display = "none";
+  }
+}
+
+function worldTransform() {
+  return `translate(${MapView.panX.toFixed(2)},${MapView.panY.toFixed(2)}) scale(${MapView.zoom.toFixed(3)})`;
+}
+
+/* Stylised site: ground, roads, two building footprints, yard + dock edge. */
+function siteBackgroundSvg() {
+  const bA = BUILDINGS.A, bB = BUILDINGS.B;
+  return `
+    <rect x="0" y="0" width="${MAP_VB.w}" height="${MAP_VB.h}" fill="#EAEDF1"/>
+    <!-- yard areas -->
+    <rect x="20" y="188" width="196" height="128" rx="6" fill="#E3E8EC"/>
+    <rect x="220" y="70" width="164" height="250" rx="6" fill="#E1E9E7"/>
+    <!-- roads -->
+    <rect x="0" y="150" width="400" height="26" fill="#D5D9DE"/>
+    <rect x="200" y="0" width="24" height="340" fill="#D5D9DE"/>
+    <line x1="0" y1="163" x2="400" y2="163" stroke="#F1F3F5" stroke-width="1.6" stroke-dasharray="10 8"/>
+    <line x1="212" y1="0" x2="212" y2="340" stroke="#F1F3F5" stroke-width="1.6" stroke-dasharray="10 8"/>
+    <!-- dock edge (water side, Sector B bottom) -->
+    <rect x="220" y="300" width="164" height="40" fill="#CBDBE6"/>
+    <line x1="220" y1="304" x2="384" y2="304" stroke="#8FB3C9" stroke-width="2" stroke-dasharray="6 5"/>
+    <!-- building footprints -->
+    <g>
+      <rect x="${bA.x}" y="${bA.y}" width="${bA.w}" height="${bA.h}" rx="7" fill="#F6F8FB" stroke="#B9C4D6" stroke-width="2"/>
+      <rect x="${bA.x}" y="${bA.y}" width="${bA.w}" height="18" rx="7" fill="#0F2B5B" opacity="0.9"/>
+      <text x="${bA.x + bA.w/2}" y="${bA.y + 13}" text-anchor="middle" font-size="10" font-weight="700" fill="#EAF1FF" font-family="var(--font)">${bA.name}</text>
+    </g>
+    <g>
+      <rect x="${bB.x}" y="${bB.y}" width="${bB.w}" height="${bB.h}" rx="7" fill="#F6F8FB" stroke="#B9C4D6" stroke-width="2"/>
+      <rect x="${bB.x}" y="${bB.y}" width="${bB.w}" height="18" rx="7" fill="#0E7C70" opacity="0.92"/>
+      <text x="${bB.x + bB.w/2}" y="${bB.y + 13}" text-anchor="middle" font-size="10" font-weight="700" fill="#EAFBF8" font-family="var(--font)">${bB.name}</text>
+    </g>
+    <text x="118" y="300" text-anchor="middle" font-size="9" fill="#8A97A8" font-family="var(--font)">Warehouse Yard</text>
+    <text x="302" y="296" text-anchor="middle" font-size="9" fill="#7FA0A9" font-family="var(--font)">Dock &amp; Yard</text>`;
+}
+
+/* Map a plan's stored calibration to a rendered SVG <image> over its building.
+   The default fit maps the image (aspect-preserved, centred) into the footprint;
+   scale/offset/rotation/opacity are applied on top. baseOpacityMul lets the
+   site view render it faintly (0.5) while floor view honours the full opacity. */
+function floorPlanImageSvg(buildingId, plan, baseOpacityMul) {
+  const b = BUILDINGS[buildingId];
+  // fitted rect (aspect-preserved contain) inside footprint, then calibrated
+  const fit = planFitRect(plan, b);
+  const cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+  const w = fit.w * plan.scale;
+  const h = fit.h * plan.scale;
+  const x = cx - w / 2 + (plan.offsetX || 0);
+  const y = cy - h / 2 + (plan.offsetY || 0);
+  const opacity = (plan.opacity != null ? plan.opacity : 1) * (baseOpacityMul != null ? baseOpacityMul : 1);
+  const rot = plan.rotation || 0;
+  // clip to building footprint so plan never bleeds outside the walls
+  const clipId = "planClip-" + buildingId;
+  return `
+    <clipPath id="${clipId}"><rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="7"/></clipPath>
+    <g clip-path="url(#${clipId})">
+      <image href="${plan.dataUrl}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}"
+             transform="rotate(${rot} ${cx} ${cy})" opacity="${opacity.toFixed(2)}" preserveAspectRatio="none"/>
+    </g>`;
+}
+
+/* Aspect-preserved "contain" fit of a plan's natural size inside a footprint. */
+function planFitRect(plan, b) {
+  const iw = plan.imgW || 4, ih = plan.imgH || 3;
+  const ar = iw / ih, br = b.w / b.h;
+  let w, h;
+  if (ar > br) { w = b.w; h = b.w / ar; }
+  else { h = b.h; w = b.h * ar; }
+  return { w, h };
+}
+
+/* A machine marker (dot + icon + optional active pulse). */
+function markerSvg(m) {
+  const p = markerScreenPos(m);
+  const color = m.status === "active" ? "#12A594" : (m.status === "maintenance" ? "#B54708" : "#98A2B3");
+  const pulse = m.status === "active"
+    ? `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7" fill="${color}" class="marker-pulse"/>`
+    : "";
+  return `
+    <g class="map-marker" data-machine="${m.id}">
+      ${pulse}
+      <circle class="mk-hit" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="13"/>
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="8.5" fill="#fff" stroke="${color}" stroke-width="2.4"/>
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="${color}"/>
+    </g>`;
+}
+
+/* Where a machine draws in the SVG viewport. Indoor machines in floor view
+   re-project onto the plan (same footprint coords → they land on the plan). */
+function markerScreenPos(m) {
+  return latLngToSvg(m.pos);
+}
+
+/* Cheap per-tick position update — moves existing marker circles in place so
+   CSS pulse animations don't restart. Falls back to a full redraw if the set
+   of visible markers changed (status flip in/out of the current filter). */
+function updateMarkerPositions() {
+  if (State.activeScreen !== "screen-map") return;
+  const svg = $("#mapSvg");
+  const world = $("#mapWorld");
+  if (!world) { drawMap(); return; }
+
+  const wanted = filteredMachines();
+  const wantedIds = wanted.map(m => m.id).sort().join(",");
+  const haveIds = $all(".map-marker", svg).map(g => g.dataset.machine).sort().join(",");
+  if (wantedIds !== haveIds) { drawMap(); renderMapFilters(); return; }
+
+  wanted.forEach(m => {
+    const g = svg.querySelector('.map-marker[data-machine="' + m.id + '"]');
+    if (!g) return;
+    const p = markerScreenPos(m);
+    const x = p.x.toFixed(1), y = p.y.toFixed(1);
+    $all("circle", g).forEach(c => { c.setAttribute("cx", x); c.setAttribute("cy", y); });
+    // keep marker colour in sync if status changed but id set didn't
+    const color = m.status === "active" ? "#12A594" : (m.status === "maintenance" ? "#B54708" : "#98A2B3");
+    const stroke = g.querySelector("circle:not(.mk-hit):not(.marker-pulse)");
+    if (stroke) stroke.setAttribute("stroke", color);
+  });
+  renderMapFilters();
+}
+
+/* ============================================================
+   PAN / ZOOM
+   ============================================================ */
+function clampZoom(z) { return Math.max(0.5, Math.min(8, z)); }
+
+function applyMapTransform() {
+  const world = $("#mapWorld");
+  if (world) world.setAttribute("transform", worldTransform());
+}
+
+function zoomBy(factor, cx, cy) {
+  const wrap = $("#mapCanvasWrap");
+  const rect = wrap.getBoundingClientRect();
+  // zoom about the canvas centre (or a given client point)
+  const px = (cx != null ? cx - rect.left : rect.width / 2) / rect.width * MAP_VB.w;
+  const py = (cy != null ? cy - rect.top : rect.height / 2) / rect.height * MAP_VB.h;
+  const oldZoom = MapView.zoom;
+  const newZoom = clampZoom(oldZoom * factor);
+  if (newZoom === oldZoom) return;
+  // keep the point under cursor stationary
+  MapView.panX = px - (px - MapView.panX) * (newZoom / oldZoom);
+  MapView.panY = py - (py - MapView.panY) * (newZoom / oldZoom);
+  MapView.zoom = newZoom;
+  applyMapTransform();
+  maybeAutoFloorView();
+}
+
+/* Fit all currently-visible machines (or the whole site) into view. */
+function fitAllMachines(animate) {
+  MapView.zoom = 1;
+  MapView.panX = 0;
+  MapView.panY = 0;
+  // managers get a gentle zoom onto their sector building
+  if (isManager() && !MapView.floorBuilding) {
+    const b = BUILDINGS[State.sector];
+    const z = 1.5;
+    const cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+    MapView.zoom = z;
+    MapView.panX = MAP_VB.w / 2 - cx * z;
+    MapView.panY = MAP_VB.h / 2 - cy * z;
+  }
+  applyMapTransform();
+}
+
+/* Auto-enter a building's floor view when zoomed in far enough over it. */
+function maybeAutoFloorView() {
+  if (MapView.floorBuilding) return;
+  if (MapView.zoom < 3.2) return;
+  // which building is under the viewport centre?
+  const centreWorld = {
+    x: (MAP_VB.w / 2 - MapView.panX) / MapView.zoom,
+    y: (MAP_VB.h / 2 - MapView.panY) / MapView.zoom
+  };
+  for (const sid of SECTOR_ORDER) {
+    const b = BUILDINGS[sid];
+    if (!canAccessSector(sid)) continue;
+    if (!State.floorPlans[sid]) continue;
+    if (centreWorld.x >= b.x && centreWorld.x <= b.x + b.w &&
+        centreWorld.y >= b.y && centreWorld.y <= b.y + b.h) {
+      enterFloorView(sid, false);
+      return;
+    }
+  }
+}
+
+function enterFloorView(buildingId, log) {
+  if (!canAccessSector(buildingId)) return;
+  MapView.floorBuilding = buildingId;
+  MapView.status = "all";
+  fitBuilding(buildingId);
+  drawMap();
+  renderMapFilters();
+  renderPlanPanel();
+  updateMapViewBadge();
+  if (log) {
+    const a = currentAcct();
+    if (a) logAudit(a.id, a.name + " opened the floor view for " + BUILDINGS[buildingId].name + ".");
+  }
+}
+
+function exitFloorView() {
+  MapView.floorBuilding = null;
+  fitAllMachines(false);
+  drawMap();
+  renderMapFilters();
+  renderPlanPanel();
+  updateMapViewBadge();
+}
+
+/* Zoom/pan so a building footprint fills the canvas. */
+function fitBuilding(buildingId) {
+  const b = BUILDINGS[buildingId];
+  const pad = 16;
+  const z = clampZoom(Math.min((MAP_VB.w) / (b.w + pad * 2), (MAP_VB.h) / (b.h + pad * 2)));
+  const cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+  MapView.zoom = z;
+  MapView.panX = MAP_VB.w / 2 - cx * z;
+  MapView.panY = MAP_VB.h / 2 - cy * z;
+  applyMapTransform();
+}
+
+/* Pan/zoom to a specific machine (the "Locate" action). */
+function locateMachine(id) {
+  const m = machineById(id);
+  if (!m || !canAccessSector(m.sector)) return;
+  // if indoor and a plan exists, enter floor view; else site view
+  if (m.indoor && State.floorPlans[m.sector] && MapView.floorBuilding !== m.sector) {
+    enterFloorView(m.sector, false);
+  } else if (!m.indoor && MapView.floorBuilding) {
+    exitFloorView();
+  }
+  const p = markerScreenPos(m);
+  const z = clampZoom(Math.max(2.4, MapView.zoom));
+  MapView.zoom = z;
+  MapView.panX = MAP_VB.w / 2 - p.x * z;
+  MapView.panY = MAP_VB.h / 2 - p.y * z;
+  applyMapTransform();
+  drawMap();
+  const a = currentAcct();
+  if (a) logAudit(a.id, a.name + " located " + m.name + " on the map.");
+}
+
+/* ============================================================
+   MACHINE DETAIL PANEL (reuses .modal.detail)
+   ============================================================ */
+function battClass(pct) { return pct >= 50 ? "hi" : (pct >= 20 ? "mid" : "lo"); }
+
+function showMachineDetail(id) {
+  const m = machineById(id);
+  if (!m || !canAccessSector(m.sector)) return;
+  MapView.openMachineId = id;
+  const typeLabel = EQUIP_TYPES[m.type] ? EQUIP_TYPES[m.type].label : m.type;
+  const chipCls = m.status === "active" ? "chip-verified" : (m.status === "maintenance" ? "chip-assigned" : "chip-submitted");
+  const statusLabel = m.status === "active" ? "Active" : (m.status === "maintenance" ? "Maintenance" : "Idle");
+  const lat = m.pos.lat.toFixed(5), lng = m.pos.lng.toFixed(5);
+  const geoUri = `geo:${lat},${lng}`;
+  const mapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
+
+  $("#modalContent").innerHTML = `
+    <div class="detail-head">
+      <div class="folder-ic" style="background:var(--navy-tint);color:var(--navy)">${iconMap()}</div>
+      <div>
+        <div class="detail-title">${escapeHtml(m.name)}</div>
+        <div class="detail-sub">${escapeHtml(typeLabel)} · Sector ${m.sector} · ${escapeHtml(SECTORS[m.sector].name)}</div>
+      </div>
+      <button class="detail-close-x" data-modal-close aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="md-statusrow">
+      <span class="chip ${chipCls}">${statusLabel}</span>
+      <span class="chip ${m.indoor ? "chip-submitted" : "chip-assigned"}" style="text-transform:none">${m.indoor ? "Indoor" : "Outdoor"}</span>
+    </div>
+
+    <div class="md-batt-wrap">
+      <div class="md-batt-label"><span>Battery</span><span class="mb-pct" id="mdBatt">${m.battery}%</span></div>
+      <div class="md-batt-track"><div class="md-batt-fill ${battClass(m.battery)}" style="width:${m.battery}%"></div></div>
+    </div>
+
+    <div class="md-table">
+      <div class="md-tr"><span class="mk">Speed</span><span class="mv" id="mdSpeed">${m.speed} km/h</span></div>
+      <div class="md-tr"><span class="mk">Coordinates</span><span class="mv mono" id="mdCoords">${lat}, ${lng}</span></div>
+      <div class="md-tr"><span class="mk">Last ping</span><span class="mv"><span class="md-ping" id="mdPing">${pingAgo(m.lastPing)}</span></span></div>
+    </div>
+
+    <div class="md-gpslink">
+      <div class="md-gps-ic">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 0 0-8 8c0 5.4 8 12 8 12s8-6.6 8-12a8 8 0 0 0-8-8Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      </div>
+      <div class="md-gps-meta">
+        <div class="md-gps-id"><span class="md-linked-dot"></span>${escapeHtml(m.gpsDevice)} · linked</div>
+        <div class="md-gps-uri" id="mdGeoUri">${geoUri}</div>
+      </div>
+    </div>
+    <div class="md-actions">
+      <button type="button" class="md-copy-btn" data-copy-geo="${geoUri}">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy geo:
+      </button>
+      <a class="md-maps-btn" href="${mapsUrl}" target="_blank" rel="noopener" data-open-maps="${m.id}">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+        Open in Maps
+      </a>
+    </div>
+    <button class="btn btn-primary btn-block md-locate-btn" data-locate="${m.id}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg>
+      Locate on map
+    </button>`;
+  $("#modal").classList.add("detail");
+  $("#backdrop").classList.add("show");
+  $("#modal").classList.add("show");
+
+  // live-refresh the ping/speed/coords while this panel is open
+  if (MapView.pingTimer) clearInterval(MapView.pingTimer);
+  MapView.pingTimer = setInterval(updateOpenMachinePing, 1000);
+}
+
+/* Refresh the open detail panel's live fields (ping/speed/coords/battery). */
+function updateOpenMachinePing() {
+  if (!MapView.openMachineId) return;
+  if (!$("#modal").classList.contains("show")) { MapView.openMachineId = null; return; }
+  const m = machineById(MapView.openMachineId);
+  if (!m) return;
+  const ping = $("#mdPing"); if (ping) ping.textContent = pingAgo(m.lastPing);
+  const spd = $("#mdSpeed"); if (spd) spd.textContent = m.speed + " km/h";
+  const coords = $("#mdCoords"); if (coords) coords.textContent = m.pos.lat.toFixed(5) + ", " + m.pos.lng.toFixed(5);
+}
+
+/* ============================================================
+   MACHINE LIST DRAWER (reuses the bottom sheet)
+   ============================================================ */
+function showMachineListSheet() {
+  const mine = visibleMachines();
+  const content = $("#sheetContent");
+  const rows = mine.map(m => {
+    const typeLabel = EQUIP_TYPES[m.type] ? EQUIP_TYPES[m.type].label : m.type;
+    const statusLabel = m.status === "active" ? "Active" : (m.status === "maintenance" ? "Maintenance" : "Idle");
+    return `<button type="button" class="mach-row" data-machlist="${m.id}">
+        <span class="mach-dot ${m.status}"></span>
+        <span class="mach-row-meta">
+          <span class="mach-row-name">${escapeHtml(m.name)}</span>
+          <span class="mach-row-sub">${escapeHtml(typeLabel)} · ${statusLabel} · ${m.battery}% · Sector ${m.sector}</span>
+        </span>
+        <span class="mach-row-chev">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </span>
+      </button>`;
+  }).join("");
+  content.innerHTML = `
+    <div class="sheet-title">Machines</div>
+    <div class="sheet-sub">${mine.length} GPS-linked · tap a row to locate</div>
+    <div class="mach-list">${rows || '<div class="mach-row-sub" style="padding:8px 2px">No machines in scope.</div>'}</div>`;
+  $("#backdrop").classList.add("show");
+  $("#sheet").classList.add("show");
+}
+
+/* ============================================================
+   FLOOR PLAN — panel, upload/auto-fit, calibrate, remove
+   ============================================================ */
+/* Which building the plan panel currently targets (exec can switch). */
+let planPanelBuilding = null;
+
+function currentPlanBuilding() {
+  if (MapView.floorBuilding) return MapView.floorBuilding;
+  if (isManager()) return State.sector;
+  return planPanelBuilding || "A";
+}
+
+function renderPlanPanel() {
+  const panel = $("#mapPlanPanel");
+  if (!panel) return;
+  const bId = currentPlanBuilding();
+  planPanelBuilding = bId;
+  const b = BUILDINGS[bId];
+  const plan = State.floorPlans[bId];
+
+  // building selector — exec picks A/B; manager fixed to their building
+  let selectHtml = "";
+  if (isExec() && !MapView.floorBuilding) {
+    selectHtml = `<div class="mpp-bldg-select">
+        <select id="planBuildingSelect">
+          ${SECTOR_ORDER.map(sid => `<option value="${sid}"${sid === bId ? " selected" : ""}>${escapeHtml(BUILDINGS[sid].name)}</option>`).join("")}
+        </select>
+      </div>`;
+  } else {
+    selectHtml = `<span class="map-view-badge">${escapeHtml(b.name)}</span>`;
+  }
+
+  let bodyHtml;
+  if (!plan) {
+    bodyHtml = `
+      <div class="plan-dropzone" id="planDropzone">
+        <div class="pd-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></div>
+        <div class="pd-title">Upload a floor plan (PNG/JPG)</div>
+        <div class="pd-sub">It will be fitted to ${escapeHtml(b.name)} automatically.</div>
+      </div>`;
+  } else {
+    const enterBtn = MapView.floorBuilding === bId
+      ? `<button type="button" class="plan-btn" data-plan-exitfloor="1">Back to site</button>`
+      : `<button type="button" class="plan-btn primary" data-plan-floorview="${bId}">Floor view</button>`;
+    bodyHtml = `
+      <div class="plan-applied">
+        <div class="plan-thumb-row">
+          <div class="plan-thumb"><img src="${plan.dataUrl}" alt="Floor plan"/></div>
+          <div class="plan-thumb-meta">
+            <div class="plan-thumb-name">Plan applied · ${escapeHtml(b.name)}</div>
+            <div class="plan-thumb-sub">Auto-fitted to footprint${plan.persisted === false ? " · session only" : ""}</div>
+          </div>
+        </div>
+        <div class="plan-actions">
+          ${enterBtn}
+          <button type="button" class="plan-btn" data-plan-calibrate="1">Calibrate</button>
+          <button type="button" class="plan-btn" data-plan-replace="${bId}">Replace</button>
+          <button type="button" class="plan-btn danger" data-plan-remove="${bId}">Remove</button>
+        </div>
+        <div class="calibrate-panel" id="calibratePanel">
+          ${calibrateControlsHtml(plan)}
+        </div>
+      </div>`;
+  }
+
+  panel.innerHTML = `
+    <div class="mpp-head">
+      <div class="mpp-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+        Floor plans
+      </div>
+      ${selectHtml}
+    </div>
+    ${bodyHtml}`;
+}
+
+function calibrateControlsHtml(plan) {
+  const r = (v) => (v >= 0 ? "+" : "") + v;
+  return `
+    <div class="cal-row"><span class="cal-label">Scale</span>
+      <input type="range" id="calScale" min="50" max="180" value="${Math.round((plan.scale||1)*100)}"/>
+      <span class="cal-val" id="calScaleV">${Math.round((plan.scale||1)*100)}%</span></div>
+    <div class="cal-row"><span class="cal-label">Offset X</span>
+      <input type="range" id="calX" min="-60" max="60" value="${Math.round(plan.offsetX||0)}"/>
+      <span class="cal-val" id="calXV">${r(Math.round(plan.offsetX||0))}</span></div>
+    <div class="cal-row"><span class="cal-label">Offset Y</span>
+      <input type="range" id="calY" min="-60" max="60" value="${Math.round(plan.offsetY||0)}"/>
+      <span class="cal-val" id="calYV">${r(Math.round(plan.offsetY||0))}</span></div>
+    <div class="cal-row"><span class="cal-label">Rotation</span>
+      <input type="range" id="calRot" min="-15" max="15" step="0.5" value="${plan.rotation||0}"/>
+      <span class="cal-val" id="calRotV">${r(plan.rotation||0)}°</span></div>
+    <div class="cal-row"><span class="cal-label">Opacity</span>
+      <input type="range" id="calOpacity" min="20" max="100" value="${Math.round((plan.opacity!=null?plan.opacity:1)*100)}"/>
+      <span class="cal-val" id="calOpacityV">${Math.round((plan.opacity!=null?plan.opacity:1)*100)}%</span></div>
+    <div class="cal-btns">
+      <button type="button" class="plan-btn" data-plan-resetfit="1">Reset fit</button>
+      <button type="button" class="plan-btn primary" data-plan-donecal="1">Done</button>
+    </div>`;
+}
+
+/* Wire the calibrate sliders (live update of the stored plan + redraw). */
+function wireCalibrate() {
+  const bId = currentPlanBuilding();
+  const plan = State.floorPlans[bId];
+  if (!plan) return;
+  const bind = (id, apply, label) => {
+    const el = $("#" + id); if (!el) return;
+    el.addEventListener("input", () => {
+      apply(parseFloat(el.value));
+      const lab = $("#" + label);
+      if (lab) lab.textContent = calValLabel(id, el.value);
+      drawMap();
+    });
+    el.addEventListener("change", () => save());
+  };
+  bind("calScale",  v => plan.scale = v / 100, "calScaleV");
+  bind("calX",      v => plan.offsetX = v,     "calXV");
+  bind("calY",      v => plan.offsetY = v,     "calYV");
+  bind("calRot",    v => plan.rotation = v,    "calRotV");
+  bind("calOpacity",v => plan.opacity = v / 100,"calOpacityV");
+}
+
+function calValLabel(id, val) {
+  const n = parseFloat(val);
+  if (id === "calScale" || id === "calOpacity") return Math.round(n) + "%";
+  if (id === "calRot") return (n >= 0 ? "+" : "") + n + "°";
+  return (n >= 0 ? "+" : "") + Math.round(n);
+}
+
+/* Default calibration for a freshly-fitted plan. */
+function defaultCalibration() {
+  return { scale: 1, offsetX: 0, offsetY: 0, rotation: 0, opacity: 1 };
+}
+
+/* Trigger the hidden file input for a building. */
+let planUploadBuilding = null;
+function triggerPlanUpload(buildingId) {
+  planUploadBuilding = buildingId;
+  const input = $("#planFileInput");
+  input.value = "";
+  input.click();
+}
+
+/* Read → downscale on canvas (max 1600px long edge) → JPEG ~0.8 data-URL,
+   then auto-georeference to the building footprint and persist. */
+function handlePlanFile(file) {
+  const bId = planUploadBuilding || currentPlanBuilding();
+  if (!file || !bId) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const MAXEDGE = 1600;
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const scale = Math.min(1, MAXEDGE / Math.max(w, h));
+      w = Math.round(w * scale); h = Math.round(h * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h);   // flatten transparency for JPEG
+      ctx.drawImage(img, 0, 0, w, h);
+      let dataUrl;
+      try { dataUrl = canvas.toDataURL("image/jpeg", 0.8); }
+      catch (err) { dataUrl = e.target.result; }
+      applyPlan(bId, dataUrl, img.naturalWidth, img.naturalHeight);
+    };
+    img.onerror = () => showToast("Could not read that image.", "danger");
+    img.src = e.target.result;
+  };
+  reader.onerror = () => showToast("Could not read that file.", "danger");
+  reader.readAsDataURL(file);
+}
+
+/* Store the plan with auto-fit calibration; persist (quota-aware). */
+function applyPlan(bId, dataUrl, imgW, imgH) {
+  const cal = defaultCalibration();
+  const plan = Object.assign({ building: bId, dataUrl, imgW: imgW || 4, imgH: imgH || 3, persisted: true }, cal);
+  State.floorPlans[bId] = plan;
+
+  // quota-aware persistence: if it won't fit, keep it in-memory for the session
+  let persisted = true;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      session: State.session, assignments: State.assignments, auditLog: State.auditLog,
+      channels: State.channels, savedChats: State.savedChats, lastRead: State.lastRead,
+      equipment: State.equipment.map(serializeMachine), floorPlans: State.floorPlans
+    }));
+  } catch (err) { persisted = false; }
+  plan.persisted = persisted;
+
+  const a = currentAcct();
+  if (a) logAudit(a.id, a.name + " uploaded a floor plan for " + BUILDINGS[bId].name + " (auto-fitted).");
+
+  // if we're on the map, re-render so the plan + indoor markers appear
+  if (State.activeScreen === "screen-map") { drawMap(); renderPlanPanel(); }
+  if (persisted) showToast("Floor plan applied to " + BUILDINGS[bId].name + ".", "success");
+  else showToast("Plan too large to persist — applied for this session only.", "danger");
+}
+
+function removePlan(bId) {
+  if (!State.floorPlans[bId]) return;
+  if (!confirm("Remove the floor plan for " + BUILDINGS[bId].name + "?")) return;
+  delete State.floorPlans[bId];
+  if (MapView.floorBuilding === bId) exitFloorView();
+  save();
+  const a = currentAcct();
+  if (a) logAudit(a.id, a.name + " removed the floor plan for " + BUILDINGS[bId].name + ".");
+  drawMap();
+  renderPlanPanel();
+  showToast("Floor plan removed.", "danger");
+}
+
+function resetPlanFit(bId) {
+  const plan = State.floorPlans[bId];
+  if (!plan) return;
+  Object.assign(plan, defaultCalibration());
+  save();
+  drawMap();
+  renderPlanPanel();
+  showToast("Fit reset.", "success");
+}
 
 /* ============================================================
    MODAL close (detail modals are populated inline by their openers)
@@ -3626,6 +4846,188 @@ $("#modal").addEventListener("click", e => {
 
 // Audit filter
 $("#auditFilter").addEventListener("change", renderAudit);
+
+/* ============================================================
+   EQUIPMENT MAP — event wiring
+   ============================================================ */
+// Status filter chips
+$("#mapFilters").addEventListener("click", e => {
+  const chip = e.target.closest("[data-mapstatus]");
+  if (!chip) return;
+  MapView.status = chip.dataset.mapstatus;
+  renderMapFilters();
+  drawMap();
+});
+// Type dropdown
+$("#mapTypeFilter").addEventListener("change", () => {
+  MapView.type = $("#mapTypeFilter").value;
+  drawMap();
+});
+// Machine list drawer
+$("#mapListBtn").addEventListener("click", showMachineListSheet);
+
+// Marker tap → detail panel (delegated on the SVG). Suppressed right after a drag.
+let mapJustDragged = false;
+$("#mapSvg").addEventListener("click", e => {
+  if (mapJustDragged) { mapJustDragged = false; return; }
+  const marker = e.target.closest(".map-marker");
+  if (!marker) return;
+  showMachineDetail(marker.dataset.machine);
+});
+
+// Zoom / fit controls
+$(".map-controls").addEventListener("click", e => {
+  const btn = e.target.closest("[data-mapzoom]");
+  if (!btn) return;
+  const act = btn.dataset.mapzoom;
+  if (act === "in") zoomBy(1.4);
+  else if (act === "out") zoomBy(1 / 1.4);
+  else if (act === "fit") { if (MapView.floorBuilding) fitBuilding(MapView.floorBuilding); else fitAllMachines(false); }
+});
+$("#mapBackSite").addEventListener("click", exitFloorView);
+
+// Pointer drag to pan
+(function wireMapPan() {
+  const svg = $("#mapSvg");
+  let dragging = false, lastX = 0, lastY = 0, moved = false;
+  const canvasScaleX = () => svg.clientWidth ? MAP_VB.w / svg.clientWidth : 1;
+  const canvasScaleY = () => svg.clientHeight ? MAP_VB.h / svg.clientHeight : 1;
+
+  svg.addEventListener("pointerdown", e => {
+    dragging = true; moved = false; lastX = e.clientX; lastY = e.clientY;
+    svg.classList.add("dragging");
+    svg.setPointerCapture(e.pointerId);
+  });
+  svg.addEventListener("pointermove", e => {
+    if (!dragging) return;
+    const dx = (e.clientX - lastX) * canvasScaleX();
+    const dy = (e.clientY - lastY) * canvasScaleY();
+    if (Math.abs(e.clientX - lastX) + Math.abs(e.clientY - lastY) > 3) moved = true;
+    lastX = e.clientX; lastY = e.clientY;
+    MapView.panX += dx; MapView.panY += dy;
+    applyMapTransform();
+  });
+  const endDrag = e => {
+    if (!dragging) return;
+    dragging = false;
+    svg.classList.remove("dragging");
+    try { svg.releasePointerCapture(e.pointerId); } catch (err) {}
+    if (moved) { mapJustDragged = true; maybeAutoFloorView(); }
+  };
+  svg.addEventListener("pointerup", endDrag);
+  svg.addEventListener("pointercancel", endDrag);
+
+  // wheel zoom (about cursor)
+  svg.addEventListener("wheel", e => {
+    e.preventDefault();
+    zoomBy(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX, e.clientY);
+  }, { passive: false });
+
+  // pinch zoom (two-pointer) — track distance
+  const pointers = new Map();
+  let pinchDist = 0;
+  svg.addEventListener("pointerdown", e => { pointers.set(e.pointerId, e); });
+  svg.addEventListener("pointermove", e => {
+    if (!pointers.has(e.pointerId)) return;
+    pointers.set(e.pointerId, e);
+    if (pointers.size === 2) {
+      dragging = false; svg.classList.remove("dragging");
+      const pts = Array.from(pointers.values());
+      const d = Math.hypot(pts[0].clientX - pts[1].clientX, pts[0].clientY - pts[1].clientY);
+      if (pinchDist) {
+        const cx = (pts[0].clientX + pts[1].clientX) / 2;
+        const cy = (pts[0].clientY + pts[1].clientY) / 2;
+        zoomBy(d / pinchDist, cx, cy);
+      }
+      pinchDist = d;
+    }
+  });
+  const clearPointer = e => { pointers.delete(e.pointerId); if (pointers.size < 2) pinchDist = 0; };
+  svg.addEventListener("pointerup", clearPointer);
+  svg.addEventListener("pointercancel", clearPointer);
+})();
+
+// Machine detail panel actions (Copy geo:, Locate) — delegated on #modal
+$("#modal").addEventListener("click", e => {
+  const copyBtn = e.target.closest("[data-copy-geo]");
+  if (copyBtn) {
+    const uri = copyBtn.dataset.copyGeo;
+    const done = () => showToast("Copied " + uri, "success");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(uri).then(done).catch(() => fallbackCopy(uri, done));
+    } else { fallbackCopy(uri, done); }
+    return;
+  }
+  const mapsLink = e.target.closest("[data-open-maps]");
+  if (mapsLink) {
+    const a = currentAcct();
+    if (a) logAudit(a.id, a.name + " opened an external maps link for a machine.");
+    return; // let the anchor navigate (target=_blank)
+  }
+  const locBtn = e.target.closest("[data-locate]");
+  if (locBtn) {
+    const id = locBtn.dataset.locate;
+    closeModal();
+    locateMachine(id);
+    return;
+  }
+});
+function fallbackCopy(text, done) {
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); ta.remove(); done();
+  } catch (err) { showToast("Copy not available", "danger"); }
+}
+
+// Machine list drawer rows → locate (delegated on the sheet)
+$("#sheet").addEventListener("click", e => {
+  const row = e.target.closest("[data-machlist]");
+  if (!row) return;
+  closeSheet();
+  locateMachine(row.dataset.machlist);
+});
+
+// Floor-plan panel actions (delegated)
+$("#mapPlanPanel").addEventListener("click", e => {
+  const dz = e.target.closest("#planDropzone");
+  if (dz) { triggerPlanUpload(currentPlanBuilding()); return; }
+  const replace = e.target.closest("[data-plan-replace]");
+  if (replace) { triggerPlanUpload(replace.dataset.planReplace); return; }
+  const remove = e.target.closest("[data-plan-remove]");
+  if (remove) { removePlan(remove.dataset.planRemove); return; }
+  const floor = e.target.closest("[data-plan-floorview]");
+  if (floor) { enterFloorView(floor.dataset.planFloorview, true); return; }
+  const exitf = e.target.closest("[data-plan-exitfloor]");
+  if (exitf) { exitFloorView(); return; }
+  const cal = e.target.closest("[data-plan-calibrate]");
+  if (cal) {
+    const panel = $("#calibratePanel");
+    if (panel) {
+      panel.classList.toggle("open");
+      if (panel.classList.contains("open")) wireCalibrate();
+    }
+    return;
+  }
+  const doneCal = e.target.closest("[data-plan-donecal]");
+  if (doneCal) { const p = $("#calibratePanel"); if (p) p.classList.remove("open"); save(); return; }
+  const resetFit = e.target.closest("[data-plan-resetfit]");
+  if (resetFit) { resetPlanFit(currentPlanBuilding()); return; }
+});
+// Exec building selector in the plan panel
+$("#mapPlanPanel").addEventListener("change", e => {
+  const sel = e.target.closest("#planBuildingSelect");
+  if (!sel) return;
+  planPanelBuilding = sel.value;
+  renderPlanPanel();
+});
+
+// Hidden file input → read/downscale/apply
+$("#planFileInput").addEventListener("change", e => {
+  const file = e.target.files && e.target.files[0];
+  if (file) handlePlanFile(file);
+});
 
 // Backdrop dismiss
 $("#backdrop").addEventListener("click", () => {
