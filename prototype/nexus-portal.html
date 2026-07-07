@@ -107,6 +107,10 @@
   .avatar.executive { background: linear-gradient(135deg,#12336E,#0F2B5B); }
   .avatar.manager   { background: linear-gradient(135deg,#16BBA8,#0E7C70); }
   .avatar.operator  { background: linear-gradient(135deg,#5E7CB0,#3C577F); }
+  .cred-avatar.executive, .chat-avatar.executive, .pick-opt .po-av.executive { background: linear-gradient(135deg,#12336E,#0F2B5B); }
+  .cred-avatar.manager,   .chat-avatar.manager,   .pick-opt .po-av.manager   { background: linear-gradient(135deg,#16BBA8,#0E7C70); }
+  .cred-avatar.operator,  .chat-avatar.operator,  .pick-opt .po-av.operator  { background: linear-gradient(135deg,#5E7CB0,#3C577F); }
+  .chat-avatar.system { background: #98A2B3; }
   .persona-meta { min-width: 0; }
   .persona-name {
     font-size: 14px; font-weight: 600; letter-spacing: -.2px;
@@ -266,6 +270,140 @@
   .chip-submitted { color: var(--blue);  background: var(--blue-tint); }
   .chip-verified  { color: var(--teal-dark); background: var(--teal-tint); }
   .chip-rejected  { color: var(--red);   background: var(--red-tint); }
+  /* Executive override — senior gold-accented on navy */
+  .chip-override {
+    color: #FFF7E0; background: var(--navy); border: 1px solid #C99A2E;
+    box-shadow: inset 0 0 0 1px rgba(201,154,46,.35);
+  }
+  .chip-override::before { background: #E9C05B; }
+
+  /* ===== Proof-of-duty thumbnail chip ===== */
+  .proof-chip {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 6px 10px 6px 6px; border: 1px solid var(--border);
+    border-radius: 10px; background: var(--white); cursor: pointer;
+    transition: var(--ease); max-width: 100%;
+  }
+  .proof-chip:hover { border-color: #C9D3E6; box-shadow: var(--shadow-sm); }
+  .proof-thumb {
+    width: 40px; height: 40px; border-radius: 7px; flex: 0 0 auto;
+    overflow: hidden; border: 1px solid #E6ECF7; background: #0F2B5B;
+  }
+  .proof-thumb svg { display: block; width: 100%; height: 100%; }
+  .proof-meta { min-width: 0; }
+  .proof-file { font-size: 12px; font-weight: 600; color: var(--text); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .proof-loc { font-size: 10.5px; color: var(--text-2); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .proof-attached {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px;
+    font-weight: 600; color: var(--teal-dark);
+  }
+
+  /* Proof enlarge modal render */
+  .proof-large {
+    width: 210px; height: 210px; border-radius: 14px; margin: 0 auto 14px;
+    overflow: hidden; border: 1px solid var(--border); background: #0F2B5B;
+  }
+  .proof-large svg { display: block; width: 100%; height: 100%; }
+  .proof-metatable { text-align: left; margin: 4px 0 18px; }
+  .proof-metarow { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+  .proof-metarow:last-child { border-bottom: none; }
+  .proof-metarow .pk { color: var(--text-2); }
+  .proof-metarow .pv { font-weight: 600; text-align: right; }
+
+  /* ===== Sector section headers (executive grouped views) ===== */
+  .sector-head {
+    font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
+    color: var(--navy); margin: 22px 0 11px; display: flex; align-items: center; gap: 8px;
+  }
+  .sector-head:first-child { margin-top: 4px; }
+  .sector-head::before {
+    content: ''; width: 8px; height: 8px; border-radius: 2px; background: var(--navy); flex: 0 0 auto;
+  }
+  .sector-head.b::before { background: var(--teal); }
+  .sector-head.b { color: var(--teal-dark); }
+
+  /* ===== Assign Duty button (manager) ===== */
+  .assign-duty-bar { margin-bottom: 14px; }
+  .btn-assign {
+    width: 100%; background: var(--navy-tint); color: var(--navy);
+    border: 1px dashed #B9C8E4; font-size: 14px; font-weight: 600;
+    border-radius: var(--radius); padding: 13px; cursor: pointer;
+    font-family: var(--font); transition: var(--ease);
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-assign:hover { background: #E3EAF8; border-color: var(--navy); }
+  .btn-assign:active { transform: scale(.99); }
+
+  /* Segmented pick control (operator/duty type selectors in sheet) */
+  .pick-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .pick-opt {
+    display: flex; align-items: center; gap: 11px; width: 100%;
+    padding: 12px 13px; border: 1px solid var(--border); border-radius: 11px;
+    background: var(--white); cursor: pointer; transition: var(--ease);
+    font-family: var(--font); text-align: left;
+  }
+  .pick-opt:hover { border-color: #C9D3E6; }
+  .pick-opt.sel { border-color: var(--navy); background: var(--navy-tint); box-shadow: 0 0 0 1px var(--navy) inset; }
+  .pick-opt .po-av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 600; font-size: 11px; flex: 0 0 auto; }
+  .pick-opt .po-ic { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: var(--navy-tint); color: var(--navy); flex: 0 0 auto; }
+  .pick-opt .po-name { font-size: 13.5px; font-weight: 600; }
+  .pick-opt .po-sub { font-size: 11.5px; color: var(--text-2); margin-top: 1px; }
+  .pick-check { margin-left: auto; color: var(--navy); opacity: 0; transition: var(--ease); }
+  .pick-opt.sel .pick-check { opacity: 1; }
+
+  .sheet-input {
+    width: 100%; border: 1px solid var(--border); border-radius: 10px;
+    padding: 11px 13px; font-size: 14px; font-family: var(--font); color: var(--text);
+    outline: none; transition: var(--ease); background: var(--white); margin-bottom: 16px;
+  }
+  .sheet-input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(15,43,91,.08); }
+  textarea.sheet-input { resize: none; }
+
+  /* Attach proof affordance in sheet */
+  .attach-proof-btn {
+    width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px; border: 1px dashed #B9C8E4; border-radius: 11px; background: var(--navy-tint);
+    color: var(--navy); font-family: var(--font); font-size: 13.5px; font-weight: 600;
+    cursor: pointer; transition: var(--ease); margin-bottom: 14px;
+  }
+  .attach-proof-btn:hover { background: #E3EAF8; }
+  .attach-proof-btn:active { transform: scale(.99); }
+  .attach-proof-btn.done { border-style: solid; border-color: #C3EDE6; background: var(--teal-tint); color: var(--teal-dark); cursor: default; }
+
+  .proof-preview-row {
+    display: flex; align-items: center; gap: 10px; padding: 10px;
+    border: 1px solid var(--border); border-radius: 11px; background: var(--bg); margin-bottom: 14px;
+  }
+
+  /* Composer attach-proof button (operator, in channel) */
+  .compose-attach {
+    width: 42px; height: 42px; border-radius: 50%; flex: 0 0 auto; border: 1px solid var(--border);
+    background: var(--white); color: var(--navy); cursor: pointer; display: grid; place-items: center;
+    transition: var(--ease);
+  }
+  .compose-attach:hover { background: var(--navy-tint); border-color: #D3DBEA; }
+  .compose-attach:active { transform: scale(.92); }
+  .compose-attach.armed { background: var(--teal-tint); border-color: #C3EDE6; color: var(--teal-dark); }
+
+  /* System-style chat message (automated) */
+  .chat-system {
+    align-self: center; max-width: 92%; margin: 4px auto 12px; text-align: center;
+  }
+  .chat-system .sys-bubble {
+    display: inline-block; font-size: 12px; color: var(--text-2); background: var(--bg);
+    border: 1px solid var(--border); border-radius: 999px; padding: 7px 13px; line-height: 1.4;
+  }
+  .chat-system .proof-chip { margin: 8px auto 0; }
+
+  /* Executive terminal header accent */
+  .chan-header.command .chan-title { color: var(--navy); }
+  .chan-header.command .chan-badge {
+    font-size: 9.5px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
+    color: #fff; background: var(--navy); padding: 3px 7px; border-radius: 5px; margin-left: 7px;
+    vertical-align: 2px;
+  }
+  .chan-header.command .chan-back { background: var(--navy-tint); color: var(--navy); border-color: #D3DBEA; }
+  .channel-card .channel-ic.command { background: var(--navy); color: #fff; border-color: var(--navy); }
 
   /* ===== Segmented tabs ===== */
   .seg-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
@@ -330,6 +468,18 @@
   }
   .resolved-card .rc-title { font-size: 13.5px; font-weight: 600; }
   .resolved-card .rc-sub { font-size: 11.5px; color: var(--text-2); }
+  .resolved-card.exec { display: block; }
+  .resolved-card.exec .rc-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .rc-override-row { display: flex; align-items: center; gap: 10px; margin-top: 11px; }
+  .btn-override {
+    flex: 1; background: var(--navy); color: #fff; border: 1px solid #C99A2E;
+    font-size: 13px; font-weight: 600; border-radius: 9px; padding: 9px;
+    cursor: pointer; font-family: var(--font); transition: var(--ease);
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-override:hover { background: var(--navy-hover); }
+  .btn-override:active { transform: scale(.98); }
+  .rc-decider { font-size: 11px; color: var(--text-3); margin-top: 3px; }
 
   /* ===== Messages ===== */
   .msg-thread { display: flex; flex-direction: column; gap: 10px; padding-bottom: 6px; }
@@ -675,6 +825,41 @@
   .hdr-actions { display: flex; align-items: center; gap: 8px; }
 
   /* ===== Chat: channel list ===== */
+  .saved-space {
+    margin-bottom: 18px; border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--white); box-shadow: var(--shadow-sm); overflow: hidden;
+  }
+  .saved-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 13px 14px; border-bottom: 1px solid var(--border); background: #FAFBFC;
+  }
+  .saved-title { font-size: 13.5px; font-weight: 700; letter-spacing: -.1px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .saved-count {
+    min-width: 21px; height: 21px; padding: 0 7px; border-radius: 999px;
+    display: grid; place-items: center; background: var(--navy); color: #fff;
+    font-size: 11px; font-weight: 700;
+  }
+  .saved-list { display: flex; flex-direction: column; gap: 0; }
+  .saved-card {
+    padding: 12px 14px; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
+  }
+  .saved-card:last-child { border-bottom: none; }
+  .saved-meta { font-size: 10.5px; color: var(--text-3); font-weight: 600; margin-bottom: 3px; }
+  .saved-text {
+    font-size: 13px; color: var(--text); line-height: 1.35;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .saved-actions { display: flex; align-items: center; gap: 6px; }
+  .saved-btn {
+    width: 31px; height: 31px; border-radius: 9px; border: 1px solid var(--border);
+    background: var(--white); color: var(--text-2); display: grid; place-items: center;
+    cursor: pointer; transition: var(--ease);
+  }
+  .saved-btn:hover { color: var(--navy); background: var(--navy-tint); border-color: #D3DBEA; }
+  .saved-btn.danger:hover { color: var(--red); background: var(--red-tint); border-color: #F4C7C7; }
+  .saved-empty { padding: 18px 14px; color: var(--text-3); font-size: 12.5px; text-align: center; }
+
   .channel-list { display: flex; flex-direction: column; gap: 11px; }
   .channel-card {
     display: flex; align-items: center; gap: 13px;
@@ -741,6 +926,17 @@
   .chat-row.in .chat-bubble { background: var(--white); border: 1px solid var(--border); border-bottom-left-radius: 4px; color: var(--text); }
   .chat-row.out .chat-bubble { background: var(--navy); color: #fff; border-bottom-right-radius: 4px; }
   .chat-time { font-size: 9.5px; color: var(--text-3); margin-top: 3px; padding: 0 4px; }
+  .chat-tools { display: flex; align-items: center; gap: 5px; margin-top: 5px; padding: 0 4px; }
+  .chat-row.out .chat-tools { justify-content: flex-end; }
+  .chat-save {
+    width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--white); color: var(--text-3); display: grid; place-items: center;
+    cursor: pointer; transition: var(--ease);
+  }
+  .chat-save:hover { color: var(--navy); background: var(--navy-tint); border-color: #D3DBEA; }
+  .chat-save.saved { color: #C99A2E; background: #FFF7E0; border-color: #E9C05B; }
+  .chat-row.focused .chat-bubble { box-shadow: 0 0 0 3px rgba(201,154,46,.25), var(--shadow-sm); }
+  .chat-system.focused .sys-bubble { box-shadow: 0 0 0 3px rgba(201,154,46,.25); }
   .chat-thread { display: flex; flex-direction: column; padding-bottom: 6px; }
 </style>
 </head>
@@ -875,10 +1071,10 @@
       </div>
     </section>
 
-    <!-- ============ SCREEN 3: OPERATOR WORKSPACE ============ -->
+    <!-- ============ SCREEN 3: OPERATOR WORKSPACE / EXEC ALL-TASKS ============ -->
     <section class="screen" id="screen-tasks">
-      <h1 class="section-title">My Tasks</h1>
-      <p class="section-sub">Field verifications assigned to you</p>
+      <h1 class="section-title" id="tasksTitle">My Tasks</h1>
+      <p class="section-sub" id="tasksSub">Duties assigned to you · proof required</p>
 
       <div class="folder-row locked" id="operatorAnalyticsFolder">
         <div class="folder-ic">
@@ -910,8 +1106,8 @@
 
     <!-- ============ SCREEN 4: MANAGER HUB ============ -->
     <section class="screen" id="screen-manager">
-      <h1 class="section-title">Team Hub</h1>
-      <p class="section-sub">Oversight &amp; approvals — Northeast Region</p>
+      <h1 class="section-title" id="mgrTitle">Team Hub</h1>
+      <p class="section-sub" id="mgrSub">Oversight &amp; approvals</p>
 
       <div class="folder-row unlocked" id="managerAnalyticsFolder">
         <div class="folder-ic">
@@ -934,6 +1130,12 @@
       </div>
 
       <div class="tab-panel active" id="mtab-team">
+        <div class="assign-duty-bar">
+          <button type="button" class="btn-assign" id="assignDutyBtn">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            Assign Duty
+          </button>
+        </div>
         <div class="task-list" id="managerTeamList"><!-- rendered --></div>
       </div>
 
@@ -966,6 +1168,16 @@
     <section class="screen" id="screen-chats">
       <h1 class="section-title">Chats</h1>
       <p class="section-sub">Team channels &amp; announcements</p>
+      <div class="saved-space" id="savedChatsSpace">
+        <div class="saved-head">
+          <div class="saved-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+            Saved Chats
+          </div>
+          <span class="saved-count" id="savedChatCount">0</span>
+        </div>
+        <div class="saved-list" id="savedChatList"><!-- rendered --></div>
+      </div>
       <div class="channel-list" id="channelList"><!-- rendered --></div>
     </section>
 
@@ -1020,26 +1232,53 @@
 "use strict";
 
 /* ============================================================
-   PERSONAS
+   SECTORS + ACCOUNTS (hierarchical RBAC)
+   Levels: executive 3 (all sectors), manager 2 (own sector),
+           operator 1 (own sector, execution only).
    ============================================================ */
-const PERSONAS = {
-  executive: { name: "Eleanor Vance", title: "Chief Operations Officer", initials: "EV" },
-  manager:   { name: "Marcus Reid",   title: "Regional Manager",         initials: "MR" },
-  operator:  { name: "Dana Cole",     title: "Field Operator",           initials: "DC" }
-};
+const LEVELS = { executive: 3, manager: 2, operator: 1 };
 
-/* Seeded accounts (email + password → role). Demo only. */
+const SECTORS = {
+  A: { id: "A", label: "Sector A", name: "Warehouse",     full: "Sector A — Warehouse" },
+  B: { id: "B", label: "Sector B", name: "Dock & Yard",   full: "Sector B — Dock & Yard" }
+};
+const SECTOR_ORDER = ["A", "B"];
+
+/* Seeded accounts. Each has a stable id used everywhere as identity. */
 const ACCOUNTS = [
-  { email: "eleanor@nexus.io", password: "exec2026",   role: "executive" },
-  { email: "marcus@nexus.io",  password: "manage2026", role: "manager"   },
-  { email: "dana@nexus.io",    password: "field2026",  role: "operator"  }
+  { id: "exec",   email: "eleanor@nexus.io", password: "exec2026",   name: "Eleanor Vance", initials: "EV", role: "executive", sector: null, title: "Executive" },
+  { id: "mgrA",   email: "marcus@nexus.io",  password: "manage2026", name: "Marcus Reid",   initials: "MR", role: "manager",   sector: "A",  title: "Manager — Sector A" },
+  { id: "mgrB",   email: "priya@nexus.io",   password: "priya2026",  name: "Priya Shah",    initials: "PS", role: "manager",   sector: "B",  title: "Manager — Sector B" },
+  { id: "opA",    email: "dana@nexus.io",    password: "field2026",  name: "Dana Cole",     initials: "DC", role: "operator",  sector: "A",  title: "Operator — Sector A" },
+  { id: "opB",    email: "luis@nexus.io",    password: "luis2026",   name: "Luis Ortega",   initials: "LO", role: "operator",  sector: "B",  title: "Operator — Sector B" }
 ];
+
+function acctById(id)    { return ACCOUNTS.find(a => a.id === id) || null; }
+function acctByEmail(e)  { return ACCOUNTS.find(a => a.email === (e || "").trim().toLowerCase()) || null; }
+function acctName(id)    { const a = acctById(id); return a ? a.name : (id === "system" ? "System" : "Unknown"); }
+function acctInitials(id){ const a = acctById(id); return a ? a.initials : "?"; }
+function acctRole(id)    { const a = acctById(id); return a ? a.role : "system"; }
+
+/* Sector label for headers/chips, e.g. "MANAGER — SECTOR A · WAREHOUSE" */
+function sectorTag(acct) {
+  if (!acct) return "";
+  if (acct.role === "executive") return "EXECUTIVE · ALL SECTORS";
+  const s = SECTORS[acct.sector];
+  return (acct.role === "manager" ? "MANAGER" : "OPERATOR") + " — SECTOR " + acct.sector + " · " + s.name.toUpperCase();
+}
 
 /* Prominent role badge label shown on the reveal interstitial */
 const ROLE_BADGE = {
   executive: "Executive",
-  manager:   "Regional Manager",
-  operator:  "Field Operator"
+  manager:   "Manager",
+  operator:  "Operator"
+};
+
+/* Duty types for proof-of-duty assignments */
+const DUTY_TYPES = {
+  inventory: { id: "inventory", title: "Inventory Count",     valueLabel: "Counted Units", unit: "units", mode: "count",   icon: "iconTasks" },
+  photo:     { id: "photo",     title: "Cargo Photo Check",   valueLabel: "Photo Check",   unit: "",      mode: "confirm", icon: "iconCamera" },
+  seal:      { id: "seal",      title: "Seal Verification",   valueLabel: "Seal Status",   unit: "",      mode: "confirm", icon: "iconSeal" }
 };
 
 /* ============================================================
@@ -1061,14 +1300,14 @@ const ROLES = {
   executive: {
     home: "screen-dashboard",
     analytics: "unlocked",              // executive dashboard is their unlocked view
-    auditInHeader: true,                // Audit folded into header icon to keep nav ≤ 4 items
+    auditInHeader: true,                // Audit folded into header icon; nav holds the other 4
     nav: [
       { key: "dashboard", access: true },
-      { key: "tasks",     access: false },
-      { key: "approvals", access: false },
+      { key: "tasks",     access: true },   // executive: all sectors' assignments (read/grouped)
+      { key: "approvals", access: true },   // executive override queue (all sectors)
       { key: "chats",     access: true }
     ],
-    actions: { viewDashboard: true, submitTask: false, approve: false, assignRole: false, message: false }
+    actions: { viewDashboard: true, submitTask: false, approve: true, assignRole: false, override: true }
   },
   manager: {
     home: "screen-manager",
@@ -1080,182 +1319,232 @@ const ROLES = {
       { key: "approvals", access: true },
       { key: "chats",     access: true }
     ],
-    actions: { viewDashboard: true, submitTask: false, approve: true, assignRole: true, message: false }
+    actions: { viewDashboard: true, submitTask: false, approve: true, assignRole: true, override: false }
   },
   operator: {
     home: "screen-tasks",
     analytics: "locked",
-    auditInHeader: true,                // Audit folded into header icon; nav holds Tasks/Messages/Chats + locked Approvals
+    auditInHeader: true,                // Audit folded into header icon; nav holds Tasks/Chats + locked Approvals
     nav: [
       { key: "tasks",     access: true },
-      { key: "messages",  access: true },
       { key: "chats",     access: true },
       { key: "approvals", access: false }
     ],
-    actions: { viewDashboard: false, submitTask: true, approve: false, assignRole: false, message: true }
+    actions: { viewDashboard: false, submitTask: true, approve: false, assignRole: false, override: false }
   }
 };
 
+/* Level/sector access helpers (hierarchical RBAC) */
+function currentAcct() { return acctById(State.account); }
+function isExec()    { return State.role === "executive"; }
+function isManager() { return State.role === "manager"; }
+function isOperator(){ return State.role === "operator"; }
+/* Can the signed-in account act on data belonging to `sector`?
+   Executive: any sector. Manager/Operator: only their own. */
+function canAccessSector(sector) {
+  if (isExec()) return true;
+  return State.sector === sector;
+}
+
 /* ============================================================
-   CHANNELS — access matrix (drives Chat hub, mirrors ROLES pattern)
-   access[role]: 'rw' (read/write) | 'locked'
+   CHANNELS — membership matrix (drives Chat hub, mirrors ROLES pattern)
+   members: explicit account ids with read/write access.
+   lockNote: message shown when a non-member taps the channel.
+   sector: (optional) the sector this terminal belongs to.
+   command: exec↔managers line (distinct navy header treatment).
    ============================================================ */
 const CHANNELS = {
   general: {
     name: "#general",
     desc: "Company-wide announcements & chatter",
-    access: { executive: "rw", manager: "rw", operator: "rw" }
+    members: ["exec", "mgrA", "mgrB", "opA", "opB"],
+    lockNote: "Requires an account"
   },
-  "field-ops": {
-    name: "#field-ops",
-    desc: "Route updates, loading bays, field coordination",
-    access: { executive: "locked", manager: "rw", operator: "rw" }
+  "command-terminal": {
+    name: "#command-terminal",
+    title: "Executive Terminal",
+    desc: "Executive ↔ Managers · KPIs & staffing",
+    members: ["exec", "mgrA", "mgrB"],
+    lockNote: "Requires Manager access",
+    command: true
   },
-  approvals: {
-    name: "#approvals",
-    desc: "Verification reviews & sign-offs",
-    access: { executive: "locked", manager: "rw", operator: "locked" }
+  "sector-a-terminal": {
+    name: "#sector-a-terminal",
+    desc: "Sector A · Warehouse floor coordination",
+    members: ["exec", "mgrA", "opA"],
+    lockNote: "Sector A personnel only",
+    sector: "A"
   },
-  "executive-briefing": {
-    name: "#executive-briefing",
-    desc: "KPIs, compliance & strategy",
-    access: { executive: "rw", manager: "rw", operator: "locked" }
+  "sector-b-terminal": {
+    name: "#sector-b-terminal",
+    desc: "Sector B · Dock & yard coordination",
+    members: ["exec", "mgrB", "opB"],
+    lockNote: "Sector B personnel only",
+    sector: "B"
   }
 };
-const CHANNEL_ORDER = ["general", "field-ops", "approvals", "executive-briefing"];
+const CHANNEL_ORDER = ["general", "command-terminal", "sector-a-terminal", "sector-b-terminal"];
 
-/* Human-readable member line + the role required to unlock a locked channel */
+/* Does the signed-in account have read/write on this channel? */
+function channelHasAccess(chanId) {
+  return CHANNELS[chanId].members.indexOf(State.account) !== -1;
+}
+/* Human-readable member line (names) */
 function channelMemberLine(chanId) {
-  const acc = CHANNELS[chanId].access;
-  const roles = Object.keys(acc).filter(r => acc[r] === "rw").map(r => capitalize(r));
-  return roles.join(" · ");
+  return CHANNELS[chanId].members.map(id => acctName(id).split(" ")[0]).join(" · ");
 }
-function requiredRoleFor(chanId) {
-  const acc = CHANNELS[chanId].access;
-  const rw = Object.keys(acc).filter(r => acc[r] === "rw");
-  // The "gatekeeper" role to name in the notice: prefer Manager if it's the only rw, else first rw role
-  if (rw.length === 1) return capitalize(rw[0]);
-  if (rw.includes("manager")) return "Manager";
-  return capitalize(rw[0]);
-}
+function channelLockNote(chanId) { return CHANNELS[chanId].lockNote; }
+function sectorChannelId(sector) { return "sector-" + String(sector).toLowerCase() + "-terminal"; }
 
 /* ============================================================
-   PERSISTENCE — single versioned localStorage key
-   Shape (nexus.v2):
+   PERSISTENCE — single versioned localStorage key (bumped to v3)
+   Stale nexus.v2 is intentionally ignored so it can't half-load.
+   Shape (nexus.v3):
    {
-     session: role|null,
-     tasks: [...], messages: [...], auditLog: [...],
-     channels: { chanId: [ {id, role, text, time, ts} ] },
-     lastRead: { accountEmail: { chanId: count } }
+     session: accountId|null,
+     assignments: [ {id, sector, operatorId, assignerId, dutyType, location, note,
+                     status, value, proof, decision, assignedAt, submittedAt} ],
+     auditLog: [ {time, role, actor, desc, ts} ],   // newest first
+     channels: { chanId: [ {id, kind, senderId, text, time, ts, proof} ] },
+     savedChats: [ {id, accountId, channelId, messageId, savedAt, savedTime} ],
+     lastRead: { accountId: { chanId: count } }
    }
+   decision: null | { action:'verified'|'rejected', byId, byName,
+                      overriddenById, overriddenByName, originalAction }
    ============================================================ */
-const STORAGE_KEY = "nexus.v2";
+const STORAGE_KEY  = "nexus.v3";
+const LEGACY_KEY   = "nexus.v2";
 
 /* ============================================================
    GLOBAL STATE (single source of truth, hydrated from storage)
    ============================================================ */
 const State = {
-  role: null,                 // active role once signed in
-  session: null,              // persisted signed-in role (survives reload)
+  account: null,              // active account id once signed in
+  role: null,                 // derived from active account
+  sector: null,               // derived from active account
+  level: 0,                   // derived from active account
+  session: null,              // persisted signed-in account id (survives reload)
   activeScreen: "screen-signin",
-  analyticsViewed: false,
   dashboardViewLogged: false,
-  tasks: [],
-  messages: [],
+  assignments: [],            // proof-of-duty assignments (the task model)
   auditLog: [],               // newest first
   channels: {},               // chanId -> array of messages (oldest first)
-  lastRead: {}                // accountEmail -> { chanId: seenCount }
+  savedChats: [],             // account-scoped saved chat references
+  lastRead: {}                // accountId -> { chanId: seenCount }
 };
 
-/* Build a fresh default dataset (used on first run + reset) */
+/* Build a fresh default dataset (used on first run + reset).
+   Original 3 demo tasks are folded into Sector A assignments for Dana;
+   Sector B seeds keep Priya's/Luis's views populated. */
 function seedDefaults() {
+  const assignments = [
+    // ---- Sector A — Marcus assigns Dana ----
+    { id: "as1", sector: "A", operatorId: "opA", assignerId: "mgrA", dutyType: "inventory",
+      location: "Bay 7", note: "Cross-check against manifest C-4817.",
+      status: "assigned", value: null, proof: null, decision: null, assignedAt: "8:10 AM", submittedAt: null },
+    { id: "as2", sector: "A", operatorId: "opA", assignerId: "mgrA", dutyType: "photo",
+      location: "Dock 3", note: "Full pallet wrap before it ships.",
+      status: "assigned", value: null, proof: null, decision: null, assignedAt: "8:12 AM", submittedAt: null },
+    { id: "as3", sector: "A", operatorId: "opA", assignerId: "mgrA", dutyType: "seal",
+      location: "Container C-4817", note: "",
+      status: "assigned", value: null, proof: null, decision: null, assignedAt: "8:14 AM", submittedAt: null },
+    // ---- Sector B — Priya assigns Luis ----
+    { id: "bs1", sector: "B", operatorId: "opB", assignerId: "mgrB", dutyType: "inventory",
+      location: "Yard Row 4", note: "Reefer units only.",
+      status: "assigned", value: null, proof: null, decision: null, assignedAt: "8:16 AM", submittedAt: null },
+    { id: "bs2", sector: "B", operatorId: "opB", assignerId: "mgrB", dutyType: "seal",
+      location: "Dock Door 12", note: "Inbound from Rail 2.",
+      status: "assigned", value: null, proof: null, decision: null, assignedAt: "8:18 AM", submittedAt: null }
+  ];
   return {
     session: null,
-    tasks: [
-      { id: "t1", type: "weight", title: "Verify Cargo Weight",       subtitle: "Container #C-4817", status: "assigned", value: null, valueLabel: "Recorded Weight", unit: "kg", submittedAt: null },
-      { id: "t2", type: "scan",   title: "Scan Container ID",         subtitle: "Bay 7",            status: "assigned", value: null, valueLabel: "Scanned ID",      unit: "",   submittedAt: null },
-      { id: "t3", type: "confirm",title: "Confirm Delivery Manifest", subtitle: "Route A-12",       status: "assigned", value: null, valueLabel: "Confirmation",    unit: "",   submittedAt: null }
-    ],
-    messages: [
-      { from: "in",  who: "Dispatch",   text: "Container C-4817 arrived at Bay 7. Please verify weight.", time: "8:42 AM" },
-      { from: "in",  who: "Dispatch",   text: "Manifest for Route A-12 uploaded to your queue.",          time: "8:58 AM" },
-      { from: "out", who: "You",        text: "Copy. Heading to Bay 7 now.",                              time: "9:03 AM" }
-    ],
+    assignments: assignments,
     auditLog: [
-      { time: "8:55 AM", role: "executive",actor: "Eleanor Vance",desc: "Compliance rate cleared quarterly threshold (98.2%)." },
-      { time: "8:32 AM", role: "manager",  actor: "Marcus Reid",  desc: "Reviewed Northeast regional shipment report." },
-      { time: "8:10 AM", role: "operator", actor: "Dana Cole",    desc: "Received 3 field task assignments." },
-      { time: "7:45 AM", role: "system",   actor: "System",       desc: "System initialized demo environment." }
+      { time: "8:18 AM", role: "manager",  actor: "Priya Shah",   desc: "Assigned Seal Verification — Dock Door 12 to Luis Ortega · proof required.", ts: 6 },
+      { time: "8:16 AM", role: "manager",  actor: "Priya Shah",   desc: "Assigned Inventory Count — Yard Row 4 to Luis Ortega · proof required.", ts: 5 },
+      { time: "8:14 AM", role: "manager",  actor: "Marcus Reid",  desc: "Assigned Seal Verification — Container C-4817 to Dana Cole · proof required.", ts: 4 },
+      { time: "8:12 AM", role: "manager",  actor: "Marcus Reid",  desc: "Assigned Cargo Photo Check — Dock 3 to Dana Cole · proof required.", ts: 3 },
+      { time: "8:10 AM", role: "manager",  actor: "Marcus Reid",  desc: "Assigned Inventory Count — Bay 7 to Dana Cole · proof required.", ts: 2 },
+      { time: "7:45 AM", role: "system",   actor: "System",       desc: "System initialized demo environment.", ts: 1 }
     ],
     channels: seedChannels(),
+    savedChats: [],
     lastRead: {}
   };
 }
 
-/* Seed each channel with a few believable messages (earlier today) */
+/* Seed each channel with believable messages (earlier today).
+   kind: 'chat' (person) or 'system' (automated). senderId = account id. */
 function seedChannels() {
   return {
     "general": [
-      { id: "g1", role: "executive", text: "Morning all — quarterly compliance cleared 98%. Great work.", time: "7:52 AM", ts: 1 },
-      { id: "g2", role: "manager",   text: "Thanks Eleanor. Northeast team is running clean this week.",   time: "8:05 AM", ts: 2 },
-      { id: "g3", role: "operator",  text: "On site at Bay 7, starting inbound verifications now.",         time: "8:20 AM", ts: 3 },
-      { id: "g4", role: "manager",   text: "Appreciate it Dana. Ping the channel if anything's off.",       time: "8:22 AM", ts: 4 }
+      { id: "g1", kind: "chat", senderId: "exec", text: "Morning all — quarterly compliance cleared 98%. Great work across both sectors.", time: "7:52 AM", ts: 1 },
+      { id: "g2", kind: "chat", senderId: "mgrA", text: "Thanks Eleanor. Warehouse is running clean this week.", time: "8:05 AM", ts: 2 },
+      { id: "g3", kind: "chat", senderId: "mgrB", text: "Dock & yard the same — inbound volume steady.", time: "8:07 AM", ts: 3 },
+      { id: "g4", kind: "chat", senderId: "opA",  text: "On the warehouse floor, starting inbound checks now.", time: "8:20 AM", ts: 4 }
     ],
-    "field-ops": [
-      { id: "f1", role: "manager",   text: "Route A-12 manifest is live in your queue Dana.",              time: "8:40 AM", ts: 1 },
-      { id: "f2", role: "operator",  text: "Copy. Container C-4817 is at Bay 7, weighing it now.",          time: "8:44 AM", ts: 2 },
-      { id: "f3", role: "operator",  text: "Loading dock 3 is clear if we need to reroute.",                time: "8:51 AM", ts: 3 },
-      { id: "f4", role: "manager",   text: "Good. Hold C-4817 for my sign-off once you submit the weight.", time: "8:53 AM", ts: 4 }
+    "command-terminal": [
+      { id: "c1", kind: "chat", senderId: "exec", text: "Board wants the 30-day volume trend Thursday. Sector splits included.", time: "7:58 AM", ts: 1 },
+      { id: "c2", kind: "chat", senderId: "mgrA", text: "Warehouse KPIs are packaged. Staffing at 6 of 6 on shift.", time: "8:03 AM", ts: 2 },
+      { id: "c3", kind: "chat", senderId: "mgrB", text: "Dock is 5 of 6 — one call-out on the night crew. Covering with overtime.", time: "8:06 AM", ts: 3 },
+      { id: "c4", kind: "chat", senderId: "exec", text: "Noted. Flag any compliance dip above the 2% threshold to me directly.", time: "8:09 AM", ts: 4 }
     ],
-    "approvals": [
-      { id: "a1", role: "manager",   text: "Keeping all verification sign-offs threaded here for the audit trail.", time: "8:15 AM", ts: 1 },
-      { id: "a2", role: "manager",   text: "Weight submissions get a second look before I approve.",              time: "8:16 AM", ts: 2 },
-      { id: "a3", role: "manager",   text: "Nothing pending yet this shift.",                                     time: "8:30 AM", ts: 3 }
+    "sector-a-terminal": [
+      { id: "sa1", kind: "chat", senderId: "mgrA", text: "Dana, pallets for C-4817 are staged in Bay 7. Count them before wrap.", time: "8:24 AM", ts: 1 },
+      { id: "sa2", kind: "chat", senderId: "opA",  text: "Copy. Bay 7 now. Dock 3 is clear if we need to reroute.", time: "8:28 AM", ts: 2 },
+      { id: "sa3", kind: "chat", senderId: "mgrA", text: "Good. I'll want proof on the count and the pallet wrap photo.", time: "8:30 AM", ts: 3 }
     ],
-    "executive-briefing": [
-      { id: "e1", role: "executive", text: "Board wants the 30-day volume trend for Thursday.",              time: "7:58 AM", ts: 1 },
-      { id: "e2", role: "manager",   text: "I'll have the Northeast numbers packaged by EOD.",               time: "8:12 AM", ts: 2 },
-      { id: "e3", role: "executive", text: "Perfect. Flag any compliance dips above the 2% threshold.",      time: "8:14 AM", ts: 3 }
+    "sector-b-terminal": [
+      { id: "sb1", kind: "chat", senderId: "mgrB", text: "Luis, reefer units landed in Yard Row 4. Log the count when you get eyes on them.", time: "8:26 AM", ts: 1 },
+      { id: "sb2", kind: "chat", senderId: "opB",  text: "On it. Dock Door 12 inbound from Rail 2 is next up.", time: "8:31 AM", ts: 2 },
+      { id: "sb3", kind: "chat", senderId: "mgrB", text: "Perfect. Seal check on Door 12 needs a photo for the file.", time: "8:33 AM", ts: 3 }
     ]
   };
 }
 
 function hydrateInto(data) {
-  State.session   = data.session || null;
-  State.tasks     = data.tasks;
-  State.messages  = data.messages;
-  State.auditLog  = data.auditLog;
-  State.channels  = data.channels;
-  State.lastRead  = data.lastRead || {};
+  State.session     = data.session || null;
+  State.assignments = data.assignments || [];
+  State.auditLog    = data.auditLog || [];
+  State.channels    = data.channels || {};
+  State.savedChats  = data.savedChats || [];
+  State.lastRead    = data.lastRead || {};
 }
 
-/* Load from storage or seed. Returns true if a session should be restored. */
+/* Load from storage or seed. Returns true if a session should be restored.
+   Any stale nexus.v2 payload is ignored (never half-loaded). */
 function loadState() {
   let data = null;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) data = JSON.parse(raw);
   } catch (e) { data = null; }
-  if (!data) { data = seedDefaults(); }
+  if (!data) {
+    // Ignore legacy v2 entirely; seed a fresh v3 dataset.
+    data = seedDefaults();
+  }
   hydrateInto(data);
-  return !!State.session;
+  return !!State.session && !!acctById(State.session);
 }
 
 function save() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      session:  State.session,
-      tasks:    State.tasks,
-      messages: State.messages,
-      auditLog: State.auditLog,
-      channels: State.channels,
-      lastRead: State.lastRead
+      session:     State.session,
+      assignments: State.assignments,
+      auditLog:    State.auditLog,
+      channels:    State.channels,
+      savedChats:  State.savedChats,
+      lastRead:    State.lastRead
     }));
   } catch (e) { /* storage unavailable (e.g. private mode) — app still works in-memory */ }
 }
 
 function resetDemo() {
-  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(LEGACY_KEY);
+  } catch (e) {}
   hydrateInto(seedDefaults());
   save();
 }
@@ -1275,9 +1564,12 @@ function nowTime() {
   return h + ":" + (m < 10 ? "0" + m : m) + " " + ampm;
 }
 
-function logAudit(role, desc) {
-  const actor = role === "system" ? "System" : (PERSONAS[role] ? PERSONAS[role].name : "System");
-  State.auditLog.unshift({ time: nowTime(), role: role, actor: actor, desc: desc, live: true });
+/* Log an audit entry. `who` is an account id or "system".
+   Role (for styling/filter) is derived from the account. */
+function logAudit(who, desc) {
+  const role  = who === "system" ? "system" : acctRole(who);
+  const actor = who === "system" ? "System" : acctName(who);
+  State.auditLog.unshift({ time: nowTime(), role: role, actor: actor, desc: desc, ts: Date.now(), live: true });
   save();
   // keep audit view fresh if visible
   if (State.activeScreen === "screen-audit") renderAudit();
@@ -1308,10 +1600,87 @@ function iconChats() {
 function iconAudit() {
   return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>`;
 }
-function taskTypeIcon(type) {
-  if (type === "weight") return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="M6.5 6h11l3 11a5 5 0 0 1-10 0"/><path d="M6.5 6l-3 11a5 5 0 0 0 10 0"/><circle cx="12" cy="4" r="1"/></svg>`;
-  if (type === "scan")   return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>`;
-  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg>`;
+function iconBookmark(filled) {
+  return `<svg width="15" height="15" viewBox="0 0 24 24" ${filled ? 'fill="currentColor"' : 'fill="none"'} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>`;
+}
+function iconOpen() {
+  return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`;
+}
+function iconTrash() {
+  return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5"/><path d="M14 11v5"/></svg>`;
+}
+function iconCamera() {
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></svg>`;
+}
+function iconSeal() {
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>`;
+}
+/* Icon for a duty type (used on assignment task cards) */
+function dutyIcon(dutyType) {
+  if (dutyType === "photo") return iconCamera();
+  if (dutyType === "seal")  return iconSeal();
+  // inventory / default
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3"/><path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M10 12h4"/></svg>`;
+}
+
+/* ============================================================
+   PROOF-OF-DUTY — simulated photo attachment (inline SVG)
+   Generates a stylized crate/container graphic with a timestamp +
+   location watermark baked in, plus a filename. Stored on the
+   assignment and/or on chat messages.
+   ============================================================ */
+function makeProof(location, dutyType) {
+  const num = 4000 + Math.floor(Math.random() * 5999);
+  return {
+    file: "IMG_" + num + ".jpg",
+    location: location || "On site",
+    time: nowTime(),
+    seed: num,
+    dutyType: dutyType || "inventory"
+  };
+}
+
+/* Render the proof graphic as an inline SVG string (size in px).
+   Deterministic per proof.seed so a stored proof always looks the same. */
+function proofSvg(proof, size) {
+  const s = size || 40;
+  const loc = escapeHtml(proof.location || "");
+  const t = escapeHtml(proof.time || "");
+  // subtle pseudo-random slat pattern from the seed
+  const slats = [];
+  const cols = 5;
+  for (let i = 0; i < cols; i++) {
+    const x = 14 + i * 34;
+    slats.push(`<rect x="${x}" y="34" width="22" height="96" rx="3" fill="#12336E" opacity="${0.55 + ((proof.seed + i) % 4) * 0.1}"/>`);
+  }
+  return `
+  <svg viewBox="0 0 200 200" width="${s}" height="${s}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Simulated cargo photo">
+    <defs>
+      <linearGradient id="pg${proof.seed}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1B3E7A"/><stop offset="100%" stop-color="#0C1F45"/>
+      </linearGradient>
+    </defs>
+    <rect width="200" height="200" fill="url(#pg${proof.seed})"/>
+    <rect x="6" y="26" width="188" height="118" rx="8" fill="#0F2B5B" stroke="#2E5599" stroke-width="2"/>
+    ${slats.join("")}
+    <rect x="6" y="26" width="188" height="18" fill="#E9C05B" opacity="0.9"/>
+    <rect x="14" y="30" width="52" height="10" rx="2" fill="#0C1F45" opacity="0.6"/>
+    <text x="12" y="168" font-size="15" font-family="ui-monospace, Menlo, monospace" fill="#EAF1FF" opacity="0.92">${loc}</text>
+    <text x="12" y="188" font-size="13" font-family="ui-monospace, Menlo, monospace" fill="#9DB6E0" opacity="0.85">${t}</text>
+    <circle cx="180" cy="180" r="7" fill="#E9C05B"/>
+  </svg>`;
+}
+
+/* A compact tappable proof chip (thumbnail + filename + location) */
+function proofChipHtml(proof, ctx) {
+  const dataCtx = ctx ? ` data-proofctx="${ctx}"` : "";
+  return `<button type="button" class="proof-chip" data-proof="1"${dataCtx}>
+      <span class="proof-thumb">${proofSvg(proof, 40)}</span>
+      <span class="proof-meta">
+        <span class="proof-file">${escapeHtml(proof.file)}</span>
+        <span class="proof-loc">${escapeHtml(proof.location)} · ${escapeHtml(proof.time)}</span>
+      </span>
+    </button>`;
 }
 
 /* ============================================================
@@ -1361,21 +1730,21 @@ function renderChart(container) {
    HEADER + NAV RENDER
    ============================================================ */
 function renderHeader() {
-  const p = PERSONAS[State.role];
-  if (!p) return;
-  $("#hdrAvatar").className = "avatar " + State.role;
-  $("#hdrAvatar").textContent = p.initials;
-  $("#hdrName").textContent = p.name;
-  $("#hdrRole").textContent = p.title;
+  const a = currentAcct();
+  if (!a) return;
+  $("#hdrAvatar").className = "avatar " + a.role;
+  $("#hdrAvatar").textContent = a.initials;
+  $("#hdrName").textContent = a.name;
+  $("#hdrRole").textContent = a.title;
 
-  // account chip + popover
-  $("#chipAvatar").className = "avatar " + State.role;
-  $("#chipAvatar").textContent = p.initials;
-  $("#popName").textContent = p.name;
-  $("#popRole").textContent = capitalize(State.role);
+  // account chip + popover (show the sector tag)
+  $("#chipAvatar").className = "avatar " + a.role;
+  $("#chipAvatar").textContent = a.initials;
+  $("#popName").textContent = a.name;
+  $("#popRole").textContent = sectorTag(a);
 
   // Audit folded into header icon for roles whose nav is full
-  const inHeader = !!(ROLES[State.role] && ROLES[State.role].auditInHeader);
+  const inHeader = !!(ROLES[a.role] && ROLES[a.role].auditInHeader);
   $("#hdrAuditBtn").style.display = inHeader ? "" : "none";
 }
 
@@ -1434,11 +1803,11 @@ function showScreen(screenId) {
 
   // per-screen render hooks
   if (screenId === "screen-dashboard") renderDashboard();
-  if (screenId === "screen-tasks") renderOperatorTasks();
-  if (screenId === "screen-messages") renderMessages();
+  if (screenId === "screen-tasks") { isManager() || isExec() ? renderTasksScreen() : renderOperatorTasks(); }
   if (screenId === "screen-manager") renderManager();
   if (screenId === "screen-audit") renderAudit();
   if (screenId === "screen-chats") renderChannelList();
+  if (screenId === "screen-messages") renderMessages();
 
   highlightNav();
 }
@@ -1446,7 +1815,7 @@ function showScreen(screenId) {
 /* ============================================================
    SIGN IN / SESSION / SIGN OUT
    ============================================================ */
-/* Validate credentials; returns matched account or null (no role leaked on failure) */
+/* Validate credentials; returns matched account or null (no info leaked on failure) */
 function matchAccount(email, password) {
   const e = (email || "").trim().toLowerCase();
   return ACCOUNTS.find(a => a.email === e && a.password === password) || null;
@@ -1461,10 +1830,9 @@ function attemptSignIn() {
     return;
   }
   hideSigninError();
-  const p = PERSONAS[acct.role];
-  logAudit(acct.role, `${p.name} signed in (${capitalize(acct.role)}).`);
-  activateSession(acct.role);
-  showRoleReveal(acct.role);
+  activateSession(acct.id);
+  logAudit(acct.id, `${acct.name} signed in (${sectorTag(acct)}).`);
+  showRoleReveal(acct.id);
 }
 
 function showSigninError() {
@@ -1476,30 +1844,39 @@ function showSigninError() {
 }
 function hideSigninError() { $("#signinError").classList.remove("show"); }
 
+/* Set the active identity from an account id (derives role/sector/level) */
+function setIdentity(accountId) {
+  const a = acctById(accountId);
+  State.account = a ? a.id : null;
+  State.role    = a ? a.role : null;
+  State.sector  = a ? a.sector : null;
+  State.level   = a ? LEVELS[a.role] : 0;
+}
+
 /* Persist who's signed in + wire up chrome (does not route) */
-function activateSession(role) {
-  State.role = role;
-  State.session = role;
+function activateSession(accountId) {
+  setIdentity(accountId);
+  State.session = accountId;
   save();
   renderHeader();
   renderNav();
 }
 
 /* Role reveal interstitial → Continue routes to the role home */
-function showRoleReveal(role) {
-  const p = PERSONAS[role];
+function showRoleReveal(accountId) {
+  const a = acctById(accountId);
   $("#revealInner").innerHTML = `
-    <div class="reveal-avatar ${role}">${p.initials}</div>
+    <div class="reveal-avatar ${a.role}">${a.initials}</div>
     <div class="reveal-welcome">Welcome,</div>
-    <div class="reveal-name">${p.name}</div>
-    <div class="reveal-badge ${role}">${ROLE_BADGE[role]}</div>
+    <div class="reveal-name">${a.name}</div>
+    <div class="reveal-badge ${a.role}">${sectorTag(a)}</div>
     <button class="btn btn-primary" id="revealContinue">Continue</button>`;
   showScreen("screen-reveal");
-  $("#revealContinue").onclick = () => enterHome(role);
+  $("#revealContinue").onclick = () => enterHome(a.role);
   // auto-advance after ~1s if the user doesn't tap
   clearTimeout(showRoleReveal._t);
   showRoleReveal._t = setTimeout(() => {
-    if (State.activeScreen === "screen-reveal") enterHome(role);
+    if (State.activeScreen === "screen-reveal") enterHome(a.role);
   }, 1400);
 }
 
@@ -1510,19 +1887,18 @@ function enterHome(role) {
 }
 
 /* Restore an existing session on load without re-showing sign-in */
-function restoreSession(role) {
-  State.role = role;
+function restoreSession(accountId) {
+  setIdentity(accountId);
   renderHeader();
   renderNav();
-  showScreen(ROLES[role].home);
-  if (role === "manager") setManagerTab("team");
+  showScreen(ROLES[State.role].home);
+  if (State.role === "manager") setManagerTab("team");
 }
 
 function doSignOut() {
-  const role = State.role;
-  const p = PERSONAS[role];
-  if (p) logAudit(role, `${p.name} signed out.`);
-  State.role = null;
+  const a = currentAcct();
+  if (a) logAudit(a.id, `${a.name} signed out.`);
+  setIdentity(null);
   State.session = null;
   save();
   closeUserMenu();
@@ -1542,199 +1918,271 @@ function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 function renderDashboard() {
   const chart = $("#dashChart");
   if (!chart.querySelector("svg")) renderChart(chart);
-  $("#dashSub").textContent = State.role === "manager"
-    ? "Regional analytics — Marcus Reid" : "Executive summary — read-only";
+  const a = currentAcct();
+  $("#dashSub").textContent = isExec()
+    ? "Executive summary — all sectors"
+    : "Sector analytics — " + (a && a.sector ? SECTORS[a.sector].full : "");
 
-  if (State.role === "executive" && !State.dashboardViewLogged) {
+  if (isExec() && !State.dashboardViewLogged) {
     State.dashboardViewLogged = true;
-    logAudit("executive", "Eleanor Vance viewed Dashboard.");
+    logAudit(State.account, a.name + " viewed the Operations Overview.");
   }
 }
 
 /* ============================================================
-   SCREEN 3 — OPERATOR TASKS
+   SCREEN 3 — OPERATOR TASKS (proof-of-duty assignments)
    ============================================================ */
-function chipHtml(status) {
+/* Effective, display-ready status for an assignment.
+   Resolved decisions (incl. overrides) win over the raw status. */
+function assignmentStatus(as) {
+  if (as.decision) return as.decision.action; // 'verified' | 'rejected'
+  return as.status; // 'assigned' | 'submitted'
+}
+function isOverridden(as) { return !!(as.decision && as.decision.overriddenById); }
+
+function chipHtml(as) {
+  const st = assignmentStatus(as);
+  if (isOverridden(as)) {
+    return `<span class="chip chip-override">Executive Override</span>`;
+  }
   const map = {
-    assigned:  { cls: "chip-assigned",  label: "Assigned" },
+    assigned:  { cls: "chip-assigned",  label: "Assigned — Proof required" },
     submitted: { cls: "chip-submitted", label: "Submitted — Pending" },
     verified:  { cls: "chip-verified",  label: "Verified" },
     rejected:  { cls: "chip-rejected",  label: "Rejected" }
   };
-  const c = map[status];
+  const c = map[st];
   return `<span class="chip ${c.cls}">${c.label}</span>`;
 }
 
+function dutyTitle(as)      { return DUTY_TYPES[as.dutyType].title; }
+function dutyValueLabel(as) { return DUTY_TYPES[as.dutyType].valueLabel; }
+
+/* Human-readable submitted value */
+function formatAssignmentValue(as) {
+  if (as.value == null) return "";
+  const dt = DUTY_TYPES[as.dutyType];
+  if (dt.mode === "count") return fmtNumber(as.value) + " " + dt.unit;
+  return as.value; // e.g. "Confirmed"
+}
+
+/* Assignments visible to the current account (sector/role scoped) */
+function visibleAssignments() {
+  if (isExec()) return State.assignments.slice();
+  if (isManager()) return State.assignments.filter(a => a.sector === State.sector);
+  // operator: only their own
+  return State.assignments.filter(a => a.operatorId === State.account);
+}
+
 function renderOperatorTasks() {
+  $("#tasksTitle").textContent = "My Tasks";
+  $("#tasksSub").textContent = "Duties assigned to you · proof required";
+  $("#operatorAnalyticsFolder").style.display = "";
   const list = $("#operatorTaskList");
   list.innerHTML = "";
-  State.tasks.forEach(t => {
-    const actionable = t.status === "assigned";
+  const mine = State.assignments.filter(a => a.operatorId === State.account);
+  if (mine.length === 0) {
+    list.innerHTML = `<div class="empty-state">
+        <div class="empty-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="empty-title">No assignments</div>
+        <div class="empty-sub">Duties assigned by your manager will appear here.</div>
+      </div>`;
+    return;
+  }
+  mine.forEach(as => {
+    const actionable = as.status === "assigned";
+    const assigner = acctName(as.assignerId).split(" ")[0];
     const card = document.createElement("div");
     card.className = "task-card" + (actionable ? "" : " no-action");
-    if (actionable) card.dataset.taskid = t.id;
+    if (actionable) card.dataset.asid = as.id;
+    const valStr = as.value != null ? " · " + formatAssignmentValue(as) : "";
+    const noteStr = as.note ? " · " + escapeHtml(as.note) : "";
     card.innerHTML = `
-      <div class="task-ic">${taskTypeIcon(t.type)}</div>
+      <div class="task-ic">${dutyIcon(as.dutyType)}</div>
       <div class="task-body">
-        <div class="task-title">${t.title}</div>
-        <div class="task-sub">${t.subtitle}${t.value != null ? " · " + formatTaskValue(t) : ""}</div>
+        <div class="task-title">${dutyTitle(as)} — ${escapeHtml(as.location)}</div>
+        <div class="task-sub">From ${assigner}${valStr}${noteStr}</div>
       </div>
-      ${chipHtml(t.status)}`;
+      ${chipHtml(as)}`;
     list.appendChild(card);
   });
 }
 
-function formatTaskValue(t) {
-  if (t.type === "weight") return fmtNumber(t.value) + " " + t.unit;
-  return t.value;
+/* Executive grouped read view — all sectors' assignments (Tasks nav) */
+function renderTasksScreen() {
+  $("#tasksTitle").textContent = "All Duties";
+  $("#tasksSub").textContent = "Every sector's assignments — executive view";
+  $("#operatorAnalyticsFolder").style.display = "none";
+  const list = $("#operatorTaskList");
+  list.innerHTML = "";
+  SECTOR_ORDER.forEach(sid => {
+    const items = State.assignments.filter(a => a.sector === sid);
+    const head = document.createElement("div");
+    head.className = "sector-head" + (sid === "B" ? " b" : "");
+    head.textContent = SECTORS[sid].full;
+    list.appendChild(head);
+    if (items.length === 0) {
+      const e = document.createElement("div");
+      e.className = "task-sub";
+      e.style.cssText = "padding:2px 2px 6px;color:var(--text-3)";
+      e.textContent = "No assignments in this sector.";
+      list.appendChild(e);
+      return;
+    }
+    items.forEach(as => {
+      const op = acctName(as.operatorId).split(" ")[0];
+      const card = document.createElement("div");
+      card.className = "task-card no-action";
+      const valStr = as.value != null ? " · " + formatAssignmentValue(as) : "";
+      card.innerHTML = `
+        <div class="task-ic">${dutyIcon(as.dutyType)}</div>
+        <div class="task-body">
+          <div class="task-title">${dutyTitle(as)} — ${escapeHtml(as.location)}</div>
+          <div class="task-sub">${op}${valStr}</div>
+        </div>
+        ${chipHtml(as)}`;
+      list.appendChild(card);
+    });
+  });
 }
 
 /* ============================================================
-   BOTTOM SHEET (task verification)
+   BOTTOM SHEET — operator proof-of-duty submission
    ============================================================ */
-let sheetTaskId = null;
+let sheetAsId = null;
+let sheetProof = null;   // proof attached in the current sheet (before submit)
+let assignDraft = null;  // manager assignment sheet draft selections
 
-function openSheet(taskId) {
-  const t = State.tasks.find(x => x.id === taskId);
-  if (!t || t.status !== "assigned") return;
-  sheetTaskId = taskId;
+/* Short label for a duty (used in audit/system messages) */
+function dutyLabel(as) { return dutyTitle(as) + " — " + as.location; }
+
+function openSheet(asId) {
+  const as = State.assignments.find(x => x.id === asId);
+  if (!as || as.status !== "assigned" || as.operatorId !== State.account) return;
+  sheetAsId = asId;
+  sheetProof = null;
+  const dt = DUTY_TYPES[as.dutyType];
   const content = $("#sheetContent");
 
-  if (t.type === "weight") {
-    content.innerHTML = `
-      <div class="sheet-title">${t.title}</div>
-      <div class="sheet-sub">${t.subtitle} · record the measured value</div>
-      <label class="field-label">Recorded Weight (kg)</label>
+  let inputBlock = "";
+  if (dt.mode === "count") {
+    inputBlock = `
+      <label class="field-label">${dt.valueLabel}</label>
       <div class="stepper">
         <button type="button" id="stepDown">−</button>
-        <input type="number" id="weightInput" value="12480" inputmode="numeric" />
+        <input type="number" id="countInput" value="0" inputmode="numeric" />
         <button type="button" id="stepUp">+</button>
       </div>
-      <div class="unit-hint">kilograms · use steppers or presets</div>
+      <div class="unit-hint">units · use steppers or presets</div>
       <div class="quick-vals">
-        <button class="quick-val" data-qv="11500">11,500</button>
-        <button class="quick-val" data-qv="12480">12,480</button>
-        <button class="quick-val" data-qv="13250">13,250</button>
-      </div>
-      <button class="btn btn-primary btn-block" id="sheetSubmit">Submit Verification</button>`;
-  } else if (t.type === "scan") {
-    content.innerHTML = `
-      <div class="sheet-title">${t.title}</div>
-      <div class="sheet-sub">${t.subtitle} · scan container barcode</div>
-      <div class="sheet-sim">
-        <div class="sim-visual" id="scanVisual">
-          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
-        </div>
-        <div class="sim-status" id="scanStatus">Ready to scan</div>
-      </div>
-      <button class="btn btn-primary btn-block" id="sheetSubmit">Simulate Scan</button>`;
+        <button class="quick-val" data-qv="120">120</button>
+        <button class="quick-val" data-qv="342">342</button>
+        <button class="quick-val" data-qv="500">500</button>
+      </div>`;
   } else {
-    content.innerHTML = `
-      <div class="sheet-title">${t.title}</div>
-      <div class="sheet-sub">${t.subtitle} · confirm all items received</div>
+    const label = as.dutyType === "seal" ? "Seal intact & matches manifest" : "Cargo condition matches order";
+    inputBlock = `
       <div class="sheet-sim">
-        <div class="sim-visual">
-          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg>
-        </div>
-        <div class="sim-status">18 line items · Route A-12</div>
-      </div>
-      <button class="btn btn-primary btn-block" id="sheetSubmit">Confirm Manifest</button>`;
+        <div class="sim-visual">${dutyIcon(as.dutyType)}</div>
+        <div class="sim-status">${escapeHtml(label)}</div>
+      </div>`;
   }
 
-  wireSheet(t);
+  content.innerHTML = `
+    <div class="sheet-title">${dutyTitle(as)}</div>
+    <div class="sheet-sub">${escapeHtml(as.location)} · assigned by ${escapeHtml(acctName(as.assignerId))}</div>
+    ${inputBlock}
+    <label class="field-label">Proof of duty</label>
+    <div id="proofSlot">
+      <button type="button" class="attach-proof-btn" id="attachProof">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></svg>
+        Attach Proof (simulated photo)
+      </button>
+    </div>
+    <button class="btn btn-primary btn-block" id="sheetSubmit" disabled>Submit for Review</button>`;
+
+  wireSheet(as, dt);
   $("#backdrop").classList.add("show");
   $("#sheet").classList.add("show");
 }
 
-function wireSheet(t) {
+function wireSheet(as, dt) {
   const submit = $("#sheetSubmit");
-  if (t.type === "weight") {
-    const input = $("#weightInput");
-    $("#stepDown").onclick = () => { input.value = Math.max(0, (parseInt(input.value || "0", 10) - 10)); };
-    $("#stepUp").onclick   = () => { input.value = (parseInt(input.value || "0", 10) + 10); };
+  if (dt.mode === "count") {
+    const input = $("#countInput");
+    $("#stepDown").onclick = () => { input.value = Math.max(0, (parseInt(input.value || "0", 10) - 1)); };
+    $("#stepUp").onclick   = () => { input.value = (parseInt(input.value || "0", 10) + 1); };
     $all(".quick-val", $("#sheetContent")).forEach(b => {
       b.onclick = () => { input.value = b.dataset.qv; };
     });
-    submit.onclick = () => {
-      const val = parseInt(input.value || "0", 10);
-      if (!val || val <= 0) { input.focus(); return; }
-      submitTask(t.id, val, fmtNumber(val) + " kg", "Cargo Weight verification");
-    };
-  } else if (t.type === "scan") {
-    submit.onclick = () => {
-      const status = $("#scanStatus");
-      const visual = $("#scanVisual");
-      status.textContent = "Scanning…";
-      visual.style.color = "#12A594";
-      submit.disabled = true;
-      setTimeout(() => {
-        const code = "CID-" + (Math.floor(Math.random() * 9000) + 1000);
-        submitTask(t.id, code, code, "Scan Container ID");
-      }, 650);
-    };
-  } else {
-    submit.onclick = () => {
-      submitTask(t.id, "Confirmed (18 items)", "Confirmed", "Delivery Manifest");
-    };
   }
+
+  $("#attachProof").onclick = () => {
+    sheetProof = makeProof(as.location, as.dutyType);
+    const slot = $("#proofSlot");
+    slot.innerHTML = `
+      <div class="proof-preview-row">
+        <span class="proof-thumb">${proofSvg(sheetProof, 44)}</span>
+        <div class="proof-meta" style="flex:1">
+          <div class="proof-file">${escapeHtml(sheetProof.file)}</div>
+          <div class="proof-loc">${escapeHtml(sheetProof.location)} · ${escapeHtml(sheetProof.time)}</div>
+        </div>
+        <span class="proof-attached">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Attached
+        </span>
+      </div>`;
+    submit.disabled = false;
+  };
+
+  submit.onclick = () => {
+    if (!sheetProof) return;
+    let value, displayVal;
+    if (dt.mode === "count") {
+      const val = parseInt($("#countInput").value || "0", 10);
+      if (!val || val <= 0) { $("#countInput").focus(); return; }
+      value = val; displayVal = fmtNumber(val) + " " + dt.unit;
+    } else {
+      value = "Confirmed"; displayVal = "Confirmed";
+    }
+    submitAssignment(as.id, value, displayVal);
+  };
 }
 
-function submitTask(taskId, value, displayVal, auditLabel) {
-  const t = State.tasks.find(x => x.id === taskId);
-  if (!t) return;
-  t.value = value;
-  t.status = "submitted";
-  t.submittedAt = nowTime();
+function submitAssignment(asId, value, displayVal) {
+  const as = State.assignments.find(x => x.id === asId);
+  if (!as) return;
+  as.value = value;
+  as.proof = sheetProof;
+  as.status = "submitted";
+  as.submittedAt = nowTime();
   save();
-  logAudit("operator", `Dana Cole submitted verification for ${friendlyTaskName(t)} (${displayVal}).`);
+
+  const opName = acctName(as.operatorId);
+  logAudit(as.operatorId, `${opName} submitted proof for ${dutyLabel(as)} (${displayVal}).`);
+
+  // Automated proof message to the sector terminal
+  const chanId = sectorChannelId(as.sector);
+  postSystemMessage(chanId, `${opName} submitted proof for ${dutyLabel(as)}`, as.proof);
+
   closeSheet();
   renderOperatorTasks();
-  showToast("Verification submitted for review.", "success");
-}
-
-function friendlyTaskName(t) {
-  if (t.type === "weight") return "Cargo Weight";
-  if (t.type === "scan") return "Container ID Scan";
-  return "Delivery Manifest";
+  showToast("Proof submitted for review.", "success");
 }
 
 function closeSheet() {
   $("#sheet").classList.remove("show");
-  $("#backdrop").classList.remove("show");
-  sheetTaskId = null;
+  if (!$("#modal").classList.contains("show")) $("#backdrop").classList.remove("show");
+  sheetAsId = null;
+  sheetProof = null;
+  assignDraft = null;
 }
 
 /* ============================================================
-   MESSAGES
+   UTIL — HTML escape (used widely)
    ============================================================ */
-function renderMessages() {
-  const thread = $("#msgThread");
-  thread.innerHTML = "";
-  State.messages.forEach(m => {
-    const el = document.createElement("div");
-    el.className = "msg " + m.from;
-    el.innerHTML = `${escapeHtml(m.text)}<div class="msg-meta">${m.who} · ${m.time}</div>`;
-    thread.appendChild(el);
-  });
-  thread.scrollTop = thread.scrollHeight;
-}
-
-function sendMessage() {
-  const input = $("#msgInput");
-  const text = input.value.trim();
-  if (!text) return;
-  State.messages.push({ from: "out", who: "You", text: text, time: nowTime() });
-  save();
-  input.value = "";
-  renderMessages();
-  logAudit("operator", `Dana Cole sent a message to Dispatch.`);
-  // simple scroll to bottom
-  const wrap = $("#screenWrap");
-  wrap.scrollTop = wrap.scrollHeight;
-}
-
 function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
 /* ============================================================
@@ -1743,6 +2191,17 @@ function escapeHtml(s) {
 let currentManagerTab = "team";
 
 function renderManager() {
+  const a = currentAcct();
+  if (isExec()) {
+    $("#mgrTitle").textContent = "Executive Review";
+    $("#mgrSub").textContent = "Cross-sector approvals & overrides";
+    currentManagerTab = "approvals";
+  } else if (a && a.sector) {
+    $("#mgrTitle").textContent = "Team Hub";
+    $("#mgrSub").textContent = "Oversight & approvals — " + SECTORS[a.sector].full;
+  }
+  const assignBar = $("#assignDutyBtn").closest(".assign-duty-bar");
+  if (assignBar) assignBar.style.display = isManager() ? "" : "none";
   renderManagerTeam();
   renderApprovals();
   setManagerTab(currentManagerTab);
@@ -1756,100 +2215,299 @@ function setManagerTab(tab) {
   highlightNav();
 }
 
+/* Team tasks — only this manager's sector */
 function renderManagerTeam() {
   const list = $("#managerTeamList");
   list.innerHTML = "";
-  State.tasks.forEach(t => {
+  const items = isExec()
+    ? visibleAssignments()
+    : State.assignments.filter(a => a.sector === State.sector);
+  if (items.length === 0) {
+    list.innerHTML = `<div class="empty-state">
+        <div class="empty-title">No assignments yet</div>
+        <div class="empty-sub">Use “Assign Duty” to task an operator in your sector.</div>
+      </div>`;
+    return;
+  }
+  items.forEach(as => {
+    const op = acctName(as.operatorId);
     const card = document.createElement("div");
     card.className = "task-card no-action";
+    const sectorPrefix = isExec() ? SECTORS[as.sector].label + " · " : "";
     card.innerHTML = `
-      <div class="task-ic">${taskTypeIcon(t.type)}</div>
+      <div class="task-ic">${dutyIcon(as.dutyType)}</div>
       <div class="task-body">
-        <div class="task-title">${t.title}</div>
-        <div class="task-sub">Dana Cole · ${t.subtitle}</div>
+        <div class="task-title">${dutyTitle(as)} — ${escapeHtml(as.location)}</div>
+        <div class="task-sub">${sectorPrefix}${op}${as.value != null ? " · " + formatAssignmentValue(as) : ""}</div>
       </div>
-      ${chipHtml(t.status)}`;
+      ${chipHtml(as)}`;
     list.appendChild(card);
   });
 }
 
+function showAssignDutySheet() {
+  if (!isManager()) return;
+  const operators = ACCOUNTS.filter(a => a.role === "operator" && a.sector === State.sector);
+  if (!operators.length) return;
+
+  assignDraft = { operatorId: operators[0].id, dutyType: "inventory" };
+  const content = $("#sheetContent");
+  content.innerHTML = `
+    <div class="sheet-title">Assign Duty</div>
+    <div class="sheet-sub">${SECTORS[State.sector].full} · proof required</div>
+
+    <label class="field-label">Operator</label>
+    <div class="pick-group" id="assignOperatorPick">
+      ${operators.map(op => `
+        <button type="button" class="pick-opt${op.id === assignDraft.operatorId ? " sel" : ""}" data-pick-operator="${op.id}">
+          <span class="po-av ${op.role}">${op.initials}</span>
+          <span>
+            <span class="po-name">${escapeHtml(op.name)}</span>
+            <span class="po-sub">${SECTORS[op.sector].full}</span>
+          </span>
+          <span class="pick-check">✓</span>
+        </button>`).join("")}
+    </div>
+
+    <label class="field-label">Duty type</label>
+    <div class="pick-group" id="assignDutyPick">
+      ${Object.values(DUTY_TYPES).map(dt => `
+        <button type="button" class="pick-opt${dt.id === assignDraft.dutyType ? " sel" : ""}" data-pick-duty="${dt.id}">
+          <span class="po-ic">${dutyIcon(dt.id)}</span>
+          <span>
+            <span class="po-name">${escapeHtml(dt.title)}</span>
+            <span class="po-sub">${escapeHtml(dt.valueLabel || "Confirmation")}</span>
+          </span>
+          <span class="pick-check">✓</span>
+        </button>`).join("")}
+    </div>
+
+    <label class="field-label" for="assignLocation">Location</label>
+    <input class="sheet-input" id="assignLocation" placeholder="Bay 7, Dock Door 12, Container C-4817" />
+
+    <label class="field-label" for="assignNote">Note</label>
+    <textarea class="sheet-input" id="assignNote" rows="3" placeholder="Optional instructions"></textarea>
+
+    <button class="btn btn-primary btn-block" id="assignSubmit">Create Assignment</button>`;
+
+  $("#assignOperatorPick").addEventListener("click", e => {
+    const opt = e.target.closest("[data-pick-operator]");
+    if (!opt) return;
+    assignDraft.operatorId = opt.dataset.pickOperator;
+    selectPick("#assignOperatorPick", opt);
+  });
+  $("#assignDutyPick").addEventListener("click", e => {
+    const opt = e.target.closest("[data-pick-duty]");
+    if (!opt) return;
+    assignDraft.dutyType = opt.dataset.pickDuty;
+    selectPick("#assignDutyPick", opt);
+  });
+  $("#assignSubmit").addEventListener("click", createAssignmentFromSheet);
+
+  $("#backdrop").classList.add("show");
+  $("#sheet").classList.add("show");
+  setTimeout(() => $("#assignLocation").focus(), 0);
+}
+
+function selectPick(groupSelector, selected) {
+  $all(".pick-opt", $(groupSelector)).forEach(opt => opt.classList.toggle("sel", opt === selected));
+}
+
+function createAssignmentFromSheet() {
+  if (!assignDraft || !isManager()) return;
+  const location = $("#assignLocation").value.trim();
+  const note = $("#assignNote").value.trim();
+  if (!location) {
+    $("#assignLocation").focus();
+    return;
+  }
+
+  const assignment = {
+    id: "as" + Date.now(),
+    sector: State.sector,
+    operatorId: assignDraft.operatorId,
+    assignerId: State.account,
+    dutyType: assignDraft.dutyType,
+    location: location,
+    note: note,
+    status: "assigned",
+    value: null,
+    proof: null,
+    decision: null,
+    assignedAt: nowTime(),
+    submittedAt: null
+  };
+  State.assignments.push(assignment);
+  save();
+
+  const manager = currentAcct();
+  const opName = acctName(assignment.operatorId);
+  logAudit(manager.id, `${manager.name} assigned ${dutyLabel(assignment)} to ${opName} · proof required.`);
+  postSystemMessage(sectorChannelId(assignment.sector), `${manager.name} assigned ${dutyLabel(assignment)} to ${opName}`);
+
+  closeSheet();
+  renderManagerTeam();
+  renderApprovals();
+  showToast("Assignment created.", "success");
+}
+
+/* Approvals queue.
+   Managers: their sector's submitted items (+ resolved list).
+   Executive: ALL sectors, grouped — pending AND resolved, with Override. */
 function renderApprovals() {
   const queue = $("#approvalsQueue");
-  const pending = State.tasks.filter(t => t.status === "submitted");
-  const resolved = State.tasks.filter(t => t.status === "verified" || t.status === "rejected");
-
-  // badge
   const badge = $("#approvalBadge");
+  queue.innerHTML = "";
+
+  if (isExec()) {
+    renderExecApprovals(queue, badge);
+    return;
+  }
+
+  const inSector = State.assignments.filter(a => a.sector === State.sector);
+  const pending  = inSector.filter(a => a.status === "submitted" && !a.decision);
+  const resolved = inSector.filter(a => a.decision);
+
   if (pending.length > 0) { badge.style.display = ""; badge.textContent = pending.length; }
   else { badge.style.display = "none"; }
 
-  queue.innerHTML = "";
-
   if (pending.length === 0) {
-    queue.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-ic">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-        </div>
-        <div class="empty-title">No pending approvals</div>
-        <div class="empty-sub">Operator submissions will appear here for review.</div>
-      </div>`;
+    queue.innerHTML = emptyApprovalsHtml();
   } else {
-    pending.forEach(t => {
-      const card = document.createElement("div");
-      card.className = "approval-card";
-      card.dataset.taskid = t.id;
-      card.innerHTML = `
-        <div class="ap-head">
-          <div>
-            <div class="ap-operator">Dana Cole · Field Operator</div>
-            <div class="ap-task">${t.title}</div>
-            <div class="ap-time">Submitted ${t.submittedAt || ""} · ${t.subtitle}</div>
-          </div>
-          ${chipHtml("submitted")}
-        </div>
-        <div class="ap-value">
-          <span class="ap-value-label">${t.valueLabel}</span>
-          <span class="ap-value-num">${formatTaskValue(t)}</span>
-        </div>
-        <div class="ap-actions">
-          <button class="btn btn-red" data-approve="reject" data-taskid="${t.id}">Reject</button>
-          <button class="btn btn-teal" data-approve="approve" data-taskid="${t.id}">Approve</button>
-        </div>`;
-      queue.appendChild(card);
-    });
+    pending.forEach(as => queue.appendChild(pendingCard(as)));
   }
 
-  // resolved subsection
   if (resolved.length > 0) {
     const head = document.createElement("div");
     head.className = "resolved-head";
     head.textContent = "Resolved";
     queue.appendChild(head);
-    resolved.forEach(t => {
-      const rc = document.createElement("div");
-      rc.className = "resolved-card";
-      rc.innerHTML = `
-        <div>
-          <div class="rc-title">${t.title}</div>
-          <div class="rc-sub">Dana Cole · ${formatTaskValue(t)}</div>
-        </div>
-        ${chipHtml(t.status)}`;
-      queue.appendChild(rc);
-    });
+    resolved.forEach(as => queue.appendChild(resolvedCard(as, false)));
   }
 }
 
-function resolveApproval(taskId, decision) {
-  const t = State.tasks.find(x => x.id === taskId);
-  if (!t || t.status !== "submitted") return;
-  const card = $(`.approval-card[data-taskid="${taskId}"]`);
+function renderExecApprovals(queue, badge) {
+  // Executive: badge counts every pending across sectors
+  const allPending = State.assignments.filter(a => a.status === "submitted" && !a.decision);
+  if (allPending.length > 0) { badge.style.display = ""; badge.textContent = allPending.length; }
+  else { badge.style.display = "none"; }
 
-  t.status = decision === "approve" ? "verified" : "rejected";
+  let any = false;
+  SECTOR_ORDER.forEach(sid => {
+    const items = State.assignments.filter(a => a.sector === sid && (a.status === "submitted" || a.decision));
+    if (items.length === 0) return;
+    any = true;
+    const head = document.createElement("div");
+    head.className = "sector-head" + (sid === "B" ? " b" : "");
+    head.textContent = SECTORS[sid].full;
+    queue.appendChild(head);
+    items.forEach(as => {
+      if (as.decision) queue.appendChild(resolvedCard(as, true)); // exec gets Override affordance
+      else queue.appendChild(pendingCard(as));
+    });
+  });
+  if (!any) queue.innerHTML = emptyApprovalsHtml();
+}
+
+function emptyApprovalsHtml() {
+  return `<div class="empty-state">
+      <div class="empty-ic">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+      </div>
+      <div class="empty-title">No pending approvals</div>
+      <div class="empty-sub">Operator submissions will appear here for review.</div>
+    </div>`;
+}
+
+/* A pending (submitted) approval card with proof thumbnail + Approve/Reject */
+function pendingCard(as) {
+  const op = acctById(as.operatorId);
+  const card = document.createElement("div");
+  card.className = "approval-card";
+  card.dataset.asid = as.id;
+  const proofBlock = as.proof
+    ? `<div style="margin:12px 0">${proofChipHtml(as.proof, "approval:" + as.id)}</div>`
+    : "";
+  card.innerHTML = `
+    <div class="ap-head">
+      <div>
+        <div class="ap-operator">${op.name} · ${SECTORS[as.sector].full}</div>
+        <div class="ap-task">${dutyTitle(as)} — ${escapeHtml(as.location)}</div>
+        <div class="ap-time">Submitted ${as.submittedAt || ""}</div>
+      </div>
+      <span class="chip chip-submitted">Submitted — Pending</span>
+    </div>
+    <div class="ap-value">
+      <span class="ap-value-label">${dutyValueLabel(as)}</span>
+      <span class="ap-value-num">${formatAssignmentValue(as)}</span>
+    </div>
+    ${proofBlock}
+    <div class="ap-actions">
+      <button class="btn btn-red" data-approve="reject" data-asid="${as.id}">Reject</button>
+      <button class="btn btn-teal" data-approve="approve" data-asid="${as.id}">Approve</button>
+    </div>`;
+  return card;
+}
+
+/* A resolved card. When execView, add the Override button + decider line. */
+function resolvedCard(as, execView) {
+  const op = acctName(as.operatorId).split(" ")[0];
+  const d = as.decision;
+  const rc = document.createElement("div");
+  rc.className = "resolved-card" + (execView ? " exec" : "");
+  rc.dataset.asid = as.id;
+
+  const proofBlock = (execView && as.proof)
+    ? `<div style="margin-top:10px">${proofChipHtml(as.proof, "approval:" + as.id)}</div>`
+    : "";
+
+  let deciderLine = "";
+  if (execView) {
+    if (isOverridden(as)) {
+      deciderLine = `<div class="rc-decider">${escapeHtml(d.overriddenByName)} overrode ${escapeHtml(d.byName)}'s ${d.originalAction === "verified" ? "approval" : "rejection"}</div>`;
+    } else {
+      deciderLine = `<div class="rc-decider">${d.action === "verified" ? "Approved" : "Rejected"} by ${escapeHtml(d.byName)}</div>`;
+    }
+  }
+
+  const overrideBtn = (execView && !isOverridden(as))
+    ? `<div class="rc-override-row">
+         <button class="btn-override" data-override="${as.id}">
+           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+           Override to ${d.action === "verified" ? "Reject" : "Verify"}
+         </button>
+       </div>`
+    : "";
+
+  rc.innerHTML = `
+    <div class="rc-row">
+      <div>
+        <div class="rc-title">${dutyTitle(as)} — ${escapeHtml(as.location)}</div>
+        <div class="rc-sub">${op}${as.value != null ? " · " + formatAssignmentValue(as) : ""}</div>
+        ${deciderLine}
+      </div>
+      ${chipHtml(as)}
+    </div>
+    ${proofBlock}
+    ${overrideBtn}`;
+  return rc;
+}
+
+/* Manager/Exec resolve a pending submission (sector-scoped for managers) */
+function resolveApproval(asId, decision) {
+  const as = State.assignments.find(x => x.id === asId);
+  if (!as || as.status !== "submitted" || as.decision) return;
+  if (!canAccessSector(as.sector)) return; // manager can't act outside their sector
+
+  const me = currentAcct();
+  const action = decision === "approve" ? "verified" : "rejected";
+  as.decision = { action: action, byId: me.id, byName: me.name, overriddenById: null, overriddenByName: null, originalAction: null };
   save();
-  const verb = decision === "approve" ? "approved" : "rejected";
-  logAudit("manager", `Marcus Reid ${verb} ${friendlyTaskName(t)} verification.`);
 
+  const verb = decision === "approve" ? "approved" : "rejected";
+  logAudit(me.id, `${me.name} ${verb} ${acctName(as.operatorId).split(" ")[0]}'s ${dutyLabel(as)}.`);
+
+  const card = $(`.approval-card[data-asid="${asId}"]`);
   if (card) {
     card.classList.add("resolving");
     setTimeout(() => { renderApprovals(); renderManagerTeam(); }, 260);
@@ -1857,10 +2515,33 @@ function resolveApproval(taskId, decision) {
     renderApprovals(); renderManagerTeam();
   }
 
+  const actorLabel = isExec() ? "Executive" : "Manager";
   showToast(
-    decision === "approve" ? "Process verified by Manager." : "Verification rejected — returned to operator.",
+    decision === "approve" ? `Verified by ${actorLabel}.` : `Rejected by ${actorLabel}.`,
     decision === "approve" ? "success" : "danger"
   );
+}
+
+/* Executive override — flips a resolved decision. */
+function overrideDecision(asId) {
+  const as = State.assignments.find(x => x.id === asId);
+  if (!as || !as.decision || !isExec() || isOverridden(as)) return;
+  const d = as.decision;
+  const flipped = d.action === "verified" ? "rejected" : "verified";
+  const me = currentAcct();
+  const originalActor = d.byName;
+
+  d.originalAction = d.action;
+  d.action = flipped;
+  d.overriddenById = me.id;
+  d.overriddenByName = me.name;
+  save();
+
+  const origVerb = d.originalAction === "verified" ? "approval" : "rejection";
+  logAudit(me.id, `${me.name} overrode ${originalActor}'s ${origVerb} of ${dutyLabel(as)}.`);
+
+  renderApprovals();
+  showToast("Executive override applied", "success");
 }
 
 /* ============================================================
@@ -1897,38 +2578,82 @@ function renderAudit() {
    CHAT HUB — channel list + channel view
    ============================================================ */
 let currentChannelId = null;
+let focusSavedMessageId = null;
 
-/* The signed-in account's email keys last-read tracking */
-function currentAccountEmail() {
-  const acct = ACCOUNTS.find(a => a.role === State.role);
-  return acct ? acct.email : "unknown";
+function currentAccountKey() {
+  return State.account || "guest";
 }
 
 function channelAccess(chanId) {
-  return CHANNELS[chanId].access[State.role] || "locked";
+  return channelHasAccess(chanId) ? "rw" : "locked";
 }
 
 /* messages arrived since this account last opened the channel */
 function unreadCount(chanId) {
   const total = (State.channels[chanId] || []).length;
-  const email = currentAccountEmail();
-  const seen = (State.lastRead[email] && State.lastRead[email][chanId]) || 0;
+  const accountKey = currentAccountKey();
+  const seen = (State.lastRead[accountKey] && State.lastRead[accountKey][chanId]) || 0;
   return Math.max(0, total - seen);
 }
 
 function markChannelRead(chanId) {
-  const email = currentAccountEmail();
-  if (!State.lastRead[email]) State.lastRead[email] = {};
-  State.lastRead[email][chanId] = (State.channels[chanId] || []).length;
+  const accountKey = currentAccountKey();
+  if (!State.lastRead[accountKey]) State.lastRead[accountKey] = {};
+  State.lastRead[accountKey][chanId] = (State.channels[chanId] || []).length;
   save();
+}
+
+function messageSenderName(m) {
+  if (m.kind === "system" || m.senderId === "system") return "System";
+  return acctName(m.senderId);
+}
+
+function channelDisplayName(chanId) {
+  const ch = CHANNELS[chanId];
+  return ch ? (ch.title || ch.name) : chanId;
+}
+
+function findChannelMessage(chanId, msgId) {
+  return (State.channels[chanId] || []).find(m => m.id === msgId) || null;
+}
+
+function savedForCurrentAccount() {
+  return State.savedChats.filter(s => s.accountId === State.account);
+}
+
+function savedEntryForMessage(chanId, msgId) {
+  return savedForCurrentAccount().find(s => s.channelId === chanId && s.messageId === msgId) || null;
+}
+
+function isMessageSaved(chanId, msgId) {
+  return !!savedEntryForMessage(chanId, msgId);
+}
+
+function messageDomId(chanId, msgId) {
+  return "msg-" + (chanId + "-" + msgId).replace(/[^A-Za-z0-9_-]/g, "-");
+}
+
+function savedChatLabel(entry) {
+  const msg = findChannelMessage(entry.channelId, entry.messageId);
+  const sender = msg ? messageSenderName(msg) : "Unknown";
+  const msgTime = msg && msg.time ? " · " + msg.time : "";
+  return `${channelDisplayName(entry.channelId)} · ${sender}${msgTime}`;
+}
+
+function saveButtonHtml(chanId, msg) {
+  const saved = isMessageSaved(chanId, msg.id);
+  return `<button type="button" class="chat-save${saved ? " saved" : ""}" data-save-chat="1" data-chanid="${chanId}" data-msgid="${msg.id}" title="${saved ? "Remove from Saved Chats" : "Save Chat"}" aria-label="${saved ? "Remove from Saved Chats" : "Save Chat"}">
+      ${iconBookmark(saved)}
+    </button>`;
 }
 
 function channelPreview(chanId) {
   const msgs = State.channels[chanId] || [];
   if (msgs.length === 0) return CHANNELS[chanId].desc;
   const last = msgs[msgs.length - 1];
-  const who = PERSONAS[last.role] ? PERSONAS[last.role].name.split(" ")[0] : "";
-  return who + ": " + last.text;
+  const who = messageSenderName(last).split(" ")[0];
+  const proof = last.proof ? " · proof attached" : "";
+  return who + ": " + last.text + proof;
 }
 function channelLastTime(chanId) {
   const msgs = State.channels[chanId] || [];
@@ -1936,6 +2661,7 @@ function channelLastTime(chanId) {
 }
 
 function renderChannelList() {
+  renderSavedChats();
   const list = $("#channelList");
   list.innerHTML = "";
   CHANNEL_ORDER.forEach(chanId => {
@@ -1946,9 +2672,9 @@ function renderChannelList() {
     card.dataset.chanid = chanId;
     const unread = locked ? 0 : unreadCount(chanId);
     card.innerHTML = `
-      <div class="channel-ic">#</div>
+      <div class="channel-ic${ch.command ? " command" : ""}">#</div>
       <div class="channel-body">
-        <div class="channel-name">${ch.name}${locked ? ' <span class="lock-badge">🔒</span>' : ""}</div>
+        <div class="channel-name">${escapeHtml(ch.title || ch.name)}${locked ? ' <span class="lock-badge">🔒</span>' : ""}</div>
         <div class="channel-preview">${escapeHtml(locked ? ch.desc : channelPreview(chanId))}</div>
       </div>
       <div class="channel-right">
@@ -1960,8 +2686,41 @@ function renderChannelList() {
     const note = document.createElement("div");
     note.className = "channel-locknote";
     note.dataset.notefor = chanId;
-    note.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Requires ${requiredRoleFor(chanId)} access</span>`;
+    note.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>${escapeHtml(channelLockNote(chanId))}</span>`;
     list.appendChild(note);
+  });
+}
+
+function renderSavedChats() {
+  const count = $("#savedChatCount");
+  const list = $("#savedChatList");
+  if (!count || !list) return;
+  const saved = savedForCurrentAccount();
+  count.textContent = saved.length;
+  list.innerHTML = "";
+
+  if (saved.length === 0) {
+    list.innerHTML = `<div class="saved-empty">No saved chats yet.</div>`;
+    return;
+  }
+
+  saved.slice().reverse().forEach(entry => {
+    const msg = findChannelMessage(entry.channelId, entry.messageId);
+    const card = document.createElement("div");
+    card.className = "saved-card";
+    card.dataset.savedid = entry.id;
+    const text = msg ? msg.text : "Saved message is no longer available.";
+    const proof = msg && msg.proof ? " · proof attached" : "";
+    card.innerHTML = `
+      <div>
+        <div class="saved-meta">${escapeHtml(savedChatLabel(entry) + proof)}</div>
+        <div class="saved-text">${escapeHtml(text)}</div>
+      </div>
+      <div class="saved-actions">
+        <button type="button" class="saved-btn" data-open-saved="${entry.id}" title="Open Saved Chat" aria-label="Open Saved Chat">${iconOpen()}</button>
+        <button type="button" class="saved-btn danger" data-remove-saved="${entry.id}" title="Remove Saved Chat" aria-label="Remove Saved Chat">${iconTrash()}</button>
+      </div>`;
+    list.appendChild(card);
   });
 }
 
@@ -1969,12 +2728,14 @@ function denyChannel(chanId, cardEl) {
   cardEl.classList.remove("wiggle"); void cardEl.offsetWidth; cardEl.classList.add("wiggle");
   const note = $(`.channel-locknote[data-notefor="${chanId}"]`);
   if (note) note.classList.add("show");
-  logAudit(State.role, `${PERSONAS[State.role].name} attempted to open ${CHANNELS[chanId].name} (denied — requires ${requiredRoleFor(chanId)} access).`);
+  const a = currentAcct();
+  if (a) logAudit(a.id, `${a.name} attempted to open ${CHANNELS[chanId].name} (denied — ${channelLockNote(chanId)}).`);
 }
 
 function openChannel(chanId) {
   if (channelAccess(chanId) !== "rw") return;
   currentChannelId = chanId;
+  focusSavedMessageId = null;
   renderChannelView();
   markChannelRead(chanId);
   showScreen("screen-channel");
@@ -1983,26 +2744,55 @@ function openChannel(chanId) {
 function renderChannelView() {
   const chanId = currentChannelId;
   const ch = CHANNELS[chanId];
-  $("#chanTitle").textContent = ch.name;
+  $(".chan-header", $("#screen-channel")).classList.toggle("command", !!ch.command);
+  $("#chanTitle").textContent = ch.title || ch.name;
   $("#chanMembers").textContent = channelMemberLine(chanId);
   const thread = $("#chatThread");
   thread.innerHTML = "";
   (State.channels[chanId] || []).forEach(m => {
-    const mine = m.role === State.role;
-    const p = PERSONAS[m.role];
+    if (m.kind === "system" || m.senderId === "system") {
+      const row = document.createElement("div");
+      row.className = "chat-system";
+      row.id = messageDomId(chanId, m.id);
+      row.dataset.msgid = m.id;
+      row.classList.toggle("focused", focusSavedMessageId === m.id);
+      row.innerHTML = `
+        <div class="sys-bubble">${escapeHtml(m.text)}</div>
+        ${m.proof ? proofChipHtml(m.proof, "channel:" + chanId + ":" + m.id) : ""}
+        <div class="chat-tools">${saveButtonHtml(chanId, m)}</div>`;
+      thread.appendChild(row);
+      return;
+    }
+    const sender = acctById(m.senderId) || { name: "Unknown", initials: "?", role: "system" };
+    const role = sender.role;
+    const mine = m.senderId === State.account;
     const row = document.createElement("div");
     row.className = "chat-row " + (mine ? "out" : "in");
+    row.id = messageDomId(chanId, m.id);
+    row.dataset.msgid = m.id;
+    row.classList.toggle("focused", focusSavedMessageId === m.id);
     row.innerHTML = `
-      <div class="chat-avatar ${m.role}">${p.initials}</div>
+      <div class="chat-avatar ${role}">${sender.initials}</div>
       <div class="chat-col">
-        <div class="chat-senderline">${p.name} <span class="role-chip ${m.role}">${capitalize(m.role)}</span></div>
+        <div class="chat-senderline">${escapeHtml(sender.name)} <span class="role-chip ${role}">${capitalize(role)}</span></div>
         <div class="chat-bubble">${escapeHtml(m.text)}</div>
+        ${m.proof ? proofChipHtml(m.proof, "channel:" + chanId + ":" + m.id) : ""}
         <div class="chat-time">${m.time}</div>
+        <div class="chat-tools">${saveButtonHtml(chanId, m)}</div>
       </div>`;
     thread.appendChild(row);
   });
   const wrap = $("#screenWrap");
-  requestAnimationFrame(() => { wrap.scrollTop = wrap.scrollHeight; });
+  const focusedId = focusSavedMessageId;
+  requestAnimationFrame(() => {
+    if (focusedId) {
+      const target = document.getElementById(messageDomId(chanId, focusedId));
+      if (target) target.scrollIntoView({ block: "center" });
+      focusSavedMessageId = null;
+      return;
+    }
+    wrap.scrollTop = wrap.scrollHeight;
+  });
 }
 
 function sendChannelMessage() {
@@ -2013,7 +2803,8 @@ function sendChannelMessage() {
   const chanId = currentChannelId;
   const msg = {
     id: "m" + Date.now() + Math.floor(Math.random() * 1000),
-    role: State.role,
+    kind: "chat",
+    senderId: State.account,
     text: text,
     time: nowTime(),
     ts: Date.now()
@@ -2023,7 +2814,166 @@ function sendChannelMessage() {
   input.value = "";
   markChannelRead(chanId);   // author has read their own message (also saves)
   renderChannelView();
-  logAudit(State.role, `${PERSONAS[State.role].name} posted in ${CHANNELS[chanId].name}.`);
+  const a = currentAcct();
+  if (a) logAudit(a.id, `${a.name} posted in ${CHANNELS[chanId].name}.`);
+}
+
+function toggleSavedChat(chanId, msgId) {
+  const existing = savedEntryForMessage(chanId, msgId);
+  if (existing) {
+    removeSavedChat(existing.id, "thread");
+    return;
+  }
+  saveChatMessage(chanId, msgId);
+}
+
+function saveChatMessage(chanId, msgId) {
+  const msg = findChannelMessage(chanId, msgId);
+  const a = currentAcct();
+  if (!msg || !a || channelAccess(chanId) !== "rw") return;
+  if (savedEntryForMessage(chanId, msgId)) return;
+
+  const entry = {
+    id: "sc" + Date.now() + Math.floor(Math.random() * 1000),
+    accountId: a.id,
+    channelId: chanId,
+    messageId: msgId,
+    savedAt: Date.now(),
+    savedTime: nowTime()
+  };
+  State.savedChats.push(entry);
+  save();
+  logAudit(a.id, `${a.name} saved a chat from ${savedChatLabel(entry)}.`);
+  renderChannelView();
+  if (State.activeScreen === "screen-chats") renderSavedChats();
+  showToast("Chat saved.", "success");
+}
+
+function removeSavedChat(savedId, source) {
+  const idx = State.savedChats.findIndex(s => s.id === savedId && s.accountId === State.account);
+  if (idx === -1) return;
+  const entry = State.savedChats[idx];
+  const a = currentAcct();
+  const label = savedChatLabel(entry);
+  State.savedChats.splice(idx, 1);
+  save();
+  if (a) logAudit(a.id, `${a.name} removed a saved chat from ${label}.`);
+  renderSavedChats();
+  if (source === "thread" || (State.activeScreen === "screen-channel" && currentChannelId === entry.channelId)) {
+    renderChannelView();
+  }
+  showToast("Saved chat removed.", "danger");
+}
+
+function openSavedChat(savedId) {
+  const entry = State.savedChats.find(s => s.id === savedId && s.accountId === State.account);
+  const a = currentAcct();
+  if (!entry || !a) return;
+  if (channelAccess(entry.channelId) !== "rw") {
+    logAudit(a.id, `${a.name} attempted to open a saved chat in ${channelDisplayName(entry.channelId)} (denied).`);
+    showNoAccessTip();
+    return;
+  }
+
+  focusSavedMessageId = entry.messageId;
+  currentChannelId = entry.channelId;
+  renderChannelView();
+  markChannelRead(entry.channelId);
+  showScreen("screen-channel");
+  logAudit(a.id, `${a.name} opened a saved chat from ${savedChatLabel(entry)}.`);
+}
+
+function postSystemMessage(chanId, text, proof) {
+  if (!State.channels[chanId]) State.channels[chanId] = [];
+  State.channels[chanId].push({
+    id: "sys" + Date.now() + Math.floor(Math.random() * 1000),
+    kind: "system",
+    senderId: "system",
+    text: text,
+    time: nowTime(),
+    ts: Date.now(),
+    proof: proof || null
+  });
+  save();
+  if (State.activeScreen === "screen-channel" && currentChannelId === chanId) {
+    renderChannelView();
+  }
+  if (State.activeScreen === "screen-chats") renderChannelList();
+}
+
+function proofFromContext(ctx) {
+  if (!ctx) return null;
+  const parts = ctx.split(":");
+  if (parts[0] === "approval") {
+    const as = State.assignments.find(x => x.id === parts[1]);
+    return as && as.proof ? as.proof : null;
+  }
+  if (parts[0] === "channel") {
+    const chanId = parts[1];
+    const msgId = parts.slice(2).join(":");
+    const msg = (State.channels[chanId] || []).find(m => m.id === msgId);
+    return msg && msg.proof ? msg.proof : null;
+  }
+  return null;
+}
+
+function showProofModal(proof) {
+  if (!proof) return;
+  $("#modalContent").innerHTML = `
+    <div class="proof-large">${proofSvg(proof, 210)}</div>
+    <div class="modal-title">Proof Attached</div>
+    <div class="proof-metatable">
+      <div class="proof-metarow"><span class="pk">File</span><span class="pv">${escapeHtml(proof.file)}</span></div>
+      <div class="proof-metarow"><span class="pk">Location</span><span class="pv">${escapeHtml(proof.location)}</span></div>
+      <div class="proof-metarow"><span class="pk">Captured</span><span class="pv">${escapeHtml(proof.time)}</span></div>
+    </div>
+    <button class="btn btn-primary" data-modal-close>Close</button>`;
+  $("#backdrop").classList.add("show");
+  $("#modal").classList.add("show");
+}
+
+/* Legacy dispatch screen support; current nav uses channel terminals. */
+function dispatchChannelId() {
+  return State.sector ? sectorChannelId(State.sector) : "general";
+}
+
+function renderMessages() {
+  const thread = $("#msgThread");
+  if (!thread) return;
+  const chanId = dispatchChannelId();
+  thread.innerHTML = "";
+  (State.channels[chanId] || []).forEach(m => {
+    if (m.kind === "system") return;
+    const sender = acctById(m.senderId);
+    if (!sender) return;
+    const el = document.createElement("div");
+    el.className = "msg " + (m.senderId === State.account ? "out" : "in");
+    el.innerHTML = `${escapeHtml(m.text)}<div class="msg-meta">${escapeHtml(sender.name)} · ${m.time}</div>`;
+    thread.appendChild(el);
+  });
+  thread.scrollTop = thread.scrollHeight;
+}
+
+function sendMessage() {
+  const input = $("#msgInput");
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  const chanId = dispatchChannelId();
+  if (!State.channels[chanId]) State.channels[chanId] = [];
+  State.channels[chanId].push({
+    id: "dm" + Date.now() + Math.floor(Math.random() * 1000),
+    kind: "chat",
+    senderId: State.account,
+    text: text,
+    time: nowTime(),
+    ts: Date.now()
+  });
+  input.value = "";
+  markChannelRead(chanId);
+  renderMessages();
+  const a = currentAcct();
+  if (a) logAudit(a.id, `${a.name} posted in ${CHANNELS[chanId].name}.`);
 }
 
 /* ============================================================
@@ -2105,7 +3055,8 @@ function denyAnalytics(el) {
   setTimeout(() => el.classList.remove("pulse-dim"), 500);
   if (!deniedLogged) {
     deniedLogged = true;
-    logAudit("operator", "Dana Cole attempted to open Company Analytics (denied).");
+    const a = currentAcct();
+    if (a) logAudit(a.id, `${a.name} attempted to open Company Analytics (denied).`);
   }
 }
 
@@ -2134,17 +3085,16 @@ function renderDemoHint() {
   const body = $("#demoHintBody");
   body.innerHTML = "";
   ACCOUNTS.forEach(a => {
-    const p = PERSONAS[a.role];
     const row = document.createElement("button");
     row.type = "button";
     row.className = "cred-row";
     row.dataset.email = a.email;
     row.dataset.password = a.password;
     row.innerHTML = `
-      <span class="cred-avatar ${a.role}">${p.initials}</span>
+      <span class="cred-avatar ${a.role}">${a.initials}</span>
       <span class="cred-meta">
         <span class="cred-email">${a.email}</span>
-        <span class="cred-detail">${p.name} · ${capitalize(a.role)}</span>
+        <span class="cred-detail">${a.name} · ${a.title}</span>
       </span>
       <span class="cred-pw">${a.password}</span>`;
     body.appendChild(row);
@@ -2209,10 +3159,16 @@ $("#bottomNav").addEventListener("click", e => {
   const meta = NAV_META[key];
 
   if (key === "chats") { showScreen("screen-chats"); return; }
+  if (key === "approvals" && State.role === "executive") {
+    showScreen("screen-manager");
+    setManagerTab("approvals");
+    return;
+  }
 
   if (State.role === "manager") {
     if (key === "dashboard") {
-      logAudit("manager", "Marcus Reid opened Company Analytics.");
+      const a = currentAcct();
+      logAudit(a.id, `${a.name} opened Company Analytics.`);
       State.analyticsViewed = true;
       showModal("analytics");
       return;
@@ -2234,16 +3190,34 @@ $("#channelList").addEventListener("click", e => {
   openChannel(chanId);
 });
 
+$("#savedChatList").addEventListener("click", e => {
+  const openBtn = e.target.closest("[data-open-saved]");
+  if (openBtn) {
+    openSavedChat(openBtn.dataset.openSaved);
+    return;
+  }
+  const removeBtn = e.target.closest("[data-remove-saved]");
+  if (removeBtn) {
+    removeSavedChat(removeBtn.dataset.removeSaved, "saved-list");
+  }
+});
+
 // --- Chat channel view ---
 $("#chanBack").addEventListener("click", () => showScreen("screen-chats"));
 $("#chanSend").addEventListener("click", sendChannelMessage);
 $("#chanInput").addEventListener("keydown", e => { if (e.key === "Enter") sendChannelMessage(); });
+$("#chatThread").addEventListener("click", e => {
+  const saveBtn = e.target.closest("[data-save-chat]");
+  if (!saveBtn) return;
+  e.stopPropagation();
+  toggleSavedChat(saveBtn.dataset.chanid, saveBtn.dataset.msgid);
+});
 
 // Operator task card → sheet (delegated)
 $("#operatorTaskList").addEventListener("click", e => {
-  const card = e.target.closest(".task-card[data-taskid]");
+  const card = e.target.closest(".task-card[data-asid]");
   if (!card) return;
-  openSheet(card.dataset.taskid);
+  openSheet(card.dataset.asid);
 });
 
 // Operator locked analytics folder
@@ -2253,10 +3227,13 @@ $("#operatorAnalyticsFolder").addEventListener("click", function () {
 
 // Manager unlocked analytics folder
 $("#managerAnalyticsFolder").addEventListener("click", () => {
-  logAudit("manager", "Marcus Reid opened Company Analytics.");
+  const a = currentAcct();
+  if (a) logAudit(a.id, `${a.name} opened Company Analytics.`);
   State.analyticsViewed = true;
   showModal("analytics");
 });
+
+$("#assignDutyBtn").addEventListener("click", showAssignDutySheet);
 
 // Manager segmented tabs
 $all(".seg-tab").forEach(tab => {
@@ -2265,9 +3242,20 @@ $all(".seg-tab").forEach(tab => {
 
 // Approvals queue actions (delegated)
 $("#approvalsQueue").addEventListener("click", e => {
+  const overrideBtn = e.target.closest("[data-override]");
+  if (overrideBtn) {
+    overrideDecision(overrideBtn.dataset.override);
+    return;
+  }
   const btn = e.target.closest("[data-approve]");
   if (!btn) return;
-  resolveApproval(btn.dataset.taskid, btn.dataset.approve);
+  resolveApproval(btn.dataset.asid, btn.dataset.approve);
+});
+
+document.addEventListener("click", e => {
+  const chip = e.target.closest(".proof-chip[data-proof]");
+  if (!chip) return;
+  showProofModal(proofFromContext(chip.dataset.proofctx));
 });
 
 // Dashboard read-only interactions (delegated)
@@ -2309,7 +3297,7 @@ document.addEventListener("keydown", e => {
    ============================================================ */
 (function init() {
   const hasSession = loadState();
-  if (hasSession && ROLES[State.session]) {
+  if (hasSession) {
     restoreSession(State.session);   // a real app remembers you
   } else {
     showScreen("screen-signin");
