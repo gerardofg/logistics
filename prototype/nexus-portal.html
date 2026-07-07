@@ -194,6 +194,133 @@
   .delta-up { color: var(--teal-dark); }
   .delta-flat { color: var(--text-2); }
 
+  /* ===== Command center: section headers + layout ===== */
+  .cc-section-head {
+    font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase;
+    color: var(--text-3); margin: 22px 0 11px; display: flex; align-items: center; gap: 8px;
+  }
+  .cc-section-head:first-of-type { margin-top: 6px; }
+  .cc-greeting { font-size: 22px; font-weight: 700; letter-spacing: -.5px; }
+  .cc-greeting-sub { font-size: 13px; color: var(--text-2); margin-top: 2px; }
+
+  /* Compact metric grid used by exec (4-up) and manager (2/4-up) */
+  .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .metric-mini {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 13px; background: var(--white); box-shadow: var(--shadow-sm);
+    cursor: pointer; transition: var(--ease);
+  }
+  .metric-mini:hover { border-color: #D3DBEA; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .metric-mini:active { transform: translateY(0); }
+  .metric-mini .metric-label { font-size: 11.5px; }
+  .metric-mini .metric-value { font-size: 22px; font-weight: 700; letter-spacing: -.6px; margin-top: 3px; }
+  .metric-mini .metric-delta { font-size: 11px; margin-top: 2px; display: inline-flex; align-items: center; gap: 3px; }
+  .delta-down { color: var(--red); }
+
+  /* ===== Sector chip (manager greeting) ===== */
+  .sector-chip {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+    font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
+    padding: 5px 11px; border-radius: 999px;
+    color: var(--teal-dark); background: var(--teal-tint); border: 1px solid #C3EDE6;
+  }
+  .sector-chip::before { content: ''; width: 7px; height: 7px; border-radius: 2px; background: var(--teal); }
+  .sector-chip.a { color: var(--navy); background: var(--navy-tint); border-color: #DCE3F1; }
+  .sector-chip.a::before { background: var(--navy); }
+
+  /* ===== Workforce / progress bars ===== */
+  .wf-row {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px; background: var(--white); box-shadow: var(--shadow-sm); margin-bottom: 11px;
+  }
+  .wf-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 11px; }
+  .wf-name { font-size: 13.5px; font-weight: 650; letter-spacing: -.2px; }
+  .wf-headcount { font-size: 11.5px; color: var(--text-2); }
+  .wf-bar-block { margin-top: 9px; }
+  .wf-bar-block:first-of-type { margin-top: 0; }
+  .wf-bar-label { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-2); margin-bottom: 5px; }
+  .wf-bar-label .wf-pct { font-weight: 700; color: var(--text); }
+  .wf-track { height: 8px; border-radius: 999px; background: var(--bg); overflow: hidden; }
+  .wf-fill { height: 100%; border-radius: 999px; transition: width .5s cubic-bezier(.4,0,.2,1); }
+  .wf-fill.eff { background: linear-gradient(90deg,#16BBA8,#0E7C70); }
+  .wf-fill.prod { background: linear-gradient(90deg,#3466C4,#0F2B5B); }
+
+  /* ===== Operator roster (manager centerpiece) ===== */
+  .roster-list { display: flex; flex-direction: column; gap: 11px; }
+  .roster-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px; background: var(--white); box-shadow: var(--shadow-sm);
+    cursor: pointer; transition: var(--ease);
+  }
+  .roster-card:hover { border-color: #D3DBEA; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .roster-card:active { transform: translateY(0); }
+  .roster-top { display: flex; align-items: center; gap: 12px; }
+  .roster-av-wrap { position: relative; flex: 0 0 auto; }
+  .roster-av {
+    width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+    color: #fff; font-weight: 600; font-size: 14px; letter-spacing: .3px;
+  }
+  .shift-dot {
+    position: absolute; right: -1px; bottom: -1px; width: 13px; height: 13px; border-radius: 50%;
+    border: 2.5px solid var(--white);
+  }
+  .shift-dot.on { background: var(--teal); }
+  .shift-dot.off { background: var(--text-3); }
+  .roster-meta { flex: 1; min-width: 0; }
+  .roster-name { font-size: 14.5px; font-weight: 650; letter-spacing: -.2px; display: flex; align-items: center; gap: 7px; }
+  .roster-shift { font-size: 11.5px; color: var(--text-2); margin-top: 1px; }
+  .roster-pending {
+    font-size: 10px; font-weight: 700; letter-spacing: .3px;
+    color: var(--blue); background: var(--blue-tint); border: 1px solid #CFE0FF;
+    padding: 2px 7px; border-radius: 999px; white-space: nowrap;
+  }
+  .roster-stats { display: flex; gap: 8px; margin: 13px 0 11px; }
+  .roster-stat {
+    flex: 1; text-align: center; padding: 8px 4px; border-radius: 9px;
+    background: var(--bg); border: 1px solid var(--border);
+  }
+  .roster-stat .rs-num { font-size: 17px; font-weight: 700; letter-spacing: -.4px; }
+  .roster-stat .rs-lbl { font-size: 9.5px; color: var(--text-2); margin-top: 1px; text-transform: uppercase; letter-spacing: .3px; }
+  .roster-prodrow { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-2); margin-bottom: 5px; }
+  .roster-prodrow .rp-pct { font-weight: 700; color: var(--text); }
+  .roster-lastact { font-size: 11px; color: var(--text-3); margin-top: 10px; display: flex; align-items: center; gap: 6px; }
+  .roster-chevron { color: var(--text-3); flex: 0 0 auto; }
+
+  /* ===== Detail modal (larger, scrollable) — reuses .modal ===== */
+  .modal.detail {
+    width: min(360px, calc(100% - 40px)); max-height: 82%; overflow-y: auto;
+    text-align: left; padding: 20px 20px 18px;
+  }
+  .detail-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .detail-title { font-size: 17px; font-weight: 700; letter-spacing: -.3px; }
+  .detail-sub { font-size: 12.5px; color: var(--text-2); margin-top: 1px; }
+  .detail-close-x {
+    margin-left: auto; width: 30px; height: 30px; border-radius: 9px; flex: 0 0 auto;
+    border: 1px solid var(--border); background: var(--white); color: var(--text-2);
+    display: grid; place-items: center; cursor: pointer; transition: var(--ease);
+  }
+  .detail-close-x:hover { background: var(--bg); color: var(--text); }
+  .detail-tasklist { display: flex; flex-direction: column; gap: 9px; margin: 14px 0; }
+  .detail-task {
+    border: 1px solid var(--border); border-radius: 11px; padding: 11px 12px; background: var(--white);
+  }
+  .detail-task-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .detail-task-title { font-size: 13px; font-weight: 650; letter-spacing: -.1px; }
+  .detail-task-sub { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+  .detail-mini-metrics { display: flex; gap: 8px; margin: 4px 0 12px; }
+  .detail-mini-metrics .mm {
+    flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); text-align: center;
+  }
+
+  /* ===== Detail breakdown modal (metric cards) ===== */
+  .detail-breakdown { margin: 12px 0 14px; }
+  .bd-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .bd-row:last-child { border-bottom: none; }
+  .bd-key { font-size: 12.5px; color: var(--text-2); }
+  .bd-val { font-size: 13.5px; font-weight: 650; }
+  .spark-wrap { margin: 10px 0 14px; border: 1px solid var(--border); border-radius: 11px; padding: 12px 12px 6px; background: var(--bg); }
+  .spark-wrap .chart-svg { height: auto; }
+
   /* ===== Chart card ===== */
   .chart-card {
     border: 1px solid var(--border); border-radius: var(--radius);
@@ -481,15 +608,7 @@
   .btn-override:active { transform: scale(.98); }
   .rc-decider { font-size: 11px; color: var(--text-3); margin-top: 3px; }
 
-  /* ===== Messages ===== */
-  .msg-thread { display: flex; flex-direction: column; gap: 10px; padding-bottom: 6px; }
-  .msg {
-    max-width: 82%; padding: 10px 13px; border-radius: 14px;
-    font-size: 13.5px; line-height: 1.4; box-shadow: var(--shadow-sm);
-  }
-  .msg .msg-meta { font-size: 10.5px; margin-top: 4px; opacity: .7; }
-  .msg.in  { align-self: flex-start; background: var(--white); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
-  .msg.out { align-self: flex-end; background: var(--navy); color: #fff; border-bottom-right-radius: 4px; }
+  /* ===== Chat composer (channel view) ===== */
   .msg-input-row {
     display: flex; gap: 8px; margin-top: 14px; padding-top: 14px;
     border-top: 1px solid var(--border);
@@ -759,29 +878,15 @@
   }
   .reset-link:hover { color: var(--red); }
 
-  /* ===== Role reveal interstitial ===== */
-  #screen-reveal { padding: 0; height: 100%; display: flex; flex-direction: column; }
-  .reveal-inner {
-    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 30px 30px; text-align: center;
+  /* ===== Sign-in leave transition (login → mainframe) ===== */
+  #screen-signin.leaving {
+    animation: signinLeave .25s cubic-bezier(.4,0,.2,1) both;
+    pointer-events: none;
   }
-  .reveal-avatar {
-    width: 80px; height: 80px; border-radius: 50%; display: grid; place-items: center;
-    color: #fff; font-weight: 700; font-size: 28px; letter-spacing: .5px; margin-bottom: 20px;
-    animation: revealPop .5s cubic-bezier(.34,1.56,.64,1) both;
+  @keyframes signinLeave {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-14px); }
   }
-  @keyframes revealPop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
-  .reveal-welcome { font-size: 14px; color: var(--text-2); }
-  .reveal-name { font-size: 22px; font-weight: 700; letter-spacing: -.5px; margin: 2px 0 16px; }
-  .reveal-badge {
-    font-size: 13px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
-    padding: 9px 18px; border-radius: 999px; margin-bottom: 28px;
-    animation: fadeUp .5s .15s ease both;
-  }
-  .reveal-badge.executive { color: var(--navy); background: var(--navy-tint); border: 1px solid #DCE3F1; }
-  .reveal-badge.manager { color: var(--teal-dark); background: var(--teal-tint); border: 1px solid #C3EDE6; }
-  .reveal-badge.operator { color: #3C577F; background: #EEF2F8; border: 1px solid #DCE4EF; }
-  .reveal-inner .btn { min-width: 180px; animation: fadeUp .5s .25s ease both; }
 
   /* ===== Sign-out chip + menu ===== */
   .user-menu-wrap { position: relative; flex: 0 0 auto; }
@@ -1036,39 +1141,13 @@
       </div>
     </section>
 
-    <!-- ============ SCREEN: ROLE REVEAL ============ -->
-    <section class="screen" id="screen-reveal">
-      <div class="reveal-inner" id="revealInner"><!-- rendered --></div>
-    </section>
-
-    <!-- ============ SCREEN 2: EXECUTIVE DASHBOARD ============ -->
+    <!-- ============ SCREEN 2: EXECUTIVE COMMAND CENTER ============ -->
     <section class="screen" id="screen-dashboard">
-      <h1 class="section-title">Operations Overview</h1>
-      <p class="section-sub" id="dashSub">Executive summary — read-only</p>
-
-      <div class="metrics" id="dashMetrics">
-        <div class="metric-card" data-metric="shipments">
-          <div class="metric-label">Total Shipments</div>
-          <div class="metric-value">1,284</div>
-          <div class="metric-delta delta-up">▲ +4.1% this week</div>
-        </div>
-        <div class="metric-card" data-metric="compliance">
-          <div class="metric-label">Compliance Rate</div>
-          <div class="metric-value">98.2%</div>
-          <div class="metric-delta delta-up">▲ +0.6%</div>
-        </div>
-        <div class="metric-card" data-metric="partners">
-          <div class="metric-label">Active Partners</div>
-          <div class="metric-value">47</div>
-          <div class="metric-delta delta-flat">— stable</div>
-        </div>
+      <div id="dashHead">
+        <h1 class="section-title" id="dashTitle">Operations Overview</h1>
+        <p class="section-sub" id="dashSub">Executive summary</p>
       </div>
-
-      <div class="chart-card" id="dashChart">
-        <div class="chart-caption">Shipment Volume</div>
-        <div class="chart-sub">Last 30 Days</div>
-        <!-- inline SVG chart injected by renderChart() -->
-      </div>
+      <div id="dashBody"><!-- rendered by renderDashboard() --></div>
     </section>
 
     <!-- ============ SCREEN 3: OPERATOR WORKSPACE / EXEC ALL-TASKS ============ -->
@@ -1076,53 +1155,23 @@
       <h1 class="section-title" id="tasksTitle">My Tasks</h1>
       <p class="section-sub" id="tasksSub">Duties assigned to you · proof required</p>
 
-      <div class="folder-row locked" id="operatorAnalyticsFolder">
-        <div class="folder-ic">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>
-          </svg>
-        </div>
-        <div class="folder-text">
-          <div class="folder-title">Company Analytics <span class="lock-badge">🔒</span></div>
-          <div class="folder-sub">Manager Access Required</div>
-        </div>
-      </div>
-
       <div class="task-list" id="operatorTaskList"><!-- rendered --></div>
     </section>
 
-    <!-- ============ SCREEN: MESSAGES (Operator) ============ -->
-    <section class="screen" id="screen-messages">
-      <h1 class="section-title">Messages</h1>
-      <p class="section-sub">Dispatch &amp; status updates</p>
-      <div class="msg-thread" id="msgThread"><!-- rendered --></div>
-      <div class="msg-input-row">
-        <input type="text" class="msg-input" id="msgInput" placeholder="Message dispatch…" />
-        <button class="msg-send" id="msgSend" aria-label="Send">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-        </button>
+
+    <!-- ============ SCREEN: MANAGER DASHBOARD (personalized home) ============ -->
+    <section class="screen" id="screen-mgr-dash">
+      <div id="mgrDashHead">
+        <h1 class="cc-greeting" id="mgrGreeting">Good day</h1>
+        <div id="mgrSectorChip"></div>
       </div>
+      <div id="mgrDashBody"><!-- rendered by renderManagerDash() --></div>
     </section>
 
-    <!-- ============ SCREEN 4: MANAGER HUB ============ -->
+    <!-- ============ SCREEN 4: MANAGER HUB (Team Tasks + Approvals) ============ -->
     <section class="screen" id="screen-manager">
       <h1 class="section-title" id="mgrTitle">Team Hub</h1>
       <p class="section-sub" id="mgrSub">Oversight &amp; approvals</p>
-
-      <div class="folder-row unlocked" id="managerAnalyticsFolder">
-        <div class="folder-ic">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>
-          </svg>
-        </div>
-        <div class="folder-text">
-          <div class="folder-title">Company Analytics</div>
-          <div class="folder-sub">Regional performance &amp; volume</div>
-        </div>
-        <span class="folder-chevron">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-        </span>
-      </div>
 
       <div class="seg-tabs">
         <button class="seg-tab active" data-mtab="team">Team Tasks</button>
@@ -1291,7 +1340,6 @@ const NAV_META = {
   dashboard: { label: "Dashboard", screen: "screen-dashboard", icon: iconChart },
   tasks:     { label: "Tasks",     screen: "screen-tasks",     icon: iconTasks },
   approvals: { label: "Approvals", screen: "screen-manager",   icon: iconApprovals, sub: "approvals" },
-  messages:  { label: "Dispatch",  screen: "screen-messages",  icon: iconMessages },
   chats:     { label: "Chats",     screen: "screen-chats",     icon: iconChats },
   audit:     { label: "Audit Log", screen: "screen-audit",     icon: iconAudit }
 };
@@ -1310,11 +1358,11 @@ const ROLES = {
     actions: { viewDashboard: true, submitTask: false, approve: true, assignRole: false, override: true }
   },
   manager: {
-    home: "screen-manager",
+    home: "screen-mgr-dash",            // personalized sector dashboard
     analytics: "unlocked",
     auditInHeader: true,
     nav: [
-      { key: "dashboard", access: true },
+      { key: "dashboard", access: true },   // personalized sector dashboard + roster
       { key: "tasks",     access: true },   // routes to manager team-tasks view
       { key: "approvals", access: true },
       { key: "chats",     access: true }
@@ -1323,12 +1371,11 @@ const ROLES = {
   },
   operator: {
     home: "screen-tasks",
-    analytics: "locked",
-    auditInHeader: true,                // Audit folded into header icon; nav holds Tasks/Chats + locked Approvals
+    analytics: "none",                  // operators have no analytics — Tasks + Chats only
+    auditInHeader: false,               // operators do not get an audit icon
     nav: [
-      { key: "tasks",     access: true },
-      { key: "chats",     access: true },
-      { key: "approvals", access: false }
+      { key: "tasks", access: true },
+      { key: "chats", access: true }
     ],
     actions: { viewDashboard: false, submitTask: true, approve: false, assignRole: false, override: false }
   }
@@ -1412,8 +1459,8 @@ function sectorChannelId(sector) { return "sector-" + String(sector).toLowerCase
    decision: null | { action:'verified'|'rejected', byId, byName,
                       overriddenById, overriddenByName, originalAction }
    ============================================================ */
-const STORAGE_KEY  = "nexus.v3";
-const LEGACY_KEY   = "nexus.v2";
+const STORAGE_KEY   = "nexus.v4";
+const LEGACY_KEYS   = ["nexus.v3", "nexus.v2"];
 
 /* ============================================================
    GLOBAL STATE (single source of truth, hydrated from storage)
@@ -1520,7 +1567,7 @@ function loadState() {
     if (raw) data = JSON.parse(raw);
   } catch (e) { data = null; }
   if (!data) {
-    // Ignore legacy v2 entirely; seed a fresh v3 dataset.
+    // Ignore any legacy (v2/v3) payloads entirely; seed a fresh v4 dataset.
     data = seedDefaults();
   }
   hydrateInto(data);
@@ -1543,7 +1590,7 @@ function save() {
 function resetDemo() {
   try {
     localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(LEGACY_KEY);
+    LEGACY_KEYS.forEach(k => localStorage.removeItem(k));
   } catch (e) {}
   hydrateInto(seedDefaults());
   save();
@@ -1590,9 +1637,6 @@ function iconTasks() {
 }
 function iconApprovals() {
   return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>`;
-}
-function iconMessages() {
-  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
 }
 function iconChats() {
   return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/><path d="M21 12c0 4.42-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.3-3.9A7.7 7.7 0 0 1 3 12c0-4.42 4.03-8 9-8s9 3.58 9 8Z"/></svg>`;
@@ -1777,10 +1821,10 @@ function highlightNav() {
     if (key === "chats") {
       match = chatActive;
     } else if (State.role === "manager") {
-      if (key === "tasks" && State.activeScreen === "screen-manager" && currentManagerTab === "team") match = true;
+      if (key === "dashboard" && State.activeScreen === "screen-mgr-dash") match = true;
+      else if (key === "tasks" && State.activeScreen === "screen-manager" && currentManagerTab === "team") match = true;
       else if (key === "approvals" && State.activeScreen === "screen-manager" && currentManagerTab === "approvals") match = true;
       else if (key === "audit" && State.activeScreen === "screen-audit") match = true;
-      // dashboard opens modal, never "active"
     } else {
       match = meta.screen === State.activeScreen;
     }
@@ -1797,17 +1841,17 @@ function showScreen(screenId) {
   $("#screenWrap").scrollTop = 0;
 
   // chrome (header + nav) hidden on auth screens
-  const noChrome = screenId === "screen-signin" || screenId === "screen-reveal";
+  const noChrome = screenId === "screen-signin";
   $("#appHeader").classList.toggle("hidden", noChrome);
   $("#bottomNav").classList.toggle("hidden", noChrome);
 
   // per-screen render hooks
   if (screenId === "screen-dashboard") renderDashboard();
+  if (screenId === "screen-mgr-dash") renderManagerDash();
   if (screenId === "screen-tasks") { isManager() || isExec() ? renderTasksScreen() : renderOperatorTasks(); }
   if (screenId === "screen-manager") renderManager();
   if (screenId === "screen-audit") renderAudit();
   if (screenId === "screen-chats") renderChannelList();
-  if (screenId === "screen-messages") renderMessages();
 
   highlightNav();
 }
@@ -1832,7 +1876,30 @@ function attemptSignIn() {
   hideSigninError();
   activateSession(acct.id);
   logAudit(acct.id, `${acct.name} signed in (${sectorTag(acct)}).`);
-  showRoleReveal(acct.id);
+  enterMainframe(acct.id);
+}
+
+/* Signed-in role label for the welcome toast, e.g.
+   "Manager, Sector A · Warehouse" / "Executive · All Sectors" */
+function roleToastLabel(acct) {
+  if (!acct) return "";
+  if (acct.role === "executive") return "Executive · All Sectors";
+  const s = SECTORS[acct.sector];
+  return ROLE_BADGE[acct.role] + ", Sector " + acct.sector + " · " + s.name;
+}
+
+/* Transition straight from sign-in into the role's mainframe (home),
+   with a brief fade/slide and a role-announcing toast. */
+function enterMainframe(accountId) {
+  const a = acctById(accountId);
+  const signin = $("#screen-signin");
+  // quick fade/slide-out of the login screen (~250ms)
+  signin.classList.add("leaving");
+  setTimeout(() => {
+    signin.classList.remove("leaving");
+    enterHome(a.role);
+    showToast("Signed in as " + a.name + " — " + roleToastLabel(a), "success");
+  }, 250);
 }
 
 function showSigninError() {
@@ -1862,26 +1929,7 @@ function activateSession(accountId) {
   renderNav();
 }
 
-/* Role reveal interstitial → Continue routes to the role home */
-function showRoleReveal(accountId) {
-  const a = acctById(accountId);
-  $("#revealInner").innerHTML = `
-    <div class="reveal-avatar ${a.role}">${a.initials}</div>
-    <div class="reveal-welcome">Welcome,</div>
-    <div class="reveal-name">${a.name}</div>
-    <div class="reveal-badge ${a.role}">${sectorTag(a)}</div>
-    <button class="btn btn-primary" id="revealContinue">Continue</button>`;
-  showScreen("screen-reveal");
-  $("#revealContinue").onclick = () => enterHome(a.role);
-  // auto-advance after ~1s if the user doesn't tap
-  clearTimeout(showRoleReveal._t);
-  showRoleReveal._t = setTimeout(() => {
-    if (State.activeScreen === "screen-reveal") enterHome(a.role);
-  }, 1400);
-}
-
 function enterHome(role) {
-  clearTimeout(showRoleReveal._t);
   showScreen(ROLES[role].home);
   if (role === "manager") setManagerTab("team");
 }
@@ -1904,6 +1952,7 @@ function doSignOut() {
   closeUserMenu();
   // reset transient view flags & sign-in form
   State.dashboardViewLogged = false;
+  State.mgrDashViewed = false;
   $("#emailInput").value = "";
   $("#passwordInput").value = "";
   hideSigninError();
@@ -1913,20 +1962,366 @@ function doSignOut() {
 function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 /* ============================================================
-   SCREEN 2 — EXECUTIVE DASHBOARD
+   SCREEN 2 — EXECUTIVE COMMAND CENTER (full analytics view)
+   Financial (seeded) + Operations + Workforce (live-blended).
+   Every card opens a detail modal. Section headers uppercase-muted.
    ============================================================ */
+/* Seeded financial figures (static — purely financial) */
+const FIN = {
+  revenue:   { value: "$2.84M", delta: "+6.2%", dir: "up",   label: "Revenue MTD" },
+  costs:     { value: "$1.91M", delta: "+2.1%", dir: "down", label: "Operating Costs" },
+  margin:    { value: "32.7%",  delta: "+1.4%", dir: "up",   label: "Net Margin" }
+};
+/* Seeded operations figures blended with live compliance */
+function opsMetrics() {
+  const c = assignmentCounts();
+  // Compliance rate blends the seeded base with live verified throughput.
+  const complianceBase = 98.2;
+  const compliance = c.resolved ? (complianceBase - c.rejected * 0.4).toFixed(1) : complianceBase.toFixed(1);
+  return {
+    shipments:   { value: "1,284", delta: "+4.1%", dir: "up",   label: "Total Shipments" },
+    ontime:      { value: "96.4%", delta: "+0.9%", dir: "up",   label: "On-Time Delivery" },
+    fleet:       { value: "88.1%", delta: "+2.3%", dir: "up",   label: "Fleet Utilization" },
+    compliance:  { value: compliance + "%", delta: c.rejected ? "live" : "+0.6%", dir: c.rejected ? "flat" : "up", label: "Compliance Rate" }
+  };
+}
+
+function deltaClass(dir) {
+  return dir === "up" ? "delta-up" : (dir === "down" ? "delta-down" : "delta-flat");
+}
+function deltaArrow(dir) {
+  return dir === "up" ? "▲ " : (dir === "down" ? "▼ " : "— ");
+}
+function miniCardHtml(key, m) {
+  return `<div class="metric-mini" data-cc="${key}">
+      <div class="metric-label">${m.label}</div>
+      <div class="metric-value">${m.value}</div>
+      <div class="metric-delta ${deltaClass(m.dir)}">${deltaArrow(m.dir)}${m.delta}</div>
+    </div>`;
+}
+
 function renderDashboard() {
-  const chart = $("#dashChart");
-  if (!chart.querySelector("svg")) renderChart(chart);
   const a = currentAcct();
-  $("#dashSub").textContent = isExec()
-    ? "Executive summary — all sectors"
-    : "Sector analytics — " + (a && a.sector ? SECTORS[a.sector].full : "");
+  $("#dashTitle").textContent = "Command Center";
+  $("#dashSub").textContent = "Executive analytics — all sectors";
+
+  const ops = opsMetrics();
+  const cA = assignmentCounts("A"), cB = assignmentCounts("B");
+  const cAll = assignmentCounts();
+  const prodA = sectorProductivity("A"), prodB = sectorProductivity("B");
+  // Workforce efficiency blends a seeded baseline with live verified throughput.
+  const effA = Math.min(99, 82 + Math.round((cA.verified) * 4));
+  const effB = Math.min(99, 79 + Math.round((cB.verified) * 4));
+
+  const body = $("#dashBody");
+  body.innerHTML = `
+    <div class="cc-section-head">Financial</div>
+    <div class="metrics" style="margin-bottom:14px">
+      <div class="metric-card" data-cc="fin-revenue">
+        <div class="metric-label">${FIN.revenue.label}</div>
+        <div class="metric-value">${FIN.revenue.value}</div>
+        <div class="metric-delta ${deltaClass(FIN.revenue.dir)}">${deltaArrow(FIN.revenue.dir)}${FIN.revenue.delta} vs last month</div>
+      </div>
+      <div class="metric-card" data-cc="fin-costs">
+        <div class="metric-label">${FIN.costs.label}</div>
+        <div class="metric-value">${FIN.costs.value}</div>
+        <div class="metric-delta ${deltaClass(FIN.costs.dir)}">${deltaArrow(FIN.costs.dir)}${FIN.costs.delta}</div>
+      </div>
+      <div class="metric-card" data-cc="fin-margin">
+        <div class="metric-label">${FIN.margin.label}</div>
+        <div class="metric-value">${FIN.margin.value}</div>
+        <div class="metric-delta ${deltaClass(FIN.margin.dir)}">${deltaArrow(FIN.margin.dir)}${FIN.margin.delta}</div>
+      </div>
+    </div>
+
+    <div class="chart-card" id="dashChart" data-cc="revenue-chart">
+      <div class="chart-caption">Revenue — Last 30 Days</div>
+      <div class="chart-sub">Daily gross · USD</div>
+    </div>
+
+    <div class="cc-section-head">Operations</div>
+    <div class="metric-grid" style="margin-bottom:6px">
+      ${miniCardHtml("ops-shipments", ops.shipments)}
+      ${miniCardHtml("ops-ontime", ops.ontime)}
+      ${miniCardHtml("ops-fleet", ops.fleet)}
+      ${miniCardHtml("ops-compliance", ops.compliance)}
+    </div>
+    <div class="metric-mini" data-cc="throughput" style="margin-top:8px">
+      <div class="metric-label">Verification Throughput</div>
+      <div class="metric-value">${cAll.verified} / ${cAll.total}</div>
+      <div class="metric-delta ${cAll.pending ? "delta-flat" : "delta-up"}">${cAll.pending ? cAll.pending + " pending review" : "▲ all reviewed"}</div>
+    </div>
+
+    <div class="cc-section-head">Workforce</div>
+    <div class="wf-row" data-cc="wf-A">
+      <div class="wf-head">
+        <div class="wf-name">Sector A — Warehouse</div>
+        <div class="wf-headcount">2 on shift</div>
+      </div>
+      ${wfBar("Efficiency Rate", effA, "eff")}
+      ${wfBar("Productivity", prodA, "prod")}
+    </div>
+    <div class="wf-row" data-cc="wf-B">
+      <div class="wf-head">
+        <div class="wf-name">Sector B — Dock &amp; Yard</div>
+        <div class="wf-headcount">2 on shift</div>
+      </div>
+      ${wfBar("Efficiency Rate", effB, "eff")}
+      ${wfBar("Productivity", prodB, "prod")}
+    </div>`;
+
+  renderChart($("#dashChart"));
 
   if (isExec() && !State.dashboardViewLogged) {
     State.dashboardViewLogged = true;
-    logAudit(State.account, a.name + " viewed the Operations Overview.");
+    logAudit(State.account, a.name + " viewed the Command Center.");
   }
+}
+
+function wfBar(label, pct, kind) {
+  return `<div class="wf-bar-block">
+      <div class="wf-bar-label"><span>${label}</span><span class="wf-pct">${pct}%</span></div>
+      <div class="wf-track"><div class="wf-fill ${kind}" style="width:${pct}%"></div></div>
+    </div>`;
+}
+
+/* Detail modal for an executive command-center card. Reuses .modal. */
+function showCcDetail(key) {
+  const cAll = assignmentCounts();
+  const cA = assignmentCounts("A"), cB = assignmentCounts("B");
+  let title = "", sub = "", body = "";
+
+  const finDetail = (m, rows) => {
+    title = m.label; sub = "Month to date";
+    body = `<div class="detail-breakdown">${rows.map(r => `<div class="bd-row"><span class="bd-key">${r[0]}</span><span class="bd-val">${r[1]}</span></div>`).join("")}</div>`;
+  };
+
+  if (key === "fin-revenue") {
+    title = "Revenue MTD"; sub = "Daily gross · last 30 days";
+    body = `<div class="spark-wrap" id="ccSpark"></div>
+      <div class="detail-breakdown">
+        <div class="bd-row"><span class="bd-key">Revenue MTD</span><span class="bd-val">$2.84M</span></div>
+        <div class="bd-row"><span class="bd-key">vs last month</span><span class="bd-val delta-up">▲ +6.2%</span></div>
+        <div class="bd-row"><span class="bd-key">Sector A share</span><span class="bd-val">$1.61M</span></div>
+        <div class="bd-row"><span class="bd-key">Sector B share</span><span class="bd-val">$1.23M</span></div>
+      </div>`;
+  } else if (key === "fin-costs") {
+    finDetail(FIN.costs, [["Operating Costs","$1.91M"],["Labor","$0.98M"],["Fleet & fuel","$0.61M"],["Facilities","$0.32M"]]);
+  } else if (key === "fin-margin") {
+    finDetail(FIN.margin, [["Net Margin","32.7%"],["Gross Margin","41.2%"],["EBITDA","$0.93M"],["Trend","▲ +1.4%"]]);
+  } else if (key === "revenue-chart") {
+    title = "Revenue — Last 30 Days"; sub = "Daily gross · USD";
+    body = `<div class="spark-wrap" id="ccSpark"></div>
+      <div class="detail-breakdown">
+        <div class="bd-row"><span class="bd-key">Peak day</span><span class="bd-val">$118K</span></div>
+        <div class="bd-row"><span class="bd-key">30-day avg</span><span class="bd-val">$94.6K</span></div>
+        <div class="bd-row"><span class="bd-key">Trend</span><span class="bd-val delta-up">▲ climbing</span></div>
+      </div>`;
+  } else if (key === "ops-shipments") {
+    title = "Total Shipments"; sub = "Rolling 30 days";
+    body = `<div class="spark-wrap" id="ccSpark"></div>
+      <div class="detail-breakdown">
+        <div class="bd-row"><span class="bd-key">Total</span><span class="bd-val">1,284</span></div>
+        <div class="bd-row"><span class="bd-key">Sector A</span><span class="bd-val">712</span></div>
+        <div class="bd-row"><span class="bd-key">Sector B</span><span class="bd-val">572</span></div>
+      </div>`;
+  } else if (key === "ops-ontime") {
+    finDetail({label:"On-Time Delivery"}, [["On-Time %","96.4%"],["Sector A","97.1%"],["Sector B","95.6%"],["Late shipments","46"]]);
+  } else if (key === "ops-fleet") {
+    finDetail({label:"Fleet Utilization"}, [["Utilization","88.1%"],["Active vehicles","41 / 47"],["Idle","6"],["Avg load","82%"]]);
+  } else if (key === "ops-compliance" || key === "throughput") {
+    title = key === "throughput" ? "Verification Throughput" : "Compliance Rate";
+    sub = "Live from proof-of-duty reviews";
+    body = `<div class="detail-breakdown">
+        <div class="bd-row"><span class="bd-key">Verified</span><span class="bd-val">${cAll.verified}</span></div>
+        <div class="bd-row"><span class="bd-key">Pending review</span><span class="bd-val">${cAll.pending}</span></div>
+        <div class="bd-row"><span class="bd-key">Rejected</span><span class="bd-val">${cAll.rejected}</span></div>
+        <div class="bd-row"><span class="bd-key">Executive overrides</span><span class="bd-val">${cAll.overridden}</span></div>
+        <div class="bd-row"><span class="bd-key">Total duties</span><span class="bd-val">${cAll.total}</span></div>
+      </div>`;
+  } else if (key === "wf-A" || key === "wf-B") {
+    const sid = key === "wf-A" ? "A" : "B";
+    const c = sid === "A" ? cA : cB;
+    title = SECTORS[sid].full; sub = "Workforce — live productivity";
+    body = `<div class="detail-breakdown">
+        <div class="bd-row"><span class="bd-key">Headcount on shift</span><span class="bd-val">2</span></div>
+        <div class="bd-row"><span class="bd-key">Duties assigned</span><span class="bd-val">${c.total}</span></div>
+        <div class="bd-row"><span class="bd-key">Verified</span><span class="bd-val">${c.verified}</span></div>
+        <div class="bd-row"><span class="bd-key">Pending</span><span class="bd-val">${c.pending}</span></div>
+        <div class="bd-row"><span class="bd-key">Productivity</span><span class="bd-val">${sectorProductivity(sid)}%</span></div>
+      </div>`;
+  } else {
+    return;
+  }
+
+  $("#modalContent").innerHTML = `
+    <div class="detail-head">
+      <div>
+        <div class="detail-title">${escapeHtml(title)}</div>
+        <div class="detail-sub">${escapeHtml(sub)}</div>
+      </div>
+      <button class="detail-close-x" data-modal-close aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    ${body}
+    <button class="btn btn-primary btn-block" data-modal-close>Close</button>`;
+  $("#modal").classList.add("detail");
+  const spark = $("#ccSpark");
+  if (spark) renderChart(spark);
+  $("#backdrop").classList.add("show");
+  $("#modal").classList.add("show");
+}
+
+/* ============================================================
+   SCREEN — MANAGER PERSONALIZED DASHBOARD (sector-scoped)
+   Greeting + sector chip + scoped KPIs + operator roster.
+   Managers see ONLY their own sector.
+   ============================================================ */
+function renderManagerDash() {
+  const a = currentAcct();
+  if (!a || !isManager()) return;
+  const sid = a.sector;
+  const sec = SECTORS[sid];
+  const first = a.name.split(" ")[0];
+
+  $("#mgrGreeting").textContent = "Good day, " + first;
+  $("#mgrSectorChip").innerHTML =
+    `<span class="sector-chip ${sid === "A" ? "a" : "b"}">Sector ${sid} · ${sec.name}</span>`;
+
+  const c = assignmentCounts(sid);
+  // Sector KPIs — scoped, smaller than exec's.
+  const onTime = sid === "A" ? "97.1%" : "95.6%";
+  const shipments = sid === "A" ? "712" : "572";
+  const efficiency = Math.min(99, (sid === "A" ? 82 : 79) + c.verified * 4);
+
+  const operators = ACCOUNTS.filter(x => x.role === "operator" && x.sector === sid);
+
+  const body = $("#mgrDashBody");
+  body.innerHTML = `
+    <div class="cc-section-head">Sector KPIs</div>
+    <div class="metric-grid" style="margin-bottom:6px">
+      <div class="metric-mini" data-mgrkpi="shipments">
+        <div class="metric-label">Sector Shipments</div>
+        <div class="metric-value">${shipments}</div>
+        <div class="metric-delta delta-up">▲ +3.4%</div>
+      </div>
+      <div class="metric-mini" data-mgrkpi="ontime">
+        <div class="metric-label">On-Time %</div>
+        <div class="metric-value">${onTime}</div>
+        <div class="metric-delta delta-up">▲ +0.8%</div>
+      </div>
+      <div class="metric-mini" data-mgrkpi="efficiency">
+        <div class="metric-label">Efficiency Rate</div>
+        <div class="metric-value">${efficiency}%</div>
+        <div class="metric-delta ${c.verified ? "delta-up" : "delta-flat"}">${c.verified ? "▲ live" : "— steady"}</div>
+      </div>
+      <div class="metric-mini" data-mgrkpi="pending">
+        <div class="metric-label">Pending Approvals</div>
+        <div class="metric-value">${c.pending}</div>
+        <div class="metric-delta ${c.pending ? "delta-flat" : "delta-up"}">${c.pending ? "awaiting review" : "▲ all clear"}</div>
+      </div>
+    </div>
+
+    <div class="cc-section-head">Operator Roster</div>
+    <div class="roster-list" id="rosterList">
+      ${operators.map(op => rosterCardHtml(op)).join("")}
+    </div>`;
+
+  if (!State.mgrDashViewed) {
+    State.mgrDashViewed = true;
+    logAudit(a.id, a.name + " opened the " + sec.full + " dashboard.");
+  }
+}
+
+function rosterCardHtml(op) {
+  const oc = operatorCounts(op.id);
+  const onShift = true; // seeded demo: all operators on shift
+  const last = operatorLastActivity(op.id);
+  const pendingChip = oc.pending
+    ? `<span class="roster-pending">${oc.pending} proof pending</span>`
+    : "";
+  return `<div class="roster-card" data-roster="${op.id}">
+      <div class="roster-top">
+        <div class="roster-av-wrap">
+          <div class="roster-av ${op.role}">${op.initials}</div>
+          <span class="shift-dot ${onShift ? "on" : "off"}"></span>
+        </div>
+        <div class="roster-meta">
+          <div class="roster-name">${escapeHtml(op.name)}</div>
+          <div class="roster-shift">${onShift ? "On shift" : "Off shift"} · ${escapeHtml(SECTORS[op.sector].name)}</div>
+        </div>
+        ${pendingChip}
+        <span class="roster-chevron">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </span>
+      </div>
+      <div class="roster-stats">
+        <div class="roster-stat"><div class="rs-num">${oc.assigned}</div><div class="rs-lbl">Assigned</div></div>
+        <div class="roster-stat"><div class="rs-num">${oc.submitted}</div><div class="rs-lbl">Submitted</div></div>
+        <div class="roster-stat"><div class="rs-num">${oc.verified}</div><div class="rs-lbl">Verified</div></div>
+      </div>
+      <div class="roster-prodrow"><span>Productivity</span><span class="rp-pct">${oc.productivity}%</span></div>
+      <div class="wf-track"><div class="wf-fill prod" style="width:${oc.productivity}%"></div></div>
+      <div class="roster-lastact">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+        Last activity ${escapeHtml(last)}
+      </div>
+    </div>`;
+}
+
+/* Operator detail modal (manager taps a roster card): full task list,
+   proof thumbnails, and a "Message in terminal" jump. */
+function showOperatorDetail(operatorId) {
+  const op = acctById(operatorId);
+  if (!op || !isManager() || op.sector !== State.sector) return;
+  const oc = operatorCounts(operatorId);
+  const mine = State.assignments.filter(a => a.operatorId === operatorId);
+
+  const tasksHtml = mine.length ? mine.map(as => {
+    const proof = as.proof
+      ? `<div style="margin-top:9px">${proofChipHtml(as.proof, "approval:" + as.id)}</div>`
+      : "";
+    const valStr = as.value != null ? " · " + formatAssignmentValue(as) : "";
+    return `<div class="detail-task">
+        <div class="detail-task-head">
+          <div>
+            <div class="detail-task-title">${dutyTitle(as)} — ${escapeHtml(as.location)}</div>
+            <div class="detail-task-sub">${escapeHtml(as.assignedAt || "")}${valStr}</div>
+          </div>
+          ${chipHtml(as)}
+        </div>
+        ${proof}
+      </div>`;
+  }).join("") : `<div class="detail-task-sub" style="padding:6px 2px">No duties assigned yet.</div>`;
+
+  $("#modalContent").innerHTML = `
+    <div class="detail-head">
+      <div class="roster-av-wrap">
+        <div class="roster-av ${op.role}">${op.initials}</div>
+        <span class="shift-dot on"></span>
+      </div>
+      <div>
+        <div class="detail-title">${escapeHtml(op.name)}</div>
+        <div class="detail-sub">${escapeHtml(SECTORS[op.sector].full)} · On shift</div>
+      </div>
+      <button class="detail-close-x" data-modal-close aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="detail-mini-metrics">
+      <div class="mm"><div class="mm-val">${oc.assigned}</div><div class="mm-lbl">Assigned</div></div>
+      <div class="mm"><div class="mm-val">${oc.submitted}</div><div class="mm-lbl">Submitted</div></div>
+      <div class="mm"><div class="mm-val">${oc.verified}</div><div class="mm-lbl">Verified</div></div>
+    </div>
+    <div class="detail-tasklist">${tasksHtml}</div>
+    <button class="btn btn-primary btn-block" data-msg-operator="${op.sector}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Message in terminal
+    </button>`;
+  $("#modal").classList.add("detail");
+  $("#backdrop").classList.add("show");
+  $("#modal").classList.add("show");
 }
 
 /* ============================================================
@@ -1966,6 +2361,60 @@ function formatAssignmentValue(as) {
   return as.value; // e.g. "Confirmed"
 }
 
+/* ============================================================
+   DERIVED METRICS — live counts computed from State.assignments.
+   Approving/rejecting/overriding visibly moves these numbers.
+   ============================================================ */
+/* Count assignments (optionally scoped to a sector) by resolved status. */
+function assignmentCounts(sector) {
+  const items = sector ? State.assignments.filter(a => a.sector === sector) : State.assignments;
+  let assigned = 0, submitted = 0, verified = 0, rejected = 0, overridden = 0;
+  items.forEach(a => {
+    const st = assignmentStatus(a);
+    if (st === "verified") verified++;
+    else if (st === "rejected") rejected++;
+    else if (st === "submitted") submitted++;
+    else assigned++;
+    if (isOverridden(a)) overridden++;
+  });
+  const total = items.length;
+  const pending = submitted; // submitted & not yet decided
+  const resolved = verified + rejected;
+  return { total, assigned, submitted, verified, rejected, overridden, pending, resolved };
+}
+
+/* Per-operator live counts: assigned/submitted/verified + productivity. */
+function operatorCounts(operatorId) {
+  const mine = State.assignments.filter(a => a.operatorId === operatorId);
+  let submitted = 0, verified = 0, pending = 0;
+  mine.forEach(a => {
+    const st = assignmentStatus(a);
+    if (st === "submitted") { submitted++; pending++; }
+    else if (st === "verified") { submitted++; verified++; }
+    else if (st === "rejected") { submitted++; }
+  });
+  const assigned = mine.length;
+  const productivity = assigned ? Math.round((verified / assigned) * 100) : 0;
+  return { assigned, submitted, verified, pending, productivity };
+}
+
+/* Most recent activity timestamp label for an operator (audit or assignment). */
+function operatorLastActivity(operatorId) {
+  const opName = acctName(operatorId);
+  const entry = State.auditLog.find(e => e.actor === opName);
+  if (entry) return entry.time;
+  const mine = State.assignments.filter(a => a.operatorId === operatorId);
+  const withTime = mine.map(a => a.submittedAt || a.assignedAt).filter(Boolean);
+  return withTime.length ? withTime[withTime.length - 1] : "—";
+}
+
+/* Sector productivity % (verified ÷ total) — live-derived, blended into
+   the workforce bars so approvals visibly move the numbers. */
+function sectorProductivity(sector) {
+  const c = assignmentCounts(sector);
+  return c.total ? Math.round((c.verified / c.total) * 100) : 0;
+}
+
 /* Assignments visible to the current account (sector/role scoped) */
 function visibleAssignments() {
   if (isExec()) return State.assignments.slice();
@@ -1977,7 +2426,6 @@ function visibleAssignments() {
 function renderOperatorTasks() {
   $("#tasksTitle").textContent = "My Tasks";
   $("#tasksSub").textContent = "Duties assigned to you · proof required";
-  $("#operatorAnalyticsFolder").style.display = "";
   const list = $("#operatorTaskList");
   list.innerHTML = "";
   const mine = State.assignments.filter(a => a.operatorId === State.account);
@@ -2012,7 +2460,6 @@ function renderOperatorTasks() {
 function renderTasksScreen() {
   $("#tasksTitle").textContent = "All Duties";
   $("#tasksSub").textContent = "Every sector's assignments — executive view";
-  $("#operatorAnalyticsFolder").style.display = "none";
   const list = $("#operatorTaskList");
   list.innerHTML = "";
   SECTOR_ORDER.forEach(sid => {
@@ -2928,92 +3375,18 @@ function showProofModal(proof) {
       <div class="proof-metarow"><span class="pk">Captured</span><span class="pv">${escapeHtml(proof.time)}</span></div>
     </div>
     <button class="btn btn-primary" data-modal-close>Close</button>`;
+  $("#modal").classList.remove("detail");   // proof view uses the centered modal layout
   $("#backdrop").classList.add("show");
   $("#modal").classList.add("show");
 }
 
-/* Legacy dispatch screen support; current nav uses channel terminals. */
-function dispatchChannelId() {
-  return State.sector ? sectorChannelId(State.sector) : "general";
-}
-
-function renderMessages() {
-  const thread = $("#msgThread");
-  if (!thread) return;
-  const chanId = dispatchChannelId();
-  thread.innerHTML = "";
-  (State.channels[chanId] || []).forEach(m => {
-    if (m.kind === "system") return;
-    const sender = acctById(m.senderId);
-    if (!sender) return;
-    const el = document.createElement("div");
-    el.className = "msg " + (m.senderId === State.account ? "out" : "in");
-    el.innerHTML = `${escapeHtml(m.text)}<div class="msg-meta">${escapeHtml(sender.name)} · ${m.time}</div>`;
-    thread.appendChild(el);
-  });
-  thread.scrollTop = thread.scrollHeight;
-}
-
-function sendMessage() {
-  const input = $("#msgInput");
-  if (!input) return;
-  const text = input.value.trim();
-  if (!text) return;
-  const chanId = dispatchChannelId();
-  if (!State.channels[chanId]) State.channels[chanId] = [];
-  State.channels[chanId].push({
-    id: "dm" + Date.now() + Math.floor(Math.random() * 1000),
-    kind: "chat",
-    senderId: State.account,
-    text: text,
-    time: nowTime(),
-    ts: Date.now()
-  });
-  input.value = "";
-  markChannelRead(chanId);
-  renderMessages();
-  const a = currentAcct();
-  if (a) logAudit(a.id, `${a.name} posted in ${CHANNELS[chanId].name}.`);
-}
 
 /* ============================================================
-   MODAL (read-only / access / analytics)
+   MODAL close (detail modals are populated inline by their openers)
    ============================================================ */
-function showModal(kind) {
-  const c = $("#modalContent");
-  if (kind === "readonly") {
-    c.innerHTML = `
-      <div class="modal-ic lock">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      </div>
-      <div class="modal-title">Read-Only View</div>
-      <div class="modal-body">Executive access is read-only. Contact a Manager for operational changes.</div>
-      <button class="btn btn-primary" data-modal-close>OK</button>`;
-  } else if (kind === "analytics") {
-    // reuse chart + a couple of metrics
-    c.innerHTML = `
-      <div class="modal-ic unlock">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-      </div>
-      <div class="modal-title">Company Analytics</div>
-      <div class="modal-body" style="margin-bottom:12px">Northeast region — last 30 days.</div>
-      <div class="chart-card" id="modalChart" style="cursor:default;box-shadow:none;margin-bottom:14px">
-        <div class="chart-caption">Shipment Volume</div>
-        <div class="chart-sub">Last 30 Days</div>
-      </div>
-      <div class="modal-analytics-metrics">
-        <div class="mm"><div class="mm-val">1,284</div><div class="mm-lbl">Total Shipments</div></div>
-        <div class="mm"><div class="mm-val">98.2%</div><div class="mm-lbl">Compliance</div></div>
-      </div>
-      <button class="btn btn-primary" data-modal-close>Close</button>`;
-    renderChart($("#modalChart", c));
-  }
-  $("#backdrop").classList.add("show");
-  $("#modal").classList.add("show");
-}
-
 function closeModal() {
   $("#modal").classList.remove("show");
+  $("#modal").classList.remove("detail");
   if (!$("#sheet").classList.contains("show")) $("#backdrop").classList.remove("show");
 }
 
@@ -3041,23 +3414,6 @@ function showNoAccessTip() {
   tip.classList.add("show");
   clearTimeout(tip._t);
   tip._t = setTimeout(() => tip.classList.remove("show"), 1600);
-}
-
-/* ============================================================
-   DENIED ANALYTICS (operator folder)
-   ============================================================ */
-let deniedLogged = false;
-function denyAnalytics(el) {
-  el.classList.remove("shake");
-  void el.offsetWidth; // reflow to restart animation
-  el.classList.add("shake");
-  el.classList.add("pulse-dim");
-  setTimeout(() => el.classList.remove("pulse-dim"), 500);
-  if (!deniedLogged) {
-    deniedLogged = true;
-    const a = currentAcct();
-    if (a) logAudit(a.id, `${a.name} attempted to open Company Analytics (denied).`);
-  }
 }
 
 /* ============================================================
@@ -3166,13 +3522,7 @@ $("#bottomNav").addEventListener("click", e => {
   }
 
   if (State.role === "manager") {
-    if (key === "dashboard") {
-      const a = currentAcct();
-      logAudit(a.id, `${a.name} opened Company Analytics.`);
-      State.analyticsViewed = true;
-      showModal("analytics");
-      return;
-    }
+    if (key === "dashboard") { showScreen("screen-mgr-dash"); return; }
     if (key === "tasks") { showScreen("screen-manager"); setManagerTab("team"); return; }
     if (key === "approvals") { showScreen("screen-manager"); setManagerTab("approvals"); return; }
     if (key === "audit") { showScreen("screen-audit"); return; }
@@ -3220,19 +3570,6 @@ $("#operatorTaskList").addEventListener("click", e => {
   openSheet(card.dataset.asid);
 });
 
-// Operator locked analytics folder
-$("#operatorAnalyticsFolder").addEventListener("click", function () {
-  denyAnalytics(this);
-});
-
-// Manager unlocked analytics folder
-$("#managerAnalyticsFolder").addEventListener("click", () => {
-  const a = currentAcct();
-  if (a) logAudit(a.id, `${a.name} opened Company Analytics.`);
-  State.analyticsViewed = true;
-  showModal("analytics");
-});
-
 $("#assignDutyBtn").addEventListener("click", showAssignDutySheet);
 
 // Manager segmented tabs
@@ -3258,17 +3595,27 @@ document.addEventListener("click", e => {
   showProofModal(proofFromContext(chip.dataset.proofctx));
 });
 
-// Dashboard read-only interactions (delegated)
-$("#dashMetrics").addEventListener("click", () => {
-  if (State.role === "executive") showModal("readonly");
-});
-$("#dashChart").addEventListener("click", () => {
-  if (State.role === "executive") showModal("readonly");
+// Executive command-center cards → detail modal (delegated)
+$("#dashBody").addEventListener("click", e => {
+  const card = e.target.closest("[data-cc]");
+  if (!card || State.role !== "executive") return;
+  showCcDetail(card.dataset.cc);
 });
 
-// Messages
-$("#msgSend").addEventListener("click", sendMessage);
-$("#msgInput").addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
+// Manager dashboard: KPI cards + operator roster (delegated)
+$("#mgrDashBody").addEventListener("click", e => {
+  const roster = e.target.closest("[data-roster]");
+  if (roster) { showOperatorDetail(roster.dataset.roster); return; }
+});
+
+// Detail modal actions — "Message in terminal" jumps to the sector terminal
+$("#modal").addEventListener("click", e => {
+  const msgBtn = e.target.closest("[data-msg-operator]");
+  if (!msgBtn) return;
+  const sector = msgBtn.dataset.msgOperator;
+  closeModal();
+  openChannel(sectorChannelId(sector));
+});
 
 // Audit filter
 $("#auditFilter").addEventListener("change", renderAudit);
