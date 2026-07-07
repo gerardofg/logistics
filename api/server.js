@@ -15,26 +15,66 @@ const MIME = {
   '.svg':  'image/svg+xml',
 };
 
-// Mock data — replace with a real DB later
-const stats = { shipments: 142, inTransit: 38, delivered: 97, pending: 7 };
+// In-memory store — swap for a real DB (SQLite, Postgres, etc.)
+const store = { shipments: [], messages: [] };
+let idSeq = 1;
 
-const server = http.createServer((req, res) => {
-  if (req.url === '/api/stats') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    return res.end(JSON.stringify(stats));
+function body(req) {
+  return new Promise((resolve, reject) => {
+    let raw = '';
+    req.on('data', c => raw += c);
+    req.on('end', () => { try { resolve(JSON.parse(raw || '{}')) } catch(e) { reject(e) } });
+  });
+}
+
+const server = http.createServer(async (req, res) => {
+  const url = new URL(req.url, `http://localhost:${PORT}`);
+
+  // ── API routes ──
+  if (url.pathname === '/api/stats' && req.method === 'GET') {
+    const s = store.shipments;
+    return json(res, {
+      shipments: s.length,
+      inTransit: s.filter(x => x.status === 'in_transit').length,
+      delivered: s.filter(x => x.status === 'delivered').length,
+      pending:   s.filter(x => x.status === 'pending').length,
+    });
   }
 
-  let filePath = path.join(PUBLIC, req.url === '/' ? 'index.html' : req.url);
+  if (url.pathname === '/api/sync' && req.method === 'POST') {
+    const queue = await body(req);
+    const synced = [];
+
+    for (const item of queue) {
+      if (item.table === 'shipments') {
+        const record = { ...item.payload, serverId: idSeq++ };
+        store.shipments.push(record);
+        synced.push({ table: 'shipments', ids: [item.payload.id], queueIds: [item.id] });
+      }
+      if (item.table === 'messages') {
+        const record = { ...item.payload, serverId: idSeq++ };
+        store.messages.push(record);
+        synced.push({ table: 'messages', ids: [item.payload.id], queueIds: [item.id] });
+      }
+    }
+
+    return json(res, { synced });
+  }
+
+  // ── Static files ──
+  let filePath = path.join(PUBLIC, url.pathname === '/' ? 'index.html' : url.pathname);
   const ext = path.extname(filePath);
 
   fs.readFile(filePath, (err, data) => {
-    if (err) {
-      res.writeHead(404);
-      return res.end('Not found');
-    }
+    if (err) { res.writeHead(404); return res.end('Not found'); }
     res.writeHead(200, { 'Content-Type': MIME[ext] || 'text/plain' });
     res.end(data);
   });
 });
 
-server.listen(PORT, () => console.log(`Logistics server running at http://localhost:${PORT}`));
+function json(res, data) {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(data));
+}
+
+server.listen(PORT, () => console.log(`Logistics → http://localhost:${PORT}`));

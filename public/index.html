@@ -5,46 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Logistics</title>
   <link rel="stylesheet" href="css/style.css" />
+  <script src="https://unpkg.com/dexie@3.2.4/dist/dexie.min.js"></script>
 </head>
 <body>
+
   <header>
     <nav>
       <div class="logo">Logistics</div>
       <ul>
-        <li><a href="#">Dashboard</a></li>
-        <li><a href="#">Shipments</a></li>
-        <li><a href="#">Inventory</a></li>
-        <li><a href="#">Reports</a></li>
+        <li><a href="#" data-view="dashboard" class="active">Dashboard</a></li>
+        <li><a href="#" data-view="shipments">Shipments</a></li>
+        <li><a href="#" data-view="messages">Messages</a></li>
+        <li><a href="#" data-view="partners">Partners</a></li>
       </ul>
+      <div id="status-badge" class="badge online">Online</div>
     </nav>
   </header>
 
   <main>
-    <section class="hero">
-      <h1>Logistics Platform</h1>
-      <p>Track, manage, and optimize your supply chain.</p>
+
+    <!-- Dashboard -->
+    <section id="view-dashboard" class="view active">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <span id="sync-status" class="sync-note"></span>
+      </div>
+      <div class="stats">
+        <div class="card"><h3>Total Shipments</h3><p class="number" id="stat-total">–</p></div>
+        <div class="card"><h3>In Transit</h3><p class="number" id="stat-transit">–</p></div>
+        <div class="card"><h3>Delivered</h3><p class="number" id="stat-delivered">–</p></div>
+        <div class="card"><h3>Pending</h3><p class="number" id="stat-pending">–</p></div>
+      </div>
     </section>
 
-    <section class="stats">
-      <div class="card">
-        <h3>Shipments</h3>
-        <p class="number">0</p>
+    <!-- Shipments -->
+    <section id="view-shipments" class="view">
+      <div class="page-header">
+        <h1>Shipments</h1>
+        <button id="btn-new-shipment" class="btn-primary">+ New Shipment</button>
       </div>
-      <div class="card">
-        <h3>In Transit</h3>
-        <p class="number">0</p>
+
+      <div id="shipment-form" class="form-card hidden">
+        <h2>New Shipment</h2>
+        <div class="form-row">
+          <input id="f-tracking" placeholder="Tracking ID" />
+          <input id="f-origin" placeholder="Origin" />
+          <input id="f-destination" placeholder="Destination" />
+          <select id="f-status">
+            <option value="pending">Pending</option>
+            <option value="in_transit">In Transit</option>
+            <option value="delivered">Delivered</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button id="btn-save-shipment" class="btn-primary">Save</button>
+          <button id="btn-cancel-shipment" class="btn-ghost">Cancel</button>
+        </div>
       </div>
-      <div class="card">
-        <h3>Delivered</h3>
-        <p class="number">0</p>
-      </div>
-      <div class="card">
-        <h3>Pending</h3>
-        <p class="number">0</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Tracking ID</th><th>Origin</th><th>Destination</th><th>Status</th><th>Sync</th></tr>
+        </thead>
+        <tbody id="shipments-body">
+          <tr><td colspan="5" class="empty">No shipments yet.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Messages -->
+    <section id="view-messages" class="view">
+      <div class="page-header"><h1>Team Messages</h1></div>
+      <div class="chat-layout">
+        <aside class="rooms">
+          <p class="room-label">Rooms</p>
+          <ul id="room-list">
+            <li class="room active" data-room="general">General</li>
+            <li class="room" data-room="ops">Operations</li>
+            <li class="room" data-room="dispatch">Dispatch</li>
+          </ul>
+        </aside>
+        <div class="chat-main">
+          <div id="chat-messages" class="messages"></div>
+          <div class="chat-input">
+            <input id="msg-input" placeholder="Type a message…" />
+            <button id="btn-send" class="btn-primary">Send</button>
+          </div>
+        </div>
       </div>
     </section>
+
+    <!-- Partners -->
+    <section id="view-partners" class="view">
+      <div class="page-header"><h1>Partners</h1></div>
+      <div id="partners-grid" class="partners-grid">
+        <p class="empty">No partners added yet.</p>
+      </div>
+    </section>
+
   </main>
 
-  <script src="js/app.js"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
