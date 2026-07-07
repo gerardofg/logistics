@@ -1,0 +1,12 @@
+{
+  "name": "logistics",
+  "version": "0.1.0",
+  "description": "Offline-first logistics collaboration platform for logistics partners",
+  "main": "api/server.js",
+  "scripts": {
+    "start": "node api/server.js",
+    "dev": "node --watch api/server.js"
+  },
+  "keywords": ["logistics", "offline", "collaboration"],
+  "license": "MIT"
+}
